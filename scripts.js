@@ -154,12 +154,15 @@ if (window.netlifyIdentity) {
   });
 }
 
-// Lógica para redirecionar o usuário para o dashboard após o login
+// Lógica de redirecionamento inteligente após o login
 if (window.netlifyIdentity) {
-  netlifyIdentity.on('login', (user) => {
-    // Fecha a janela de login
-    netlifyIdentity.close();
-    // Redireciona o usuário para a página do dashboard
-    window.location.href = '/dashboard/';
+  netlifyIdentity.on('login', () => {
+    const redirectTo = sessionStorage.getItem('redirectAfterLogin');
+    if (redirectTo) {
+      // Remove o "bilhete" para não ser usado novamente
+      sessionStorage.removeItem('redirectAfterLogin');
+      // Redireciona para o local guardado
+      window.location.href = redirectTo;
+    }
   });
 }
