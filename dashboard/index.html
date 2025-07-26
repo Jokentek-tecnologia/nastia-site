@@ -99,26 +99,25 @@
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-           const user = netlifyIdentity.currentUser();
-if (user) {
-    // Se o usuário está logado, mostra o nome dele
-    document.getElementById('user-name').textContent = user.user_metadata.full_name || user.email;
-} else {
-    // Se NÃO está logado, redireciona para a página inicial
-    window.location.href = '/';
-}
+        // --- CÓDIGO CORRIGIDO PARA VERIFICAÇÃO DE LOGIN ---
 
-// Continua escutando pelo evento de logout
-netlifyIdentity.on('logout', () => {
+// Espera o sistema de identidade estar totalmente inicializado
+netlifyIdentity.on('init', user => {
+  // Se, na inicialização, o 'user' não existir, significa que ninguém está logado.
+  if (!user) {
+    // Então, redireciona para a página inicial.
     window.location.href = '/';
+  } else {
+    // Se o usuário existir, exibe o nome dele no dashboard.
+    console.log('Usuário logado:', user);
+    document.getElementById('user-name').textContent = user.user_metadata.full_name || user.email;
+  }
 });
 
-            // Redireciona para a página inicial se o usuário fizer logout
-            netlifyIdentity.on('logout', () => {
-                window.location.href = '/';
-            });
-        });
+// O código para o logout continua igual e funcionando
+netlifyIdentity.on('logout', () => {
+  window.location.href = '/';
+});
 
 // CÓDIGO PARA ENVIAR O FORMULÁRIO PARA O N8N
 const configForm = document.getElementById('ia-config-form');
