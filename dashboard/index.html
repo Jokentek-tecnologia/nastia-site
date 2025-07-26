@@ -111,6 +111,60 @@
                 window.location.href = '/';
             });
         });
+
+// CÓDIGO PARA ENVIAR O FORMULÁRIO PARA O N8N
+const configForm = document.getElementById('ia-config-form');
+
+if (configForm) {
+    configForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Impede que a página recarregue
+
+        const submitButton = configForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Salvando...';
+
+        try {
+            // Coleta todos os dados do formulário
+            const formData = new FormData(configForm);
+            const data = Object.fromEntries(formData.entries());
+
+            // Se o usuário selecionou "Outro", usamos o valor que ele digitou
+            if (data.ramo_atividade === 'outro') {
+                data.ramo_atividade = data.ramo_outro;
+            }
+            delete data.ramo_outro; // Limpa o campo extra antes de enviar
+
+            // A URL do seu webhook que você me passou
+            const webhookUrl = 'https://n8n.oresultador.com.br/webhook-test/criesuaIA';
+
+            // Envia os dados para o n8n
+            const response = await fetch(webhookUrl, {
+                method: 'POST',
+                // O n8n espera os dados como texto, então enviamos como 'text/plain'
+                // e o n8n irá converter para JSON automaticamente.
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Houve um problema ao conectar com o servidor. Tente novamente.');
+            }
+
+            // Se tudo deu certo, mostra um feedback de sucesso
+            submitButton.textContent = 'Configurações Salvas com Sucesso!';
+            // Opcional: reabilitar o botão após 3 segundos
+            setTimeout(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Salvar Configurações';
+            }, 3000);
+
+        } catch (error) {
+            alert(error.message); // Mostra um alerta em caso de erro
+            submitButton.disabled = false;
+            submitButton.textContent = 'Salvar Configurações';
+        }
+    });
+}
     </script>
 
     <script src="../scripts.js"></script>
