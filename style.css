@@ -162,3 +162,8 @@ div[data-netlify-identity-widget] {
   height: 100% !important;
   overflow-y: auto !important; /* Permite rolar a janela se for maior que a tela */
 }
+
+/* Helper class para esconder o header durante o login */
+.header-escondido {
+    display: none !important;
+}

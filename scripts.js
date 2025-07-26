@@ -134,3 +134,22 @@ function appendMessage(message, sender, salvar = true) {
     history.push({ message, sender });
     sessionStorage.setItem('nastiaChatHistory', JSON.stringify(history));
 };
+
+// Lógica para esconder o header ao abrir o widget de login
+if (window.netlifyIdentity) {
+  netlifyIdentity.on('open', () => {
+    // Encontra o cabeçalho que estiver na página (seja o principal ou o minimalista)
+    const header = document.querySelector('.main-header') || document.querySelector('.header-minimalista');
+    if (header) {
+      header.classList.add('header-escondido');
+    }
+  });
+
+  netlifyIdentity.on('close', () => {
+    // Mostra o cabeçalho novamente quando o widget fecha
+    const header = document.querySelector('.main-header') || document.querySelector('.header-minimalista');
+    if (header) {
+      header.classList.remove('header-escondido');
+    }
+  });
+}
