@@ -153,3 +153,13 @@ if (window.netlifyIdentity) {
     }
   });
 }
+
+// Lógica para redirecionar o usuário para o dashboard após o login
+if (window.netlifyIdentity) {
+  netlifyIdentity.on('login', (user) => {
+    // Fecha a janela de login
+    netlifyIdentity.close();
+    // Redireciona o usuário para a página do dashboard
+    window.location.href = '/dashboard/';
+  });
+}
