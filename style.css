@@ -151,8 +151,14 @@ textarea:focus {
     #nast-ia-chat-window { width: 95vw; max-height: 75vh; right: 2.5vw; bottom: 90px; }
 }
 
-/* --- CORREÇÃO PARA O Z-INDEX DO POP-UP DE LOGIN --- */
-/* Garante que a janela de login sempre apareça na frente de todos os outros elementos */
+/* --- CORREÇÃO COMPLETA PARA O POP-UP DE LOGIN --- */
+/* Garante que a janela de login fique visível e na frente de tudo */
 div[data-netlify-identity-widget] {
-    z-index: 9999 !important;
+  z-index: 9999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-y: auto !important; /* Permite rolar a janela se for maior que a tela */
 }
