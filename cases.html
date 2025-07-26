@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudos de Potencial | NástIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        /* Ajuste para diminuir o título apenas nesta página */
+        #cases h1 {
+            font-size: 2.8rem;
+        }
+        #cases .subtitulo {
+            max-width: 700px;
+        }
+        .card strong {
+            color: var(--text-light);
+        }
+        @media (max-width: 768px) {
+            #cases h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-minimalista">
+        <div class="container">
+            <a href="/"><img src="assets/images/logoNastia.png" alt="Logo da NástIA" class="header-logo"></a>
+            <a href="/" class="btn-inicio">Início</a>
+        </div>
+    </header>
+
+     <main>
+        <section id="cases">
+            <div class="container">
+                <h1>Veja o Potencial da Sua Empresa</h1>
+                <p class="subtitulo">Como uma empresa nova e focada em soluções sob medida, criamos alguns "Estudos de Potencial" baseados em negócios reais de Peruíbe. Veja como a NástIA poderia transformar uma empresa como a sua.</p>
+                
+                <div class="card" style="margin-bottom: 2rem; text-align: left;">
+                    <h3>O Futuro de uma Pousada em Peruíbe</h3>
+                    <p><strong>Cenário Atual:</strong> Na alta temporada, o WhatsApp não para com as mesmas perguntas sobre vagas, preços e regras. Fora do horário comercial, as reservas que chegam por mensagem são perdidas. A dependência de comissões de sites de reserva é alta.</p>
+                    <p><strong>Potencial com a NástIA:</strong> Um Agente de IA responde 100% das perguntas 24h por dia, verifica a disponibilidade e guia o cliente para a reserva direta. O perfil no Google é otimizado para atrair o turista certo, que busca exatamente o que a pousada oferece.</p>
+                    <p style="font-weight: 600; color: var(--teal); margin-top: 1rem;"><strong>Resultados em Potencial:</strong> ✅ Maior controle sobre suas reservas | 🕒 Fim do "desespero" no atendimento | ⭐ Redução de custos com comissões.</p>
+                </div>
+
+                <div class="card" style="margin-bottom: 2rem; text-align: left;">
+                    <h3>O Futuro de um Restaurante com Delivery</h3>
+                    <p><strong>Cenário Atual:</strong> Pedidos para delivery chegam de forma confusa pelo WhatsApp. O cliente não sabe o cardápio, o atendente anota errado, e a cozinha se perde. O resultado é prejuízo e clientes insatisfeitos com a demora e os erros.</p>
+                    <p><strong>Potencial com a NástIA:</strong> Um cardápio digital interativo guia o cliente passo a passo. A automação no WhatsApp anota o pedido, confirma o pagamento e o endereço, e envia o pedido para a cozinha de forma clara e padronizada.</p>
+                    <p style="font-weight: 600; color: var(--teal); margin-top: 1rem;"><strong>Resultados em Potencial:</strong> 📈 Aumento do ticket médio com sugestões automáticas | ❌ Fim dos erros de anotação | 📱 Experiência do cliente mais rápida e profissional.</p>
+                </div>
+
+                <div class="card" style="margin-bottom: 2rem; text-align: left;">
+                    <h3>O Futuro de uma Loja de Varejo</h3>
+                    <p><strong>Cenário Atual:</strong> A loja tem produtos excelentes, mas dificuldade em mostrá-los para os turistas e competir com as grandes redes online. As redes sociais demandam muito tempo para pouco resultado visível em vendas.</p>
+                    <p><strong>Potencial com a NástIA:</strong> Um catálogo online profissional, integrado com as redes sociais, funciona como uma vitrine 24h. Anúncios locais segmentados atraem tanto os moradores na baixa temporada quanto os turistas que acabaram de chegar na cidade.</p>
+                    <p style="font-weight: 600; color: var(--teal); margin-top: 1rem;"><strong>Resultados em Potencial:</strong> 💻 Novas fontes de receita com vendas online | 🎯 Marketing que atrai o cliente certo para a loja física | 💡 Uma marca local forte e digital.</p>
+                </div>
+
+            </div>
+        </section>
+     </main>
+
+    <div id="nast-ia-fab" title="Fale com a Nah">
+        <svg xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+    </div>
+    <div id="nast-ia-chat-window">
+        <div class="chat-header">
+            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
+        </div>
+        <div class="chat-body" id="chat-log">
+            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
+        </div>
+        <div class="chat-footer">
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="scripts.js"></script>
+
+</body>
+</html>

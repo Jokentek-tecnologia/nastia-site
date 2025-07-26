@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obrigado! | NástIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        /* Estilo para o novo cabeçalho com logo */
+        .header-voltar {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 100;
+        }
+        .header-voltar img {
+            height: 40px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .header-voltar img:hover {
+            opacity: 1;
+        }
+
+        /* Estilos para o novo design da página de obrigado */
+        .confirmation-card {
+            background-color: var(--dark-gray);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 199, 166, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 650px;
+            text-align: center;
+            border-top: 5px solid var(--gold);
+        }
+        .confirmation-icon {
+            font-size: 4rem;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+        .confirmation-card h1 {
+            font-size: 2.2rem;
+            color: var(--white);
+        }
+        .confirmation-card p {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+        .next-steps {
+            text-align: left;
+            background-color: rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .next-steps h3 {
+            color: var(--teal);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .next-steps p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+        @media(max-width: 768px) {
+            .confirmation-card h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body class="page-centered">
+
+    <header class="header-voltar">
+        <a href="/" title="Voltar ao Início">
+            <img src="assets/images/logoNastia.png" alt="Logo da NástIA">
+        </a>
+    </header>
+
+    <main>
+        <div class="confirmation-card">
+            <div class="confirmation-icon">✅</div>
+            <h1>Tudo certo!</h1>
+            <p>Sua pesquisa foi enviada com sucesso e já está em nossas mãos.</p>
+
+            <div class="next-steps">
+                <h3>O que acontece agora?</h3>
+                <p>Nossa equipe de especialistas irá analisar suas respostas para criar seu Diagnóstico Digital Gratuito. Entraremos em contato pelo WhatsApp ou e-mail informados em breve.</p>
+            </div>
+
+            <a href="/" class="btn">Voltar para o Início</a>
+        </div>
+    </main>
+
+    <div id="nast-ia-fab" title="Fale com a Nah">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+    </div>
+    <div id="nast-ia-chat-window">
+        <div class="chat-header">
+            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
+        </div>
+        <div class="chat-body" id="chat-log">
+            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
+        </div>
+        <div class="chat-footer">
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+     
+    <script src="scripts.js"></script>
+
+</body>
+</html>

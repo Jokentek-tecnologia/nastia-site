@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | NástIA</title>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header-minimalista">
+        <div class="container">
+            <a href="/"><img src="assets/images/logoNastia.png" alt="Logo da NástIA" class="header-logo"></a>
+            <a href="/" class="btn-inicio">Início</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="blog-lista">
+            <div class="container">
+                <h1>Blog da NástIA</h1>
+                <p class="subtitulo">Dicas de tecnologia, marketing e gestão para o comércio de Peruíbe.</p>
+                <div class="cards-grid">
+                    
+                    <div class="card" style="text-align: left;">
+                        <h3>5 Dicas de WhatsApp Business que Todo Comerciante de Peruíbe Precisa Conhecer</h3>
+                        <p>Descubra como respostas automáticas, catálogos e etiquetas podem transformar seu WhatsApp em uma máquina de atendimento...</p>
+                        <a href="artigo-whatsapp.html" class="btn" style="margin-top: 1rem;">Leia Mais</a>
+                    </div>
+                    
+                    <div class="card" style="text-align: left;">
+                        <h3>Google Meu Negócio: O Guia para ser Encontrado por Turistas em Peruíbe</h3>
+                        <p>Aprenda a otimizar seu perfil gratuito no Google para aparecer na frente dos concorrentes quando um turista procurar por você...</p>
+                        <a href="artigo-google.html" class="btn" style="margin-top: 1rem;">Leia Mais</a>
+                    </div>
+
+                    <div class="card" style="text-align: left;">
+                        <h3>Baixa Temporada em Peruíbe: 3 Estratégias Digitais para Continuar Vendendo</h3>
+                        <p>Veja como usar o marketing digital para fortalecer sua marca com os moradores locais e manter o fluxo de caixa o ano inteiro...</p>
+                        <a href="artigo-baixa-temporada.html" class="btn" style="margin-top: 1rem;">Leia Mais</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <img src="assets/images/logoNastia.png" alt="Logo da NástIA" class="footer-logo">
+            <p>© 2025 NástIA. Simplificando a tecnologia para o comércio de Peruíbe.</p>
+        </div>
+    </footer>
+
+    <div id="nast-ia-fab" title="Fale com a Nah">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+    </div>
+    <div id="nast-ia-chat-window">
+        <div class="chat-header">
+            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
+        </div>
+        <div class="chat-body" id="chat-log">
+            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
+        </div>
+        <div class="chat-footer">
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="scripts.js"></script>
+
+</body>
+</html>

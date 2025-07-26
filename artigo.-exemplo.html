@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título do Artigo | NástIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>    
+<style>
+        /* Estilos específicos para a página de artigo */
+        #artigo-content { text-align: left; }
+        #artigo-content .container { max-width: 800px; } /* Deixa o texto mais confortável para leitura */
+        #artigo-content img.banner { width: 100%; height: 400px; object-fit: cover; border-radius: 15px; margin-bottom: 2rem; }
+        #artigo-content h1 { font-size: 2.8rem; }
+        #artigo-content .meta { color: var(--text-medium); margin-bottom: 2rem; }
+        #artigo-content h2 { font-size: 1.8rem; margin-top: 2.5rem; }
+        #artigo-content ul { list-style-position: inside; padding-left: 1rem; }
+        #artigo-content li { margin-bottom: 1rem; }
+        #artigo-content .conclusao { background-color: var(--dark-gray); padding: 2rem; border-radius: 10px; margin-top: 3rem; border-left: 5px solid var(--gold); }
+        @media (max-width: 768px) {
+            #artigo-content h1 { font-size: 2rem; }
+            #artigo-content img.banner { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-minimalista">
+        <div class="container">
+            <a href="/"><img src="assets/images/logoNastia.png" alt="Logo da NástIA" class="header-logo"></a>
+            <a href="/" class="btn-inicio">Início</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="artigo-content">
+            <div class="container">
+                <img src="assets/images/blog/artigo-generico.jpg" alt="Imagem descritiva do artigo" class="banner">
+
+                <h1>Título do Artigo Vai Aqui</h1>
+                <p class="meta"><em>Publicado em: 24 de Julho de 2025</em></p>
+                
+                <p>Este é o primeiro parágrafo do seu artigo. Comece falando sobre uma dor ou um problema comum que seu cliente enfrenta. Use este espaço para criar uma conexão imediata e mostrar que você entende o universo dele. A introdução deve prometer uma solução ou um novo conhecimento.</p>
+                
+                <h2>Um Subtítulo para Organizar as Ideias</h2>
+                <p>Desenvolva o primeiro ponto principal aqui. Use parágrafos curtos para facilitar a leitura no celular. Você pode adicionar listas para quebrar o texto e torná-lo mais dinâmico:</p>
+                <ul>
+                    <li>Dica número 1: Explique o conceito de forma simples.</li>
+                    <li>Dica número 2: Dê um exemplo prático que um comerciante de Peruíbe possa aplicar.</li>
+                    <li>Dica número 3: Mostre o benefício direto de seguir esta dica.</li>
+                </ul>
+
+                <h2>Outro Ponto Importante</h2>
+                <p>Continue desenvolvendo seu conteúdo. Lembre-se de sempre focar em entregar valor real. O objetivo não é vender diretamente, mas sim educar e construir a autoridade da NástIA como especialista no assunto.</p>
+
+                <div class="conclusao">
+                    <h3>Conclusão e Chamada para Ação</h3>
+                    <p>Finalize o artigo com um resumo rápido do que foi aprendido e conecte o tema com uma das soluções da NástIA. Por exemplo: "Aplicar essas dicas já é um grande passo. Se você quer levar isso para o próximo nível com automação, a NástIA pode ajudar." <a href="/#contato" style="color: var(--teal); font-weight: 600;">Vamos conversar?</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <img src="assets/images/logoNastia.png" alt="Logo da NástIA" class="footer-logo">
+            <p>© 2025 NástIA. Simplificando a tecnologia para o comércio de Peruíbe.</p>
+        </div>
+    </footer>
+
+    <div id="nast-ia-fab" title="Fale com a Nah">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+    </div>
+    <div id="nast-ia-chat-window">
+        <div class="chat-header">
+            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
+        </div>
+        <div class="chat-body" id="chat-log">
+            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
+        </div>
+        <div class="chat-footer">
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="scripts.js"></script>
+
+</body>
+</html>

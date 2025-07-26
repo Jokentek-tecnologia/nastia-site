@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Digital | NástIA</title>
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        /* Estilos específicos que pertencem apenas à funcionalidade da pesquisa */
+        .survey-container { background-color: var(--dark-gray); border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 199, 166, 0.2); overflow: hidden; width: 100%; max-width: 700px; }
+        .progress-bar { width: 100%; height: 10px; background-color: var(--medium-gray); }
+        #progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--teal), var(--magenta)); transition: width 0.4s ease; }
+        .slide { display: none; padding: 40px; }
+        .slide.active { display: block; animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .outro-texto { display: none; margin-top: 15px; }
+        .option-label { text-align: left; }
+        .logo-container { text-align: center; margin-bottom: 25px; }
+        .logo-container .logo { max-width: 160px; height: auto; }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+        .form-grid .full-width {
+            grid-column: 1 / -1;
+        }
+        @media (max-width: 500px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="page-centered">
+
+    <a href="/" class="btn btn-voltar-inicio btn-inicio">Início</a>
+
+    <main>
+        <div class="survey-container">
+            <div class="progress-bar"><div id="progress"></div></div>
+            
+            <form name="pesquisa-diagnostico-completa" method="POST" data-netlify="true" action="/obrigado.html">
+                
+                <div class="slide active">
+                    <div class="logo-container"><img src="/assets/images/logoNastia.png" alt="Logo da NástIA" class="logo"></div>
+                    <h2>Diagnóstico Digital Gratuito</h2>
+                    <p>Responda a estas perguntas para que possamos entender seu negócio e preparar um diagnóstico preciso e gratuito para você.</p>
+                    <div class="navigation" style="justify-content: flex-end;"><button type="button" class="btn next-btn">Começar Diagnóstico</button></div>
+                </div>
+
+                <div class="slide">
+                    <h2>1. Perfil do Negócio</h2>
+                    <p>Para começar, algumas informações sobre a sua empresa.</p>
+                    <div class="form-grid">
+                        <input type="text" name="nome_negocio" placeholder="Nome do seu Comércio" required class="full-width">
+                        <textarea name="ramo_atuacao_aberto" placeholder="Descreva seu Ramo de Atuação (Ex: Restaurante, Loja...)" required rows="2" class="full-width"></textarea>
+                        <input type="text" name="tempo_mercado" placeholder="Há quanto tempo no mercado?">
+                        <input type="number" name="numero_funcionarios" placeholder="Número de funcionários">
+                    </div>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>2. Público-Alvo</h2>
+                    <p>Quem é o seu principal público? (Marque todos que se aplicam)</p>
+                    <div class="options">
+                        <div><input type="checkbox" id="pub-turistas" name="publico[]" value="Turistas"><label class="option-label" for="pub-turistas">Turistas / Veranistas</label></div>
+                        <div><input type="checkbox" id="pub-moradores" name="publico[]" value="Moradores Locais"><label class="option-label" for="pub-moradores">Moradores Locais</label></div>
+                        <div><input type="checkbox" id="pub-jovens" name="publico[]" value="Jovens"><label class="option-label" for="pub-jovens">Jovens</label></div>
+                        <div><input type="checkbox" id="pub-familias" name="publico[]" value="Famílias"><label class="option-label" for="pub-familias">Famílias</label></div>
+                        <div><input type="checkbox" id="pub-outro" name="publico[]" value="Outro"><label class="option-label" for="pub-outro">Outro(s)</label></div>
+                    </div>
+                    <input type="text" id="publico-outro-texto" class="outro-texto" name="publico_outro_texto" placeholder="Por favor, especifique o outro público">
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+
+                <div class="slide">
+                    <h2>3. Canais de Contato</h2>
+                    <p>Por quais canais seus clientes mais entram em contato? (Marque todos que se aplicam)</p>
+                    <div class="options">
+                        <div><input type="checkbox" id="canal-whatsapp" name="canais[]" value="WhatsApp"><label class="option-label" for="canal-whatsapp">WhatsApp</label></div>
+                        <div><input type="checkbox" id="canal-instagram" name="canais[]" value="Instagram Direct"><label class="option-label" for="canal-instagram">Instagram</label></div>
+                        <div><input type="checkbox" id="canal-telefone" name="canais[]" value="Telefone Fixo"><label class="option-label" for="canal-telefone">Telefone</label></div>
+                        <div><input type="checkbox" id="canal-outro" name="canais[]" value="Outro"><label class="option-label" for="canal-outro">Outro(s)</label></div>
+                    </div>
+                    <input type="text" id="canal-outro-texto" class="outro-texto" name="canal_outro_texto" placeholder="E-mail, Facebook, etc.">
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>4. Finalidade do WhatsApp</h2>
+                    <p>Para quais finalidades você mais usa o WhatsApp? (Marque todas que se aplicam)</p>
+                    <div class="options">
+                        <div><input type="checkbox" id="wpp-vendas" name="finalidade_wpp[]" value="Fechar Vendas"><label class="option-label" for="wpp-vendas">Fechar Vendas Diretas</label></div>
+                        <div><input type="checkbox" id="wpp-suporte" name="finalidade_wpp[]" value="Suporte"><label class="option-label" for="wpp-suporte">Tirar Dúvidas / Suporte</label></div>
+                        <div><input type="checkbox" id="wpp-agendamento" name="finalidade_wpp[]" value="Agendamentos"><label class="option-label" for="wpp-agendamento">Agendamentos</label></div>
+                        <div><input type="checkbox" id="wpp-relacionamento" name="finalidade_wpp[]" value="Relacionamento"><label class="option-label" for="wpp-relacionamento">Relacionamento pós-venda</label></div>
+                    </div>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+
+                <div class="slide">
+                    <h2>5. Tempo Gasto no WhatsApp</h2>
+                    <p>Quanto tempo por dia você ou sua equipe gastam respondendo perguntas repetitivas no WhatsApp?</p>
+                    <div class="options">
+                        <div><input type="radio" id="tempo-wpp-pouco" name="tempo-whatsapp" value="Pouco"><label class="option-label" for="tempo-wpp-pouco">Pouco tempo</label></div>
+                        <div><input type="radio" id="tempo-wpp-medio" name="tempo-whatsapp" value="Considerável"><label class="option-label" for="tempo-wpp-medio">Um tempo considerável</label></div>
+                        <div><input type="radio" id="tempo-wpp-muito" name="tempo-whatsapp" value="Muito, afeta a produtividade"><label class="option-label" for="tempo-wpp-muito">Muito, afeta a produtividade</label></div>
+                    </div>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>6. Oportunidades Perdidas</h2>
+                    <p>Você sente que já perdeu vendas por demorar a responder nas redes sociais (especialmente fora do horário comercial)?</p>
+                    <div class="options">
+                        <div><input type="radio" id="perdeu-venda-sim" name="perdeu-vendas" value="Sim"><label class="option-label" for="perdeu-venda-sim">Sim, com certeza</label></div>
+                        <div><input type="radio" id="perdeu-venda-talvez" name="perdeu-vendas" value="Talvez"><label class="option-label" for="perdeu-venda-talvez">Talvez, é difícil medir</label></div>
+                        <div><input type="radio" id="perdeu-venda-nao" name="perdeu-vendas" value="Não"><label class="option-label" for="perdeu-venda-nao">Acho que não</label></div>
+                    </div>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+
+                <div class="slide">
+                    <h2>7. Descoberta do Negócio</h2>
+                    <p>Como os clientes descobrem seu negócio hoje? (Marque os principais)</p>
+                    <div class="options">
+                        <div><input type="checkbox" id="desc-indicacao" name="descoberta[]" value="Indicação"><label class="option-label" for="desc-indicacao">Indicação (boca a boca)</label></div>
+                        <div><input type="checkbox" id="desc-fachada" name="descoberta[]" value="Fachada / Ponto Físico"><label class="option-label" for="desc-fachada">Ponto Físico</label></div>
+                        <div><input type="checkbox" id="desc-instagram" name="descoberta[]" value="Instagram"><label class="option-label" for="desc-instagram">Instagram</label></div>
+                        <div><input type="checkbox" id="desc-google" name="descoberta[]" value="Pesquisa no Google"><label class="option-label" for="desc-google">Google</label></div>
+                        <div><input type="checkbox" id="desc-outro" name="descoberta[]" value="Outro"><label class="option-label" for="desc-outro">Outro(s)</label></div>
+                    </div>
+                    <input type="text" id="descoberta-outro-texto" class="outro-texto" name="descoberta_outro_texto" placeholder="Anúncio em rádio, parcerias, etc.">
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>8. Presença Online</h2>
+                    <p>Sua empresa possui um site ou catálogo online?</p>
+                    <div class="options">
+                        <div><input type="radio" id="tem-site-sim" name="tem-site" value="Sim"><label class="option-label" for="tem-site-sim">Sim</label></div>
+                        <div><input type="radio" id="tem-site-nao" name="tem-site" value="Não"><label class="option-label" for="tem-site-nao">Não</label></div>
+                    </div>
+                    <textarea name="satisfacao-site" placeholder="Se sim, está satisfeito? Se não, por que optou por não ter?" class="full-width"></textarea>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>9. Avaliação das Redes Sociais</h2>
+                    <p>Como você avalia sua presença nas redes sociais (Instagram, Facebook)?</p>
+                    <div class="options">
+                        <div><input type="radio" id="social-otima" name="avaliacao-social" value="Ótima"><label class="option-label" for="social-otima">Ótima, gera muitos clientes</label></div>
+                        <div><input type="radio" id="social-boa" name="avaliacao-social" value="Boa"><label class="option-label" for="social-boa">Boa, mas poderia ser melhor</label></div>
+                        <div><input type="radio" id="social-fraca" name="avaliacao-social" value="Fraca"><label class="option-label" for="social-fraca">Fraca, posto sem estratégia</label></div>
+                        <div><input type="radio" id="social-inexistente" name="avaliacao-social" value="Inexistente"><label class="option-label" for="social-inexistente">Inexistente</label></div>
+                    </div>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+
+                <div class="slide">
+                    <h2>10. Conteúdo em Vídeo</h2>
+                    <p>Você cria vídeos para divulgar seu negócio? Qual seu maior impedimento para criar mais?</p>
+                    <textarea name="videos-marketing" placeholder="Ex: Crio pouco por falta de tempo. Não sei editar. Acho caro. Gostaria de fazer mais." class="full-width"></textarea>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+
+                <div class="slide">
+                    <h2>11. Dificuldade no Marketing</h2>
+                    <p>De forma geral, qual é sua maior dificuldade com marketing hoje?</p>
+                    <textarea name="maior-dificuldade-mkt" placeholder="Ex: Falta de tempo, falta de conhecimento, dificuldade de criar conteúdo, custo alto..." class="full-width"></textarea>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+
+                <div class="slide">
+                    <h2>12. Tarefas Repetitivas</h2>
+                    <p>Pensando na sua rotina (gestão de estoque, agendamentos, finanças), quais são as tarefas mais manuais e repetitivas?</p>
+                    <textarea name="tarefas-repetitivas" placeholder="Descreva as tarefas que mais consomem seu tempo" class="full-width"></textarea>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>13. Ferramentas de Gestão</h2>
+                    <p>Você utiliza algum sistema ou software para te ajudar a gerenciar o negócio?</p>
+                    <textarea name="ferramentas-gestao" placeholder="Ex: Nenhum, tudo no caderno. Uso planilhas. Tenho um sistema X..." class="full-width"></textarea>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>14. Desafio da Sazonalidade</h2>
+                    <p>Sendo Peruíbe uma cidade turística, qual o maior desafio que a sazonalidade (alta e baixa temporada) traz para o seu negócio?</p>
+                    <textarea name="desafio-sazonalidade" placeholder="Ex: Queda drástica de movimento, dificuldade de manter funcionários, etc." class="full-width"></textarea>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+
+                <div class="slide">
+                    <h2>15. Importância da Tecnologia</h2>
+                    <p>Numa escala de 1 (pouco importante) a 5 (essencial), qual a importância da tecnologia para o futuro do seu negócio?</p>
+                    <div class="options">
+                        <div><input type="radio" id="tec-1" name="importancia-tec" value="1"><label class="option-label" for="tec-1">1</label></div>
+                        <div><input type="radio" id="tec-2" name="importancia-tec" value="2"><label class="option-label" for="tec-2">2</label></div>
+                        <div><input type="radio" id="tec-3" name="importancia-tec" value="3"><label class="option-label" for="tec-3">3</label></div>
+                        <div><input type="radio" id="tec-4" name="importancia-tec" value="4"><label class="option-label" for="tec-4">4</label></div>
+                        <div><input type="radio" id="tec-5" name="importancia-tec" value="5"><label class="option-label" for="tec-5">5</label></div>
+                    </div>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>16. Barreiras para Inovação</h2>
+                    <p>Quais as principais barreiras que te impedem de adotar mais tecnologia? (Marque todas que se aplicam)</p>
+                    <div class="options">
+                        <div><input type="checkbox" id="barreira-custo" name="barreiras[]" value="Custo"><label class="option-label" for="barreira-custo">Custo do investimento</label></div>
+                        <div><input type="checkbox" id="barreira-conhecimento" name="barreiras[]" value="Falta de conhecimento"><label class="option-label" for="barreira-conhecimento">Falta de conhecimento</label></div>
+                        <div><input type="checkbox" id="barreira-tempo" name="barreiras[]" value="Falta de tempo"><label class="option-label" for="barreira-tempo">Falta de tempo para implementar</label></div>
+                        <div><input type="checkbox" id="barreira-outro" name="barreiras[]" value="Outro"><label class="option-label" for="barreira-outro">Outra(s)</label></div>
+                    </div>
+                    <input type="text" id="barreira-outro-texto" class="outro-texto" name="barreira_outro_texto" placeholder="Medo de não dar resultado, equipe resistente, etc.">
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Próximo →</button></div>
+                </div>
+                
+                <div class="slide">
+                    <h2>17. Prioridade de Investimento</h2>
+                    <p>Se você tivesse um orçamento para investir em uma única área amanhã, qual seria?</p>
+                    <div class="options">
+                        <div><input type="radio" id="prio-mkt" name="prioridade-investimento" value="Marketing"><label class="option-label" for="prio-mkt">Marketing e Divulgação</label></div>
+                        <div><input type="radio" id="prio-atend" name="prioridade-investimento" value="Atendimento"><label class="option-label" for="prio-atend">Melhorar Atendimento</label></div>
+                        <div><input type="radio" id="prio-gestao" name="prioridade-investimento" value="Gestão"><label class="option-label" for="prio-gestao">Organizar a Gestão Interna</label></div>
+                        <div><input type="radio" id="prio-outro" name="prioridade-investimento" value="Outro"><label class="option-label" for="prio-outro">Outra</label></div>
+                    </div>
+                    <input type="text" id="prio-outro-texto" class="outro-texto" name="prioridade_outro_texto" placeholder="Contratar pessoal, reformar o espaço, etc.">
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="button" class="btn next-btn">Quase no fim...</button></div>
+                </div>
+
+                <div class="slide">
+                    <div class="logo-container"><img src="/assets/images/logoNastia.png" alt="Logo da NástIA" class="logo" style="max-width: 100px;"></div>
+                    <h2>Último passo!</h2>
+                    <p>Deixe seus contatos para receber seu <strong>Diagnóstico Digital Gratuito</strong>.</p>
+                    <div class="form-grid">
+                        <input type="text" name="contato-nome" placeholder="Seu nome" required class="full-width">
+                        <input type="email" name="contato-email" placeholder="Seu melhor e-mail" required class="full-width">
+                        <input type="tel" name="contato-whatsapp" placeholder="Seu WhatsApp (XX) XXXXX-XXXX" required class="full-width">
+                    </div>
+                    <div id="error-message"></div>
+                    <div class="navigation"><button type="button" class="btn back-btn">← Voltar</button><button type="submit" class="btn">Receber meu Diagnóstico!</button></div>
+                </div>
+            </form>
+        </div>
+    </main>
+    
+    <div id="nast-ia-fab" title="Fale com a Nah">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+    </div>
+    <div id="nast-ia-chat-window">
+        <div class="chat-header">
+            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
+        </div>
+        <div class="chat-body" id="chat-log">
+            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
+        </div>
+        <div class="chat-footer">
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const nextBtns = document.querySelectorAll('.next-btn');
+        const backBtns = document.querySelectorAll('.back-btn');
+        const surveyForm = document.querySelector('form[name="pesquisa-diagnostico-completa"]');
+        const progressBar = document.getElementById('progress');
+        const errorMessage = document.getElementById('error-message');
+        let currentSlide = 0;
+        const totalSlides = slides.length - 1;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+            const progress = index > totalSlides - 1 ? 100 : (index / (totalSlides - 1)) * 100;
+            progressBar.style.width = `${progress}%`;
+            if(errorMessage) errorMessage.style.display = 'none';
+        }
+        
+        function validateSlide(index) {
+            const currentSlideElement = slides[index];
+            const inputs = currentSlideElement.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+            const requiredText = currentSlideElement.querySelector('input[required], textarea[required]');
+            if (requiredText && !requiredText.value.trim()) {
+                 errorMessage.textContent = 'Este campo é obrigatório.';
+                 errorMessage.style.display = 'block';
+                return false;
+            }
+            if (inputs.length === 0) return true;
+            const isChecked = Array.from(inputs).some(input => input.checked);
+            if (!isChecked) {
+                 errorMessage.textContent = 'Por favor, selecione uma opção.';
+                 errorMessage.style.display = 'block';
+            }
+            return isChecked;
+        }
+
+        nextBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (validateSlide(currentSlide)) {
+                    currentSlide++;
+                    if (currentSlide < slides.length) {
+                        showSlide(currentSlide);
+                    }
+                }
+            });
+        });
+        
+        backBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+        });
+        
+       if(surveyForm) {
+    surveyForm.addEventListener('submit', (e) => {
+        const nameInput = surveyForm.querySelector('input[name="contato-nome"]');
+        const emailInput = surveyForm.querySelector('input[name="contato-email"]');
+        const whatsappInput = surveyForm.querySelector('input[name="contato-whatsapp"]');
+        if (!nameInput.value.trim() || !emailInput.value.trim() || !whatsappInput.value.trim()) {
+            e.preventDefault();
+            errorMessage.textContent = 'Por favor, preencha nome, e-mail e WhatsApp.';
+            errorMessage.style.display = 'block';
+        }
+    });
+}
+        
+        function setupOtherOption(checkboxId, textInputId) {
+            const checkbox = document.getElementById(checkboxId);
+            const textInput = document.getElementById(textInputId);
+            if(checkbox && textInput) {
+                const isRadio = checkbox.type === 'radio';
+                if (isRadio) {
+                    const radioGroup = document.querySelectorAll(`input[name="${checkbox.name}"]`);
+                    radioGroup.forEach(radio => {
+                        radio.addEventListener('change', () => {
+                           textInput.style.display = checkbox.checked ? 'block' : 'none';
+                           if (!checkbox.checked) { textInput.value = ''; }
+                        });
+                    });
+                } else {
+                    checkbox.addEventListener('change', () => {
+                        textInput.style.display = checkbox.checked ? 'block' : 'none';
+                        if (!checkbox.checked) { textInput.value = ''; }
+                    });
+                }
+            }
+        }
+        
+        setupOtherOption('pub-outro', 'publico-outro-texto');
+        setupOtherOption('canal-outro', 'canal-outro-texto');
+        setupOtherOption('desc-outro', 'descoberta-outro-texto');
+        setupOtherOption('barreira-outro', 'barreira-outro-texto');
+        setupOtherOption('prio-outro', 'prio-outro-texto');
+        
+        showSlide(currentSlide);
+    </script>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

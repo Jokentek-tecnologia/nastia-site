@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Maturidade Digital | NástIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo para o novo cabeçalho com logo */
+        .header-voltar {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 100;
+        }
+        .header-voltar img {
+            height: 40px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .header-voltar img:hover {
+            opacity: 1;
+        }
+        /* Ajustes específicos do Quiz */
+        .quiz-container { background-color: var(--dark-gray); border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 199, 166, 0.2); overflow: hidden; width: 100%; max-width: 700px; }
+        .slide { display: none; padding: 40px; text-align: center; }
+        .slide.active { display: block; animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .option-label { text-align: left; }
+    </style>
+</head>
+<body class="page-centered">
+
+    <header class="header-voltar">
+        <a href="/" title="Voltar ao Início">
+            <img src="assets/images/logoNastia.png" alt="Logo da NástIA">
+        </a>
+    </header>
+
+    <main>
+        <div class="quiz-container">
+            <div class="slide active">
+                <h2>1/4: Como é o seu atendimento via WhatsApp hoje?</h2>
+                <div class="options" style="margin-top: 2rem;">
+                    <div><label class="option-label"><input type="radio" name="q1" value="1"> Totalmente manual, respondo quando tenho tempo.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q1" value="3"> Uso respostas rápidas, mas ainda sou eu que respondo tudo.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q1" value="5"> Já tenho algum nível de automação ou respostas automáticas.</label></div>
+                </div>
+            </div>
+            <div class="slide">
+                <h2>2/4: Sua empresa possui um site profissional?</h2>
+                <div class="options" style="margin-top: 2rem;">
+                    <div><label class="option-label"><input type="radio" name="q2" value="1"> Não tenho site.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q2" value="3"> Tenho um site simples, mas ele não gera vendas.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q2" value="5"> Sim, e meu site é uma importante fonte de clientes.</label></div>
+                </div>
+            </div>
+            <div class="slide">
+                <h2>3/4: Como você descreveria seu marketing digital?</h2>
+                <div class="options" style="margin-top: 2rem;">
+                    <div><label class="option-label"><input type="radio" name="q3" value="1"> Boca a boca é meu principal marketing.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q3" value="3"> Faço algumas postagens nas redes sociais de vez em quando.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q3" value="5"> Invisto em anúncios e tenho uma estratégia de conteúdo.</label></div>
+                </div>
+            </div>
+            <div class="slide">
+                <h2>4/4: Como você gerencia as tarefas repetitivas?</h2>
+                 <div class="options" style="margin-top: 2rem;">
+                    <div><label class="option-label"><input type="radio" name="q4" value="1"> Tudo no papel e na cabeça.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q4" value="3"> Uso planilhas para me organizar.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q4" value="5"> Utilizo algum software ou sistema de gestão.</label></div>
+                </div>
+            </div>
+            <div class="slide">
+                <h2>Seu resultado está pronto!</h2>
+                <p>Você está a um passo de descobrir o nível de maturidade digital da sua empresa. Deixe seu contato para receber o resultado completo e dicas personalizadas.</p>
+                <form id="quiz-form" style="text-align: left; max-width: 400px; margin: 2rem auto 0 auto;">
+                    <input type="text" id="quiz-nome" name="nome" placeholder="Seu nome" required>
+                    <input type="email" id="quiz-email" name="email" placeholder="Seu melhor e-mail" required style="margin-top:1rem; margin-bottom: 1rem;">
+                    <button type="submit" class="btn" style="width: 100%;">Ver meu Resultado!</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+     <form name="quiz-leads" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="nome" />
+        <input type="email" name="email" />
+        <input type="number" name="score" />
+    </form>
+
+    <div id="nast-ia-fab" title="Fale com a Nah">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+    </div>
+    <div id="nast-ia-chat-window">
+        <div class="chat-header">
+            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
+        </div>
+        <div class="chat-body" id="chat-log">
+            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
+        </div>
+        <div class="chat-footer">
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        
+        function showSlide(index) {
+            slides.forEach((slide, i) => slide.style.display = i === index ? 'block' : 'none');
+        }
+
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                setTimeout(() => {
+                    if (currentSlide < slides.length - 1) { // Avança até o último slide
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    }
+                }, 300);
+            });
+        });
+        
+        document.getElementById('quiz-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            let finalScore = 0;
+            const answers = document.querySelectorAll('input[type="radio"]:checked');
+            answers.forEach(answer => finalScore += parseInt(answer.value));
+            
+            const nome = document.getElementById('quiz-nome').value;
+            const email = document.getElementById('quiz-email').value;
+
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    "form-name": "quiz-leads",
+                    "nome": nome,
+                    "email": email,
+                    "score": finalScore
+                }).toString(),
+            })
+            .then(() => window.location.href = `/resultado-quiz.html?score=${finalScore}`)
+            .catch((error) => alert(error));
+        });
+
+        showSlide(0);
+    </script>
+     
+    <script src="scripts.js"></script>
+
+</body>
+</html>
