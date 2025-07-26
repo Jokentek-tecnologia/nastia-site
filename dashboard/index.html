@@ -100,11 +100,19 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const user = netlifyIdentity.currentUser();
-            if (user) {
-                // Exibe o nome do usuário ou, se não houver, o e-mail
-                document.getElementById('user-name').textContent = user.user_metadata.full_name || user.email;
-            }
+           const user = netlifyIdentity.currentUser();
+if (user) {
+    // Se o usuário está logado, mostra o nome dele
+    document.getElementById('user-name').textContent = user.user_metadata.full_name || user.email;
+} else {
+    // Se NÃO está logado, redireciona para a página inicial
+    window.location.href = '/';
+}
+
+// Continua escutando pelo evento de logout
+netlifyIdentity.on('logout', () => {
+    window.location.href = '/';
+});
 
             // Redireciona para a página inicial se o usuário fizer logout
             netlifyIdentity.on('logout', () => {
@@ -135,7 +143,7 @@ if (configForm) {
             delete data.ramo_outro; // Limpa o campo extra antes de enviar
 
             // A URL do seu webhook que você me passou
-            const webhookUrl = 'https://n8n.oresultador.com.br/webhook-test/criesuaIA';
+            const webhookUrl = 'https://n8n.oresultador.com.br/webhook/criesuaIA';
 
             // Envia os dados para o n8n
             const response = await fetch(webhookUrl, {
