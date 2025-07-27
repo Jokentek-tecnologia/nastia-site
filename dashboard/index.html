@@ -173,6 +173,58 @@
             if(this.value === 'outro') ramoOutroInput.setAttribute('required', 'true');
             else ramoOutroInput.removeAttribute('required');
         });
+
+        // ===========================================
+        //  NOVO CÓDIGO DA LÓGICA DO CHAT ADICIONADO AQUI
+        // ===========================================
+        const aiChatForm = document.getElementById('ai-chat-form');
+        const aiChatInput = document.getElementById('ai-chat-input');
+        const aiChatBody = document.getElementById('ai-chat-body');
+
+        if (aiChatForm) {
+            aiChatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userMessageText = aiChatInput.value.trim();
+                if (!userMessageText) return;
+
+                appendChatMessage(userMessageText, 'user');
+                aiChatInput.value = '';
+
+                const botTypingElement = appendChatMessage('Digitando...', 'bot');
+
+                try {
+                    const user = netlifyIdentity.currentUser();
+                    const response = await fetch('https://webhook.oresultador.com.br/webhook/Chat-IA', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: user.id,
+                            prompt: userMessageText
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('A resposta do servidor não foi bem-sucedida.');
+                    }
+
+                    const result = await response.json();
+                    
+                    botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
+
+                } catch (error) {
+                    botTypingElement.innerHTML = `<p>Ocorreu um erro ao conectar com a IA. Tente novamente.</p>`;
+                }
+            });
+        }
+
+        function appendChatMessage(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.innerHTML = `<p>${text}</p>`;
+            aiChatBody.appendChild(messageElement);
+            aiChatBody.scrollTop = aiChatBody.scrollHeight;
+            return messageElement;
+        }
     </script>
     <script src="../scripts.js"></script>
 
