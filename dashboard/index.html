@@ -28,156 +28,127 @@
                 <p class="subtitulo" style="text-align: left;">Este é o seu espaço para interagir com as ferramentas da NástIA. Em breve, aqui você poderá criar e testar seu próprio agente de IA.</p>
 
                 <div class="card" style="text-align: left;">
-    <h3>Personalize sua IA (Versão 1.0)</h3>
-    <p style="max-width: none; margin-bottom: 2rem;">Responda às perguntas abaixo para configurar o comportamento da sua assistente virtual. Suas respostas serão salvas automaticamente.</p>
+                    <h3>Personalize sua IA (Versão 1.0)</h3>
+                    <p style="max-width: none; margin-bottom: 2rem;">Responda às perguntas abaixo para configurar o comportamento da sua assistente virtual. Suas respostas serão salvas automaticamente.</p>
+                    <form id="ia-config-form">
+                        <label for="ia-nome-empresa">1. Qual o nome da sua empresa?</label>
+                        <input type="text" id="ia-nome-empresa" name="nome_empresa" placeholder="Ex: Pousada do Sol" required>
+                        <label for="ia-ramo-atividade">2. Qual o seu principal ramo de atividade?</label>
+                        <select id="ia-ramo-atividade" name="ramo_atividade" required>
+                            <option value="" disabled selected>Selecione uma opção</option>
+                            <option value="Restaurante/Delivery">Restaurante/Delivery</option>
+                            <option value="Pousada/Hotel">Pousada/Hotel</option>
+                            <option value="Loja de Varejo">Loja de Varejo</option>
+                            <option value="Serviços Locais">Serviços Locais</option>
+                            <option value="outro">Outro...</option>
+                        </select>
+                        <input type="text" id="ia-ramo-outro" name="ramo_outro" placeholder="Por favor, especifique" style="display: none; margin-top: 10px;">
+                        <label for="ia-horario" style="margin-top: 1rem; display: block;">3. Qual o seu horário de funcionamento?</label>
+                        <textarea id="ia-horario" name="horario" rows="3" placeholder="Ex: Seg a Sex, das 9h às 18h. Sáb, das 9h às 13h."></textarea>
+                        <label for="ia-whatsapp" style="margin-top: 1rem; display: block;">4. Qual o número de WhatsApp para direcionar um cliente?</label>
+                        <input type="tel" id="ia-whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
+                        <label for="ia-tom-voz" style="margin-top: 1rem; display: block;">5. Qual o tom de voz que sua IA deve usar?</label>
+                        <select id="ia-tom-voz" name="tom_voz" required>
+                            <option value="" disabled selected>Selecione uma opção</option>
+                            <option value="Amigável e Casual">Amigável e Casual</option>
+                            <option value="Profissional e Direto">Profissional e Direto</option>
+                            <option value="Entusiasmado e Vendedor">Entusiasmado e Vendedor</option>
+                        </select>
+                        <button type="submit" class="btn" style="width: 100%; margin-top: 2rem;">Salvar Configurações</button>
+                    </form>
+                </div>
 
-    <form id="ia-config-form">
-        <label for="ia-nome-empresa">1. Qual o nome da sua empresa?</label>
-        <input type="text" id="ia-nome-empresa" name="nome_empresa" placeholder="Ex: Pousada do Sol" required>
+                <script>
+                    const ramoSelect = document.getElementById('ia-ramo-atividade');
+                    const ramoOutroInput = document.getElementById('ia-ramo-outro');
+                    ramoSelect.addEventListener('change', function() {
+                        if (this.value === 'outro') {
+                            ramoOutroInput.style.display = 'block';
+                            ramoOutroInput.setAttribute('required', 'true');
+                        } else {
+                            ramoOutroInput.style.display = 'none';
+                            ramoOutroInput.removeAttribute('required');
+                            ramoOutroInput.value = '';
+                        }
+                    });
+                </script>
 
-        <label for="ia-ramo-atividade">2. Qual o seu principal ramo de atividade?</label>
-        <select id="ia-ramo-atividade" name="ramo_atividade" required>
-            <option value="" disabled selected>Selecione uma opção</option>
-            <option value="Restaurante/Delivery">Restaurante/Delivery</option>
-            <option value="Pousada/Hotel">Pousada/Hotel</option>
-            <option value="Loja de Varejo">Loja de Varejo</option>
-            <option value="Serviços Locais">Serviços Locais</option>
-            <option value="outro">Outro...</option>
-        </select>
-        <input type="text" id="ia-ramo-outro" name="ramo_outro" placeholder="Por favor, especifique" style="display: none; margin-top: 10px;">
+                <div class="card" style="text-align: left; margin-top: 2rem;">
+                    <h3>Converse com sua IA</h3>
+                    <p style="max-width: none; margin-bottom: 1.5rem;">Teste aqui o comportamento da sua assistente virtual. As respostas são geradas com base nas configurações que você salvou acima.</p>
+                    <div class="chat-interface-container">
+                        <div class="chat-body" id="ai-chat-body">
+                            <div class="chat-message bot">
+                                <p>Olá! Estou pronta para ajudar, com base nas configurações que você me deu. Como posso te ajudar a testar?</p>
+                            </div>
+                        </div>
+                        <div class="chat-footer">
+                            <form id="ai-chat-form">
+                                <input type="text" id="ai-chat-input" placeholder="Digite sua mensagem..." autocomplete="off" required>
+                                <button type="submit">Enviar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
-        <label for="ia-horario" style="margin-top: 1rem; display: block;">3. Qual o seu horário de funcionamento?</label>
-        <textarea id="ia-horario" name="horario" rows="3" placeholder="Ex: Seg a Sex, das 9h às 18h. Sáb, das 9h às 13h."></textarea>
-
-        <label for="ia-whatsapp" style="margin-top: 1rem; display: block;">4. Qual o número de WhatsApp para direcionar um cliente?</label>
-        <input type="tel" id="ia-whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
-
-        <label for="ia-tom-voz" style="margin-top: 1rem; display: block;">5. Qual o tom de voz que sua IA deve usar?</label>
-        <select id="ia-tom-voz" name="tom_voz" required>
-            <option value="" disabled selected>Selecione uma opção</option>
-            <option value="Amigável e Casual">Amigável e Casual</option>
-            <option value="Profissional e Direto">Profissional e Direto</option>
-            <option value="Entusiasmado e Vendedor">Entusiasmado e Vendedor</option>
-        </select>
-
-        <button type="submit" class="btn" style="width: 100%; margin-top: 2rem;">Salvar Configurações</button>
-    </form>
-</div>
-
-<script>
-    const ramoSelect = document.getElementById('ia-ramo-atividade');
-    const ramoOutroInput = document.getElementById('ia-ramo-outro');
-
-    ramoSelect.addEventListener('change', function() {
-        if (this.value === 'outro') {
-            ramoOutroInput.style.display = 'block';
-            ramoOutroInput.setAttribute('required', 'true');
-        } else {
-            ramoOutroInput.style.display = 'none';
-            ramoOutroInput.removeAttribute('required');
-            ramoOutroInput.value = ''; // Limpa o campo caso o usuário mude de ideia
-        }
-    });
-</script>
-
+            </div>
         </section>
     </main>
 
     <footer class="main-footer">
-        <div class="container">
-            <img src="../assets/images/logoNastia.png" alt="Logo da NástIA" class="footer-logo">
-            <p>© 2025 NástIA. Simplificando a tecnologia para o comércio de Peruíbe.</p>
-        </div>
-    </footer>
-
-    <div id="nast-ia-fab" title="Fale com a Nah">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
-    </div>
-    <div id="nast-ia-chat-window">
-        </div>
+        </footer>
 
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    
     <script>
-        // --- CÓDIGO CORRIGIDO PARA VERIFICAÇÃO DE LOGIN ---
-
-// Espera o sistema de identidade estar totalmente inicializado
-netlifyIdentity.on('init', user => {
-  // Se, na inicialização, o 'user' não existir, significa que ninguém está logado.
-  if (!user) {
-    // Então, redireciona para a página inicial.
-    window.location.href = '/';
-  } else {
-    // Se o usuário existir, exibe o nome dele no dashboard.
-    console.log('Usuário logado:', user);
-    document.getElementById('user-name').textContent = user.user_metadata.full_name || user.email;
-  }
-});
-
-// O código para o logout continua igual e funcionando
-netlifyIdentity.on('logout', () => {
-  window.location.href = '/';
-});
-
-// CÓDIGO PARA ENVIAR O FORMULÁRIO PARA O N8N
-const configForm = document.getElementById('ia-config-form');
-
-if (configForm) {
-    configForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Impede que a página recarregue
-
-        const submitButton = configForm.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.textContent = 'Salvando...';
-
-        try {
-            // Coleta todos os dados do formulário
-            const formData = new FormData(configForm);
-            const data = Object.fromEntries(formData.entries());
-
-	    // --- ADIÇÃO IMPORTANTE AQUI ---
-            // Pega o ID do usuário logado e adiciona aos dados
-            data.user_id = netlifyIdentity.currentUser().id;
-
-            // Se o usuário selecionou "Outro", usamos o valor que ele digitou
-            if (data.ramo_atividade === 'outro') {
-                data.ramo_atividade = data.ramo_outro;
-            }
-            delete data.ramo_outro; // Limpa o campo extra antes de enviar
-
-            // A URL do seu webhook que você me passou
-            const webhookUrl = 'https://n8n.oresultador.com.br/webhook/criesuaIA';
-
-            // Envia os dados para o n8n
-            const response = await fetch(webhookUrl, {
-                method: 'POST',
-                // O n8n espera os dados como texto, então enviamos como 'text/plain'
-                // e o n8n irá converter para JSON automaticamente.
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+        // SEUS SCRIPTS DE LOGIN E FORMULÁRIO (JÁ ESTÃO AQUI)
+        netlifyIdentity.on('init', user => {
+          if (!user) {
+            window.location.href = '/';
+          } else {
+            console.log('Usuário logado:', user);
+            document.getElementById('user-name').textContent = user.user_metadata.full_name || user.email;
+          }
+        });
+        netlifyIdentity.on('logout', () => {
+          window.location.href = '/';
+        });
+        const configForm = document.getElementById('ia-config-form');
+        if (configForm) {
+            configForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitButton = configForm.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Salvando...';
+                try {
+                    const formData = new FormData(configForm);
+                    const data = Object.fromEntries(formData.entries());
+                    data.user_id = netlifyIdentity.currentUser().id;
+                    if (data.ramo_atividade === 'outro') {
+                        data.ramo_atividade = data.ramo_outro;
+                    }
+                    delete data.ramo_outro;
+                    const webhookUrl = 'https://n8n.oresultador.com.br/webhook/criesuaIA';
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (!response.ok) {
+                        throw new Error('Houve um problema ao conectar com o servidor. Tente novamente.');
+                    }
+                    submitButton.textContent = 'Configurações Salvas com Sucesso!';
+                    setTimeout(() => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Salvar Configurações';
+                    }, 3000);
+                } catch (error) {
+                    alert(error.message);
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Salvar Configurações';
+                }
             });
-
-            if (!response.ok) {
-                throw new Error('Houve um problema ao conectar com o servidor. Tente novamente.');
-            }
-
-            // Se tudo deu certo, mostra um feedback de sucesso
-            submitButton.textContent = 'Configurações Salvas com Sucesso!';
-            // Opcional: reabilitar o botão após 3 segundos
-            setTimeout(() => {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Salvar Configurações';
-            }, 3000);
-
-        } catch (error) {
-            alert(error.message); // Mostra um alerta em caso de erro
-            submitButton.disabled = false;
-            submitButton.textContent = 'Salvar Configurações';
         }
-    });
-}
     </script>
-
     <script src="../scripts.js"></script>
 
 </body>

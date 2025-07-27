@@ -167,3 +167,78 @@ div[data-netlify-identity-widget] {
 .header-escondido {
     display: none !important;
 }
+
+/* --- ESTILOS PARA A INTERFACE DE CHAT DO DASHBOARD --- */
+.chat-interface-container {
+    border: 1px solid var(--medium-gray);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 500px; /* Altura fixa para o chat */
+    background-color: var(--black);
+}
+
+.chat-interface-container .chat-body {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chat-interface-container .chat-message {
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 80%;
+    line-height: 1.5;
+}
+
+.chat-interface-container .chat-message.bot {
+    background-color: var(--dark-gray);
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+ .chat-interface-container .chat-message.bot p {
+    margin: 0;
+    font-size: 1rem;
+ }
+
+.chat-interface-container .chat-message.user {
+    background-color: var(--teal);
+    color: var(--black);
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+ .chat-interface-container .chat-message.user p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--black);
+ }
+
+.chat-interface-container .chat-footer {
+    padding: 15px;
+    border-top: 1px solid var(--medium-gray);
+}
+
+.chat-interface-container #ai-chat-form {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+}
+
+.chat-interface-container #ai-chat-input {
+    flex-grow: 1;
+    margin-bottom: 0; /* Remove a margem padrão dos inputs */
+}
+
+.chat-interface-container .chat-footer button {
+    background: var(--teal);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
