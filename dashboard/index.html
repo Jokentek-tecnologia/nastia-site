@@ -153,7 +153,7 @@ if (configForm) {
                 method: 'POST',
                 // O n8n espera os dados como texto, então enviamos como 'text/plain'
                 // e o n8n irá converter para JSON automaticamente.
-                headers: { 'Content-Type': 'text/plain' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
