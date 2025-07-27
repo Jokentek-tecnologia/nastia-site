@@ -25,129 +25,154 @@
         <section id="dashboard-content">
             <div class="container" style="text-align: left;">
                 <h2>Bem-vindo(a) ao seu Dashboard, <span id="user-name">...</span>!</h2>
-                <p class="subtitulo" style="text-align: left;">Este é o seu espaço para interagir com as ferramentas da NástIA. Em breve, aqui você poderá criar e testar seu próprio agente de IA.</p>
+                <p class="subtitulo" style="text-align: left;">Este é o seu espaço para interagir com as ferramentas da NástIA.</p>
 
-                <div class="card" style="text-align: left;">
-                    <h3>Personalize sua IA (Versão 1.0)</h3>
-                    <p style="max-width: none; margin-bottom: 2rem;">Responda às perguntas abaixo para configurar o comportamento da sua assistente virtual. Suas respostas serão salvas automaticamente.</p>
-                    <form id="ia-config-form">
-                        <label for="ia-nome-empresa">1. Qual o nome da sua empresa?</label>
-                        <input type="text" id="ia-nome-empresa" name="nome_empresa" placeholder="Ex: Pousada do Sol" required>
-                        <label for="ia-ramo-atividade">2. Qual o seu principal ramo de atividade?</label>
-                        <select id="ia-ramo-atividade" name="ramo_atividade" required>
-                            <option value="" disabled selected>Selecione uma opção</option>
-                            <option value="Restaurante/Delivery">Restaurante/Delivery</option>
-                            <option value="Pousada/Hotel">Pousada/Hotel</option>
-                            <option value="Loja de Varejo">Loja de Varejo</option>
-                            <option value="Serviços Locais">Serviços Locais</option>
-                            <option value="outro">Outro...</option>
-                        </select>
-                        <input type="text" id="ia-ramo-outro" name="ramo_outro" placeholder="Por favor, especifique" style="display: none; margin-top: 10px;">
-                        <label for="ia-horario" style="margin-top: 1rem; display: block;">3. Qual o seu horário de funcionamento?</label>
-                        <textarea id="ia-horario" name="horario" rows="3" placeholder="Ex: Seg a Sex, das 9h às 18h. Sáb, das 9h às 13h."></textarea>
-                        <label for="ia-whatsapp" style="margin-top: 1rem; display: block;">4. Qual o número de WhatsApp para direcionar um cliente?</label>
-                        <input type="tel" id="ia-whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
-                        <label for="ia-tom-voz" style="margin-top: 1rem; display: block;">5. Qual o tom de voz que sua IA deve usar?</label>
-                        <select id="ia-tom-voz" name="tom_voz" required>
-                            <option value="" disabled selected>Selecione uma opção</option>
-                            <option value="Amigável e Casual">Amigável e Casual</option>
-                            <option value="Profissional e Direto">Profissional e Direto</option>
-                            <option value="Entusiasmado e Vendedor">Entusiasmado e Vendedor</option>
-                        </select>
-                        <button type="submit" class="btn" style="width: 100%; margin-top: 2rem;">Salvar Configurações</button>
-                    </form>
+                <div id="config-form-wrapper">
+                    <div class="card" style="text-align: left;">
+                        <h3>Personalize sua IA (Versão 1.0)</h3>
+                        <p style="max-width: none; margin-bottom: 2rem;">Responda às perguntas abaixo para configurar o comportamento da sua assistente virtual.</p>
+                        <form id="ia-config-form">
+                            <label for="ia-user-name">Seu Nome (para exibição)</label>
+                            <input type="text" id="ia-user-name" name="user_name" placeholder="Como devemos te chamar?" required>
+
+                            <label for="ia-nome-empresa" style="margin-top: 1rem; display: block;">1. Qual o nome da sua empresa?</label>
+                            <input type="text" id="ia-nome-empresa" name="nome_empresa" placeholder="Ex: Pousada do Sol" required>
+                            
+                            <label for="ia-ramo-atividade" style="margin-top: 1rem; display: block;">2. Qual o seu principal ramo de atividade?</label>
+                            <select id="ia-ramo-atividade" name="ramo_atividade" required>
+                                <option value="" disabled selected>Selecione uma opção</option>
+                                <option value="Restaurante/Delivery">Restaurante/Delivery</option>
+                                <option value="Pousada/Hotel">Pousada/Hotel</option>
+                                <option value="Loja de Varejo">Loja de Varejo</option>
+                                <option value="Serviços Locais">Serviços Locais</option>
+                                <option value="outro">Outro...</option>
+                            </select>
+                            <input type="text" id="ia-ramo-outro" name="ramo_outro" placeholder="Por favor, especifique" style="display: none; margin-top: 10px;">
+
+                            <label for="ia-horario" style="margin-top: 1rem; display: block;">3. Qual o seu horário de funcionamento?</label>
+                            <textarea id="ia-horario" name="horario" rows="3" placeholder="Ex: Seg a Sex, das 9h às 18h. Sáb, das 9h às 13h."></textarea>
+                            
+                            <label for="ia-whatsapp" style="margin-top: 1rem; display: block;">4. Qual o número de WhatsApp para direcionar um cliente?</label>
+                            <input type="tel" id="ia-whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX">
+                            
+                            <label for="ia-tom-voz" style="margin-top: 1rem; display: block;">5. Qual o tom de voz que sua IA deve usar?</label>
+                            <select id="ia-tom-voz" name="tom_voz" required>
+                                <option value="" disabled selected>Selecione uma opção</option>
+                                <option value="Amigável e Casual">Amigável e Casual</option>
+                                <option value="Profissional e Direto">Profissional e Direto</option>
+                                <option value="Entusiasmado e Vendedor">Entusiasmado e Vendedor</option>
+                            </select>
+                            
+                            <button type="submit" class="btn" style="width: 100%; margin-top: 2rem;">Salvar e Iniciar</button>
+                        </form>
+                    </div>
                 </div>
+                
+                <button id="edit-config-btn" class="btn" style="display: none; margin-bottom: 2rem;">Editar Configurações</button>
 
-                <script>
-                    const ramoSelect = document.getElementById('ia-ramo-atividade');
-                    const ramoOutroInput = document.getElementById('ia-ramo-outro');
-                    ramoSelect.addEventListener('change', function() {
-                        if (this.value === 'outro') {
-                            ramoOutroInput.style.display = 'block';
-                            ramoOutroInput.setAttribute('required', 'true');
-                        } else {
-                            ramoOutroInput.style.display = 'none';
-                            ramoOutroInput.removeAttribute('required');
-                            ramoOutroInput.value = '';
-                        }
-                    });
-                </script>
-
-                <div class="card" style="text-align: left; margin-top: 2rem;">
-                    <h3>Converse com sua IA</h3>
-                    <p style="max-width: none; margin-bottom: 1.5rem;">Teste aqui o comportamento da sua assistente virtual. As respostas são geradas com base nas configurações que você salvou acima.</p>
-                    <div class="chat-interface-container">
-                        <div class="chat-body" id="ai-chat-body">
-                            <div class="chat-message bot">
-                                <p>Olá! Estou pronta para ajudar, com base nas configurações que você me deu. Como posso te ajudar a testar?</p>
+                <div id="chat-wrapper" style="display: none;"> <div class="card" style="text-align: left;">
+                        <h3>Converse com sua IA</h3>
+                        <p style="max-width: none; margin-bottom: 1.5rem;">Teste aqui o comportamento da sua assistente virtual.</p>
+                        <div class="chat-interface-container">
+                            <div class="chat-body" id="ai-chat-body">
+                                <div class="chat-message bot">
+                                    <p>Olá! Estou pronta para ajudar, com base nas configurações que você me deu. Como posso te ajudar a testar?</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="chat-footer">
-                            <form id="ai-chat-form">
-                                <input type="text" id="ai-chat-input" placeholder="Digite sua mensagem..." autocomplete="off" required>
-                                <button type="submit">Enviar</button>
-                            </form>
+                            <div class="chat-footer">
+                                <form id="ai-chat-form">
+                                    <input type="text" id="ai-chat-input" placeholder="Digite sua mensagem..." autocomplete="off" required>
+                                    <button type="submit">Enviar</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
     </main>
 
-    <footer class="main-footer">
-        </footer>
-
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-        // SEUS SCRIPTS DE LOGIN E FORMULÁRIO (JÁ ESTÃO AQUI)
+        // --- LÓGICA GERAL DO DASHBOARD ---
+        const configWrapper = document.getElementById('config-form-wrapper');
+        const chatWrapper = document.getElementById('chat-wrapper');
+        const editBtn = document.getElementById('edit-config-btn');
+        const configForm = document.getElementById('ia-config-form');
+        const userNameSpan = document.getElementById('user-name');
+        const userNameInput = document.getElementById('ia-user-name');
+
+        // --- LÓGICA DE LOGIN E AUTENTICAÇÃO ---
         netlifyIdentity.on('init', user => {
           if (!user) {
             window.location.href = '/';
           } else {
-            console.log('Usuário logado:', user);
-            document.getElementById('user-name').textContent = user.user_metadata.full_name || user.email;
+            const fullName = user.user_metadata.full_name;
+            userNameSpan.textContent = fullName || user.email;
+            if (fullName) {
+                userNameInput.value = fullName;
+            }
           }
         });
-        netlifyIdentity.on('logout', () => {
-          window.location.href = '/';
-        });
-        const configForm = document.getElementById('ia-config-form');
+        netlifyIdentity.on('logout', () => window.location.href = '/');
+
+        // --- LÓGICA DO FORMULÁRIO DE CONFIGURAÇÃO ---
         if (configForm) {
             configForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const submitButton = configForm.querySelector('button[type="submit"]');
                 submitButton.disabled = true;
                 submitButton.textContent = 'Salvando...';
+
+                const user = netlifyIdentity.currentUser();
+                const newName = userNameInput.value;
+
                 try {
+                    // 1. Atualiza o nome do usuário no Netlify Identity
+                    await user.update({ data: { full_name: newName } });
+                    userNameSpan.textContent = newName; // Atualiza o "Bem-vindo" na hora
+
+                    // 2. Envia os dados para o n8n
                     const formData = new FormData(configForm);
                     const data = Object.fromEntries(formData.entries());
-                    data.user_id = netlifyIdentity.currentUser().id;
-                    if (data.ramo_atividade === 'outro') {
-                        data.ramo_atividade = data.ramo_outro;
-                    }
+                    data.user_id = user.id;
+                    if (data.ramo_atividade === 'outro') data.ramo_atividade = data.ramo_outro;
                     delete data.ramo_outro;
+                    
                     const webhookUrl = 'https://n8n.oresultador.com.br/webhook/criesuaIA';
-                    const response = await fetch(webhookUrl, {
+                    await fetch(webhookUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data)
                     });
-                    if (!response.ok) {
-                        throw new Error('Houve um problema ao conectar com o servidor. Tente novamente.');
-                    }
-                    submitButton.textContent = 'Configurações Salvas com Sucesso!';
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                        submitButton.textContent = 'Salvar Configurações';
-                    }, 3000);
+
+                    // 3. Esconde o formulário e mostra o chat
+                    configWrapper.style.display = 'none';
+                    chatWrapper.style.display = 'block';
+                    editBtn.style.display = 'inline-block';
+
                 } catch (error) {
-                    alert(error.message);
+                    alert('Houve um erro ao salvar: ' + error.message);
                     submitButton.disabled = false;
-                    submitButton.textContent = 'Salvar Configurações';
+                    submitButton.textContent = 'Salvar e Iniciar';
                 }
             });
         }
+        
+        // Lógica para o botão de editar
+        editBtn.addEventListener('click', () => {
+            configWrapper.style.display = 'block';
+            editBtn.style.display = 'none';
+        });
+
+        // Lógica para o campo "Outro" do ramo de atividade
+        const ramoSelect = document.getElementById('ia-ramo-atividade');
+        const ramoOutroInput = document.getElementById('ia-ramo-outro');
+        ramoSelect.addEventListener('change', function() {
+            ramoOutroInput.style.display = (this.value === 'outro') ? 'block' : 'none';
+            if(this.value === 'outro') ramoOutroInput.setAttribute('required', 'true');
+            else ramoOutroInput.removeAttribute('required');
+        });
     </script>
     <script src="../scripts.js"></script>
 
