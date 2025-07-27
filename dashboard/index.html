@@ -135,6 +135,10 @@ if (configForm) {
             const formData = new FormData(configForm);
             const data = Object.fromEntries(formData.entries());
 
+	    // --- ADIÇÃO IMPORTANTE AQUI ---
+            // Pega o ID do usuário logado e adiciona aos dados
+            data.user_id = netlifyIdentity.currentUser().id;
+
             // Se o usuário selecionou "Outro", usamos o valor que ele digitou
             if (data.ramo_atividade === 'outro') {
                 data.ramo_atividade = data.ramo_outro;
