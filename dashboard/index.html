@@ -1,140 +1,146 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | NástIA</title>
-    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Nastia</title>
+    <link rel="shortcut icon" href="../assets/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+
 </head>
+
 <body>
-
-    <header class="header-minimalista">
-        <div class="container">
-            <a href="/"><img src="../assets/images/logoNastia.png" alt="Logo da NástIA" class="header-logo"></a>
-            <div>
-                <a href="#" onclick="netlifyIdentity.logout(); return false;" class="btn-inicio">Sair</a>
-            </div>
-        </div>
-    </header>
-    
+    <div class="preloader">
+        <div class="counter">0</div>
+    </div>
     <main>
-        <section id="dashboard-content">
-            <div class="container" style="text-align: left;">
-                <h2>Bem-vindo(a) ao seu Dashboard, <span id="user-name">...</span>!</h2>
-                <p class="subtitulo" style="text-align: left;">Este é o seu espaço para interagir com as ferramentas da NástIA.</p>
-
-                <div id="config-form-wrapper" style="display: none;">
-                    <div class="card" style="text-align: left;">
-                        <h3>Personalize sua IA (Versão 1.0)</h3>
-                        <p style="max-width: none; margin-bottom: 2rem;">Responda às perguntas abaixo para configurar o comportamento da sua assistente virtual.</p>
-                        <form id="ia-config-form">
-                            </form>
-                    </div>
+        <div class="main-content d-flex flex-wrap">
+            <div class="sidebar-menu">
+                <div class="sidebar-logo-area">
+                    <a href="index.html" class="sidebar-logo">
+                        <img src="../assets/images/logo.png" alt="logo">
+                    </a>
+                    <button class="sidebar-toggle-btn">
+                        <img src="../assets/images/icons/menu-toggle.svg" alt="menu-toggle">
+                    </button>
                 </div>
-                
-                <div id="chat-wrapper">
-                    <div class="card" style="text-align: left;">
-                        <h3>Entrevista de Configuração</h3>
-                        <p style="max-width: none; margin-bottom: 1.5rem;">Responda às perguntas da nossa assistente para configurar a sua IA.</p>
-                        <div class="chat-interface-container">
-                            <div class="chat-body" id="ai-chat-body">
+                <ul class="sidebar-nav-list">
+                    <li>
+                        <a href="index.html" class="active">
+                            <span class="item-icon"><img src="../assets/images/icons/nav-item-1.svg" alt="icon"></span>
+                            <span class="item-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="prompt.html">
+                            <span class="item-icon"><img src="../assets/images/icons/nav-item-2.svg" alt="icon"></span>
+                            <span class="item-text">Prompts</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="datasets.html">
+                            <span class="item-icon"><img src="../assets/images/icons/nav-item-3.svg" alt="icon"></span>
+                            <span class="item-text">Datasets</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="models.html">
+                            <span class="item-icon"><img src="../assets/images/icons/nav-item-4.svg" alt="icon"></span>
+                            <span class="item-text">Models</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="integrations.html">
+                            <span class="item-icon"><img src="../assets/images/icons/nav-item-5.svg" alt="icon"></span>
+                            <span class="item-text">Integrations</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html">
+                            <span class="item-icon"><img src="../assets/images/icons/nav-item-6.svg" alt="icon"></span>
+                            <span class="item-text">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="sidebar-bottom-list">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <span class="item-icon"><img src="../assets/images/icons/nav-item-7.svg"
+                                        alt="icon"></span>
+                                <span class="item-text">Support</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="item-icon"><img src="../assets/images/icons/nav-item-8.svg"
+                                        alt="icon"></span>
+                                <span class="item-text">Log Out</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-area">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="interviewer-screen" class="content-chat-area">
+                                <div class="chat-header">
+                                    <div class="chat-header-info">
+                                        <h3 class="title">Entrevistador de IA</h3>
+                                        <p class="text">Vamos construir seu Agente Teste</p>
+                                    </div>
                                 </div>
-                            <div class="chat-footer">
-                                <form id="ai-chat-form">
-                                    <input type="text" id="ai-chat-input" placeholder="Digite sua resposta..." autocomplete="off" required>
-                                    <button type="submit">Enviar</button>
-                                </form>
+                                <div id="interviewer-messages" class="chat-body">
+                                    </div>
+                                <div class="chat-footer">
+                                    <form id="interviewer-form" class="chat-form">
+                                        <button class="chat-plus-btn"><img src="../assets/images/icons/plus-icon.svg" alt="plus"></button>
+                                        <input id="interviewer-input" type="text" class="form-control" placeholder="Digite sua resposta...">
+                                        <button type="submit" class="chat-submit-btn"><img src="../assets/images/icons/submit-icon.svg" alt="submit"></button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div id="loading-screen" class="content-chat-area hidden">
+                                <div class="loading-content">
+                                    <h2>Construindo seu Agente...</h2>
+                                    <p>Aguarde um momento, a mágica está acontecendo.</p>
+                                    <div class="spinner"></div>
+                                </div>
+                            </div>
+
+                            <div id="test-agent-screen" class="content-chat-area hidden">
+                                <div class="chat-header">
+                                    <div class="chat-header-info">
+                                        <h3 class="title">Seu Agente de Teste</h3>
+                                        <p class="text">Converse com a versão piloto do seu agente</p>
+                                    </div>
+                                </div>
+                                <div id="test-agent-messages" class="chat-body">
+                                    </div>
+                                <div class="chat-footer">
+                                    <form id="test-agent-form" class="chat-form">
+                                        <button class="chat-plus-btn"><img src="../assets/images/icons/plus-icon.svg" alt="plus"></button>
+                                        <input id="test-agent-input" type="text" class="form-control" placeholder="Converse com seu agente...">
+                                        <button type="submit" class="chat-submit-btn"><img src="../assets/images/icons/submit-icon.svg" alt="submit"></button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-        // --- LÓGICA GERAL DO DASHBOARD ---
-        const configWrapper = document.getElementById('config-form-wrapper');
-        const chatWrapper = document.getElementById('chat-wrapper');
-        const userNameSpan = document.getElementById('user-name');
-        const aiChatForm = document.getElementById('ai-chat-form');
-        const aiChatInput = document.getElementById('ai-chat-input');
-        const aiChatBody = document.getElementById('ai-chat-body');
-
-        // --- LÓGICA DE LOGIN E INÍCIO DA ENTREVISTA ---
-        netlifyIdentity.on('init', user => {
-          if (!user) {
-            window.location.href = '/';
-          } else {
-            const fullName = user.user_metadata.full_name || user.email;
-            userNameSpan.textContent = fullName;
-            startInterview();
-          }
-        });
-        netlifyIdentity.on('logout', () => window.location.href = '/');
-
-        // --- LÓGICA DO CHAT DA ENTREVISTA ---
-        if (aiChatForm) {
-            aiChatForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const userMessageText = aiChatInput.value.trim();
-                if (!userMessageText) return;
-
-                appendChatMessage(userMessageText, 'user');
-                aiChatInput.value = '';
-
-                const botTypingElement = appendChatMessage('Digitando...', 'bot');
-
-                // A URL agora aponta para o seu novo workflow "Entrevistador"
-                const webhookUrl = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA';
-                
-                try {
-                    const user = netlifyIdentity.currentUser();
-                    const response = await fetch(webhookUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            userId: user.id,
-                            userName: user.user_metadata.full_name || user.email,
-                            prompt: userMessageText
-                        })
-                    });
-
-                    if (!response.ok) throw new Error('A resposta do servidor não foi bem-sucedida.');
-
-                    const result = await response.json();
-                    botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
-                } catch (error) {
-                    botTypingElement.innerHTML = `<p>Ocorreu um erro ao conectar com a IA. Tente novamente.</p>`;
-                }
-            });
-        }
-
-        function startInterview() {
-            // Garante que o chat está visível e o formulário escondido
-            configWrapper.style.display = 'none';
-            chatWrapper.style.display = 'block';
-
-            // Limpa o chat e envia a primeira mensagem do entrevistador
-            aiChatBody.innerHTML = '';
-            appendChatMessage('Olá! Eu sou sua assistente de configuração. Para começarmos, preciso de fazer algumas perguntas para entender o seu negócio. Quando estiver pronto, diga "começar".', 'bot');
-        }
-
-        function appendChatMessage(text, sender) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('chat-message', sender);
-            messageElement.innerHTML = `<p>${text}</p>`;
-            aiChatBody.appendChild(messageElement);
-            aiChatBody.scrollTop = aiChatBody.scrollHeight;
-            return messageElement;
-        }
-    </script>
-    <script src="../scripts.js"></script>
-
+            </div>
+        </main>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/jquery-3.6.0.min.js"></script>
+    <script src="../assets/js/scripts.js"></script>
 </body>
+
 </html>
