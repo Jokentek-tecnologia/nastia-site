@@ -80,7 +80,6 @@
                 <form id="quiz-form" style="text-align: left; max-width: 400px; margin: 2rem auto 0 auto;">
                     <input type="text" id="quiz-nome" name="nome" placeholder="Seu nome" required>
                     <input type="email" id="quiz-email" name="email" placeholder="Seu melhor e-mail" required style="margin-top:1rem;">
-                    
                     <input type="tel" id="quiz-whatsapp" name="whatsapp" placeholder="Seu WhatsApp (opcional, para contato rápido)" style="margin-top:1rem; margin-bottom: 1rem;">
                     <button type="submit" class="btn" style="width: 100%;">Ver meu Diagnóstico!</button>
                 </form>
@@ -115,6 +114,25 @@
     <script>
         const slides = document.querySelectorAll('.slide');
         let currentSlide = 0;
+
+        // ===== NOVA FUNÇÃO PARA FORMATAR O NÚMERO DE WHATSAPP =====
+        function formatarNumeroWhatsApp(numero) {
+            if (!numero) {
+                return ''; // Retorna vazio se o campo não for preenchido
+            }
+            // 1. Remove tudo que não for número (parênteses, traços, espaços)
+            const numeroLimpo = numero.replace(/\D/g, '');
+
+            // 2. Verifica se o número já tem o código do país (55)
+            // Um número brasileiro completo (55 + DDD + 9 dígitos) tem 13 dígitos.
+            // Se tiver 12 (55 + DDD + 8 dígitos), também aceitamos.
+            if (numeroLimpo.length >= 12 && numeroLimpo.startsWith('55')) {
+                return `${numeroLimpo}@s.whatsapp.net`;
+            }
+
+            // 3. Se não tiver, adicionamos o 55 (assumindo que é um número brasileiro)
+            return `55${numeroLimpo}@s.whatsapp.net`;
+        }
         
         function showSlide(index) {
             slides.forEach((slide, i) => {
@@ -145,29 +163,25 @@
             
             const nome = document.getElementById('quiz-nome').value;
             const email = document.getElementById('quiz-email').value;
-            // ===== NOVO: Captura do número de WhatsApp =====
-            const whatsapp = document.getElementById('quiz-whatsapp').value.trim();
+            const whatsappRaw = document.getElementById('quiz-whatsapp').value.trim();
 
-            // ===== NOVO: Lógica de disparo para o n8n =====
+            // ===== MODIFICAÇÃO: Usamos a nova função para formatar o número =====
+            const whatsappFormatado = formatarNumeroWhatsApp(whatsappRaw);
+
             const n8nWebhookUrl = 'https://webhook.oresultador.com.br/webhook/Quiz';
             
-            // Só executa a chamada para o n8n se o campo de WhatsApp foi preenchido
-            if (whatsapp) {
-                // Envia os dados para o n8n em segundo plano (não trava o site)
+            if (whatsappFormatado) {
                 fetch(n8nWebhookUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         nome: nome,
                         email: email,
-                        whatsapp: whatsapp,
+                        whatsapp: whatsappFormatado, // Enviamos o número já formatado
                         score: finalScore
                     })
                 }).catch(error => console.error('Erro ao enviar dados para o n8n:', error));
-                // O .catch() garante que, mesmo se o n8n falhar, o processo principal continue
             }
-            // ===== FIM DA NOVA LÓGICA =====
-
 
             // Lógica original para enviar os dados ao Netlify e redirecionar
             fetch("/", {
@@ -178,7 +192,7 @@
                     "nome": nome,
                     "email": email,
                     "score": finalScore,
-                    "whatsapp": whatsapp // Adicionamos o whatsapp aqui também para salvar no Netlify
+                    "whatsapp": whatsappRaw // Salvamos o número "cru" no Netlify, como o usuário digitou
                 }).toString(),
             })
             .then(() => window.location.href = `/resultado-quiz.html?score=${finalScore}`)
