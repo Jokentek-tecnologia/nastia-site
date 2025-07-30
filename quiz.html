@@ -75,12 +75,12 @@
                 </div>
             </div>
             <div class="slide">
-                <h2>Seu resultado está pronto!</h2>
-                <p>Você está a um passo de descobrir o nível de maturidade digital da sua empresa. Deixe seu contato para receber o resultado completo e dicas personalizadas.</p>
+                <h2>Estamos quase lá!</h2>
+                <p>Analisamos suas respostas e preparamos um diagnóstico rápido sobre a maturidade digital da sua empresa. Para ver seu resultado, por favor, informe seu nome e e-mail.</p>
                 <form id="quiz-form" style="text-align: left; max-width: 400px; margin: 2rem auto 0 auto;">
                     <input type="text" id="quiz-nome" name="nome" placeholder="Seu nome" required>
                     <input type="email" id="quiz-email" name="email" placeholder="Seu melhor e-mail" required style="margin-top:1rem; margin-bottom: 1rem;">
-                    <button type="submit" class="btn" style="width: 100%;">Ver meu Resultado!</button>
+                    <button type="submit" class="btn" style="width: 100%;">Ver meu Diagnóstico!</button>
                 </form>
             </div>
         </div>
@@ -114,7 +114,13 @@
         let currentSlide = 0;
         
         function showSlide(index) {
-            slides.forEach((slide, i) => slide.style.display = i === index ? 'block' : 'none');
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
         }
 
         document.querySelectorAll('input[type="radio"]').forEach(radio => {

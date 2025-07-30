@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seu Resultado | NástIA</title>
+    <title>Seu Diagnóstico Digital | NástIA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,11 +82,11 @@
             <p id="resultado-texto"></p>
 
             <div class="cta-box">
-                <h3 id="cta-titulo"></h3>
-                <p id="cta-texto"></p>
-                <a href="/#contato" class="btn">Agendar uma Conversa</a>
+                <h3>Quer saber como melhorar?</h3>
+                <p>O próximo passo é uma conversa rápida de 15 minutos, sem compromisso, onde te mostrarei na prática como podemos aplicar essas melhorias no seu negócio.</p>
+                <a href="https://calendly.com/contas-nastia/30min" target="_blank" class="btn">Agendar Análise Gratuita</a>
             </div>
-        </div>
+            </div>
     </main>
     
     <div id="nast-ia-fab" title="Fale com a Nah">
@@ -114,37 +114,29 @@
         const resultIcon = document.getElementById('resultado-icon');
         const resultTitulo = document.getElementById('resultado-titulo');
         const resultTexto = document.getElementById('resultado-texto');
-        const ctaTitulo = document.getElementById('cta-titulo');
-        const ctaTexto = document.getElementById('cta-texto');
+        
+        // ===== INÍCIO DA MODIFICAÇÃO =====
+        // Lógica aprimorada para os resultados
+        let icon, titulo, texto;
 
-        let icon, titulo, texto, cta_titulo, cta_texto;
-
-        if (score <= 8) {
+        if (score <= 8) { // Pontuação Baixa
             icon = "🧭";
             titulo = "Seu Nível: Explorador Digital";
-            texto = "Sua empresa está começando a jornada digital. Existem muitas oportunidades incríveis de automação e marketing que podem alavancar seus resultados rapidamente.";
-            cta_titulo = "Seu potencial é imenso!";
-            cta_texto = "O primeiro passo é o mais importante. Que tal agendarmos uma conversa para criarmos juntos o seu mapa digital?";
-        } else if (score <= 15) {
+            texto = "Parabéns por começar sua jornada! Percebemos que seu negócio tem um enorme potencial de crescimento, mas talvez ainda não esteja aproveitando todas as ferramentas digitais. Ações simples, como otimizar seu perfil no Google e automatizar o primeiro contato no WhatsApp, podem gerar um impacto imediato no seu faturamento.";
+        } else if (score <= 15) { // Pontuação Média
             icon = "🛠️";
             titulo = "Seu Nível: Construtor Digital";
-            texto = "Você já tem uma base digital sólida, mas ela pode ser muito mais poderosa! A integração das suas ferramentas e a automação de processos podem liberar um tempo valioso.";
-            cta_titulo = "Você já tem as ferramentas, vamos construir algo incrível!";
-            cta_texto = "Nossos especialistas podem te mostrar como integrar e automatizar seus processos para o próximo nível.";
-        } else {
+            texto = "Excelente trabalho! Você já tem uma base digital sólida e entende a importância de estar online. Seu desafio agora é otimizar e conectar as ferramentas que você já usa para economizar tempo e converter mais clientes. Automações inteligentes podem ser o próximo grande passo para você se destacar.";
+        } else { // Pontuação Alta
             icon = "🚀";
-            titulo = "Seu Nível: Estrategista Digital";
-            texto = "Parabéns, você já está à frente da maioria! O próximo passo é otimizar suas estratégias com IA e analisar dados de forma inteligente para criar uma experiência única.";
-            cta_titulo = "Você está no caminho certo para liderar o mercado!";
-            cta_texto = "Vamos conversar sobre estratégias avançadas de IA e dados para acelerar ainda mais seu crescimento?";
+            titulo = "Seu Nível: Visionário Digital";
+            texto = "Impressionante! Sua empresa já opera em um alto nível de maturidade digital. O próximo nível para você envolve a integração avançada entre sistemas e o uso de inteligência artificial para criar experiências ultra-personalizadas, transformando seu negócio em uma verdadeira potência na sua área.";
         }
 
         resultIcon.textContent = icon;
         resultTitulo.textContent = titulo;
         resultTexto.textContent = texto;
-        ctaTitulo.textContent = cta_titulo;
-        ctaTexto.textContent = cta_texto;
-    </g>
+        // ===== FIM DA MODIFICAÇÃO =====
     </script>
      
     <script src="scripts.js"></script>
