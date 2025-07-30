@@ -1,384 +1,291 @@
-/* =======================================
-    01. Common-area
-======================================= */
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+/* ARQUIVO: style.css (VERSÃO COM A CORREÇÃO DO DESIGN DOS FORMULÁRIOS) */
 
 :root {
-  /* color */
-  --clr-white: #ffffff;
-  --clr-black: #080325;
-  --clr-black-2: #232039;
-  --clr-black-3: #1B182F;
-  --clr-purple: #6124FF;
-  --clr-purple-2: #8456FD;
-  --clr-text: #898798;
-  --clr-text-2: #6A687A;
-  --clr-border: #353249;
-  --clr-border-2: #E9E8F1;
-  --clr-bg: #F9F9FF;
-  --clr-bg-2: #F3F3FF;
-  --clr-bg-3: #232039;
-  --clr-bg-4: #F8F8F8;
-  --clr-green: #00D494;
-  --clr-yellow: #FFB800;
-  --clr-red: #FF342A;
-
-  /* font-family */
-  --font-body: "Plus Jakarta Sans", sans-serif;
-
-  /* box-shadow */
-  --shadow-1: 0px 4px 40px 0px rgba(0, 0, 0, 0.05);
-  --shadow-2: 0px 4px 40px 0px rgba(0, 0, 0, 0.10);
+    --teal: #00C7A6; --magenta: #8C0376; --medium-gray: #6E6E6E; --dark-gray: #424242; --black: #000000; --gold: #FFD700;
+    --text-light: #f0f0f0; --text-medium: #c0c0c0; --white: #ffffff;
 }
 
-/* dark-theme */
-[data-theme="dark"] {
-  /* color */
-  --clr-white: #080325;
-  --clr-black: #ffffff;
-  --clr-black-2: #ffffff;
-  --clr-black-3: #ffffff;
-  --clr-purple: #6124FF;
-  --clr-purple-2: #8456FD;
-  --clr-text: #898798;
-  --clr-text-2: #898798;
-  --clr-border: #353249;
-  --clr-border-2: #353249;
-  --clr-bg: #1B182F;
-  --clr-bg-2: #232039;
-  --clr-bg-3: #ffffff;
-  --clr-bg-4: #232039;
-}
-
-*,
-*::before,
-*::after {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
+/* --- ESTILOS GERAIS --- */
+* { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 body {
-  color: var(--clr-text);
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-  background: var(--clr-bg);
-  overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+    background: var(--black);
+    color: var(--text-light);
+}
+.container { width: 90%; max-width: 1100px; margin: 0 auto; }
+section { padding: 100px 0; text-align: center; }
+
+/* --- CLASSE PARA PÁGINAS CENTRALIZADAS (QUIZ, PESQUISA, ETC.) --- */
+.page-centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-::-moz-selection {
-  background: var(--clr-purple);
-  color: var(--clr-white);
-  text-shadow: none;
+/* --- CORREÇÃO AUTOMÁTICA DO CABEÇALHO --- */
+body:not(.page-centered) main {
+    padding-top: 100px; 
 }
 
-::selection {
-  background: var(--clr-purple);
-  color: var(--clr-white);
-  text-shadow: none;
-}
+/* --- TIPOGRAFIA E BOTÕES --- */
+h1 { font-size: 3.5rem; color: var(--teal); line-height: 1.2; margin-bottom: 1rem; }
+h2 { font-size: 2.5rem; color: var(--teal); margin-bottom: 1rem; }
+h3 { font-size: 1.5rem; color: var(--white); margin-bottom: 0.5rem; }
+p { font-size: 1.1rem; color: var(--text-medium); line-height: 1.7; max-width: 800px; margin: 0 auto; }
+.subtitulo { margin-bottom: 4rem; }
+.btn { background: linear-gradient(90deg, var(--teal), var(--magenta)); color: var(--white); border: none; padding: 15px 35px; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.btn:hover { transform: translateY(-3px); box-shadow: 0 7px 20px rgba(140, 3, 118, 0.4); }
 
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #353249;
-  margin: 1em 0;
-  padding: 0;
-}
+/* --- HEADER PRINCIPAL (SÓ PARA INDEX.HTML) --- */
+.main-header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 1rem 0; z-index: 100; }
+.main-header .container { display: flex; justify-content: space-between; align-items: center; }
+.header-logo { max-width: 100px; }
+.main-nav a { color: var(--text-light); text-decoration: none; margin-left: 2rem; font-weight: 600; transition: color 0.3s ease; }
+.main-nav a:hover { color: var(--teal); }
 
-audio,
-canvas,
-img,
-video {
-  vertical-align: middle;
-}
+/* --- HEADER MINIMALISTA (PARA PÁGINAS SECUNDÁRIAS DE CONTEÚDO) --- */
+.header-minimalista { position: fixed; top: 0; left: 0; width: 100%; padding: 1rem 0; z-index: 100; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); }
+.header-minimalista .container { display: flex; justify-content: space-between; align-items: center; }
+.btn-inicio { background: transparent; color: var(--text-light); border: 1px solid var(--medium-gray); padding: 8px 20px; font-weight: 500; font-size: 0.9rem; text-decoration: none; border-radius: 50px; transition: all 0.3s ease; }
+.btn-inicio:hover { background: var(--teal); color: var(--black); border-color: var(--teal); }
 
-fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
+/* --- BOTÃO 'VOLTAR' PARA PÁGINAS SEM HEADER --- */
+.btn-voltar-inicio { position: fixed; top: 25px; right: 25px; z-index: 100; }
 
+/* --- SEÇÕES E CARDS --- */
+#inicio { min-height: 100vh; display: flex; align-items: center; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.card { background: var(--dark-gray); padding: 2.5rem 2rem; border-radius: 15px; border: 1px solid var(--medium-gray); transition: all 0.3s ease; }
+.card:hover { transform: translateY(-10px); border-color: var(--teal); }
+.card .icon { font-size: 3rem; color: var(--gold); margin-bottom: 1rem; }
+
+/* --- NOVO ESTILO GLOBAL PARA FORMULÁRIOS --- */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
 textarea {
-  resize: vertical;
+    width: 100%;
+    padding: 15px;
+    background-color: var(--medium-gray);
+    border: 2px solid var(--medium-gray);
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease;
 }
 
-a {
-  color: var(--clr-text);
-  text-decoration: none;
-  -webkit-transition: all 0.3s ease;
-  transition: all 0.3s ease;
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="number"]::placeholder,
+textarea::placeholder {
+    color: var(--text-light);
+    opacity: 0.7;
 }
 
-a:hover {
-  color: var(--clr-purple);
-  text-decoration: none;
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--gold);
 }
 
-p {
-  margin: 0;
+
+/* --- ESTILOS DO CHAT FLUTUANTE --- */
+#nast-ia-fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(45deg, var(--teal), var(--magenta)); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.4); z-index: 1001; transition: transform 0.3s ease; }
+#nast-ia-fab:hover { transform: scale(1.1); }
+#nast-ia-chat-window { position: fixed; bottom: 100px; right: 30px; width: 350px; max-height: 80vh; background-color: var(--dark-gray); border: 1px solid var(--medium-gray); border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); display: none; flex-direction: column; overflow: hidden; z-index: 1000; }
+.chat-header { background-color: #333; padding: 15px; text-align: center; position: relative; }
+.chat-header h3 { margin: 0; color: var(--teal); }
+.chat-header p { margin: 0; font-size: 0.8rem; color: var(--text-medium); }
+#close-chat-btn { position: absolute; top: 5px; right: 10px; background: none; border: none; color: var(--white); font-size: 24px; cursor: pointer; }
+.chat-body { flex-grow: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.chat-message { padding: 10px 15px; border-radius: 20px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
+.chat-message.bot { background-color: var(--medium-gray); color: var(--text-light); align-self: flex-start; border-bottom-left-radius: 5px; }
+.chat-message.user { background-color: var(--teal); color: var(--black); font-weight: 500; align-self: flex-end; border-bottom-right-radius: 5px; }
+.chat-footer { padding: 10px; border-top: 1px solid var(--medium-gray); }
+#chat-form { display: flex; gap: 10px; }
+#chat-input { flex-grow: 1; margin: 0; border: 2px solid var(--medium-gray); }
+#chat-form button { background: var(--teal); border: none; color: white; font-weight: 600; padding: 0 15px; border-radius: 10px; cursor: pointer; }
+
+/* --- RODAPÉ --- */
+.main-footer { background-color: var(--dark-gray); padding: 40px 0; text-align: center; border-top: 1px solid var(--medium-gray); }
+.footer-logo { max-width: 80px; margin-bottom: 1rem; }
+.main-footer p { font-size: 0.9rem; color: var(--text-medium); }
+
+/* --- BLOCO ÚNICO DE RESPONSIVIDADE PARA CELULAR --- */
+@media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    section { padding: 60px 0; }
+    .container { width: 95%; }
+    
+    body:not(.page-centered) main {
+        padding-top: 80px;
+    }
+
+    .hamburger-btn { display: flex; flex-direction: column; justify-content: space-around; width: 30px; height: 25px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 10; }
+    .hamburger-line { width: 30px; height: 3px; background: var(--white); border-radius: 10px; transition: all 0.3s linear; }
+    .main-nav { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 2rem; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.95); }
+    .main-nav.active { display: flex; }
+    .main-nav a { margin: 0; font-size: 1.5rem; color: var(--white); }
+    .main-nav a.btn { font-size: 1.2rem; }
+    
+    #inicio h2 { font-size: 1.2rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+    
+    .survey-container, .quiz-container { margin: 10px 0; max-width: 100%; }
+    .slide { padding: 20px; }
+    .option-label { font-size: 0.9rem; }
+    .navigation { flex-direction: column-reverse; gap: 1rem; }
+    .navigation .btn { width: 100%; text-align: center; }
+    .back-btn { margin-right: 0; }
+    
+    #nast-ia-chat-window { width: 95vw; max-height: 75vh; right: 2.5vw; bottom: 90px; }
 }
 
-h1,
-.h1,
-h2,
-.h2,
-h3,
-.h3,
-h4,
-.h4,
-h5,
-.h5,
-h6,
-.h6 {
-  font-family: var(--font-body);
-  color: var(--clr-black);
-  margin: 0;
-  line-height: 1.3;
-  font-weight: 700;
+/* --- CORREÇÃO COMPLETA PARA O POP-UP DE LOGIN --- */
+/* Garante que a janela de login fique visível e na frente de tudo */
+div[data-netlify-identity-widget] {
+  z-index: 9999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-y: auto !important; /* Permite rolar a janela se for maior que a tela */
 }
 
-h1,
-.h1 {
-  font-size: 60px;
+/* Helper class para esconder o header durante o login */
+.header-escondido {
+    display: none !important;
 }
 
-@media (max-width: 991px) {
-  h1,
-  .h1 {
-    font-size: 44px;
-  }
+/* --- ESTILOS PARA A INTERFACE DE CHAT DO DASHBOARD --- */
+.chat-interface-container {
+    border: 1px solid var(--medium-gray);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 500px; /* Altura fixa para o chat */
+    background-color: var(--black);
 }
 
-h2,
-.h2 {
-  font-size: 40px;
+.chat-interface-container .chat-body {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-@media (max-width: 991px) {
-  h2,
-  .h2 {
-    font-size: 32px;
-  }
+.chat-interface-container .chat-message {
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 80%;
+    line-height: 1.5;
 }
 
-h3,
-.h3 {
-  font-size: 24px;
+.chat-interface-container .chat-message.bot {
+    background-color: var(--dark-gray);
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+ .chat-interface-container .chat-message.bot p {
+    margin: 0;
+    font-size: 1rem;
+ }
+
+.chat-interface-container .chat-message.user {
+    background-color: var(--teal);
+    color: var(--black);
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+ .chat-interface-container .chat-message.user p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--black);
+ }
+
+.chat-interface-container .chat-footer {
+    padding: 15px;
+    border-top: 1px solid var(--medium-gray);
 }
 
-@media (max-width: 991px) {
-  h3,
-  .h3 {
-    font-size: 20px;
-  }
+.chat-interface-container #ai-chat-form {
+    display: flex;
+    gap: 10px;
+    margin: 0;
 }
 
-h4,
-.h4 {
-  font-size: 20px;
+.chat-interface-container #ai-chat-input {
+    flex-grow: 1;
+    margin-bottom: 0; /* Remove a margem padrão dos inputs */
 }
 
-@media (max-width: 991px) {
-  h4,
-  .h4 {
-    font-size: 18px;
-  }
+.chat-interface-container .chat-footer button {
+    background: var(--teal);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0 20px;
+    border-radius: 10px;
+    cursor: pointer;
 }
-
-h5,
-.h5 {
-  font-size: 18px;
-}
-
-@media (max-width: 991px) {
-  h5,
-  .h5 {
-    font-size: 16px;
-  }
-}
-
-h6,
-.h6 {
-  font-size: 16px;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-li {
-  list-style: none;
-}
-
-button {
-  border: none;
-  background: transparent;
-  padding: 0;
-}
-
-/* remove-increment-decrement-arrows-from-number-input */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-.form-control {
-  border-radius: 8px;
-  border: 1px solid var(--clr-border);
-  padding: 14px 24px;
-  color: var(--clr-text-2);
-  background: transparent;
-  font-size: 16px;
-}
-
-.form-control:focus {
-  background: transparent;
-  border-color: var(--clr-purple);
-  box-shadow: none;
-  color: var(--clr-text-2);
-}
-
-.form-control::-webkit-input-placeholder {
-  color: var(--clr-text);
-  opacity: 1;
-}
-
-.form-control::-moz-placeholder {
-  color: var(--clr-text);
-  opacity: 1;
-}
-
-.form-control:-ms-input-placeholder {
-  color: var(--clr-text);
-  opacity: 1;
-}
-
-.form-control::-ms-input-placeholder {
-  color: var(--clr-text);
-  opacity: 1;
-}
-
-.form-control::placeholder {
-  color: var(--clr-text);
-  opacity: 1;
-}
-
-.form-select {
-  border-radius: 8px;
-  border: 1px solid var(--clr-border);
-  padding: 14px 24px;
-  color: var(--clr-text-2);
-  background: transparent;
-  font-size: 16px;
-}
-
-.form-select:focus {
-  border-color: var(--clr-purple);
-  box-shadow: none;
-}
-
-/* Preloader */
-.preloader {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999999;
-  background: var(--clr-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.5s ease;
-  -webkit-transition: all 0.5s ease;
-}
-
-.preloader .counter {
-  position: relative;
-  font-size: 120px;
-  font-weight: 800;
-  color: var(--clr-black);
-  z-index: 2;
-  transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease;
-  opacity: 0;
-}
-
-@media (max-width: 575px) {
-  .preloader .counter {
-    font-size: 60px;
-  }
-}
-
-.preloader.preloader-deactivate {
-  visibility: hidden;
-}
-
-.preloader.preloader-deactivate .counter {
-  opacity: 0;
-  transform: translateY(100px);
-  -webkit-transform: translateY(100px);
-}
-
-.preloader.preloader-remove {
-  display: none;
-}
-/* =======================================
-   End Common-area
-======================================= */
 
 /* =======================================
-    CÓDIGO ADICIONAL PARA CHAT E TRANSIÇÃO
+    CÓDIGO ADICIONAL E SEGURO PARA O CHAT
 ======================================= */
 
-/* Classe utilitária para esconder elementos */
+/* Classe para esconder as telas de loading e de teste */
 .hidden {
     display: none !important;
 }
 
-/* Garante que o corpo do chat alinhe as mensagens corretamente */
-.chat-body {
+/* Estilos que afetam APENAS o corpo do chat dentro das nossas novas seções */
+#interviewer-messages.chat-body, #test-agent-messages.chat-body {
     display: flex;
     flex-direction: column;
 }
 
-/* Estilo base para as "bolhas" de mensagem */
-.message {
+/* Estilos para as "bolhas" de mensagem, apenas dentro das nossas áreas de mensagens */
+#interviewer-messages .message, #test-agent-messages .message {
     max-width: 80%;
     padding: 10px 15px;
     border-radius: 18px;
     margin-bottom: 10px;
     line-height: 1.4;
-    word-wrap: break-word; /* Garante que textos longos não quebrem o layout */
+    word-wrap: break-word;
 }
 
-/* Estilo para as mensagens da IA (à esquerda) */
-.ai-message {
-    background: var(--clr-bg-4); /* Usa uma cor de fundo do seu tema */
+/* Mensagem da IA - alinhada à esquerda */
+#interviewer-messages .ai-message, #test-agent-messages .ai-message {
+    background: var(--clr-bg-4);
     align-self: flex-start;
     border-bottom-left-radius: 4px;
     color: var(--clr-black-2);
 }
 
-/* Estilo para as mensagens do Usuário (à direita) */
-.user-message {
-    background: var(--clr-purple); /* Usa a cor principal do seu tema */
+/* Mensagem do Usuário - alinhada à direita */
+#interviewer-messages .user-message, #test-agent-messages .user-message {
+    background: var(--clr-purple);
     color: var(--clr-white);
     align-self: flex-end;
     border-bottom-right-radius: 4px;
 }
 
-/* Estilos para a tela de carregamento */
+
+/* Estilos para a tela de carregamento (já são específicos) */
 .loading-content {
     display: flex;
     flex-direction: column;
