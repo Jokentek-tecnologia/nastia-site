@@ -183,42 +183,43 @@
                 appendChatMessage('Olá! Eu sou sua assistente de configuração. Para começarmos, preciso de fazer algumas perguntas para entender o seu negócio. Quando estiver pronto, diga "começar".', 'bot', aiChatBody);
             }
 
-            // LISTENER DO FORMULÁRIO DO ENTREVISTADOR (VERSÃO CORRIGIDA)
-if (aiChatForm) {
-    aiChatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const userMessageText = aiChatInput.value.trim();
-        if (!userMessageText) return;
+            // --- LISTENER DO FORMULÁRIO DO ENTREVISTADOR (VERSÃO CORRIGIDA) ---
+            if (aiChatForm) {
+                aiChatForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const userMessageText = aiChatInput.value.trim();
+                    if (!userMessageText) return;
 
-        appendChatMessage(userMessageText, 'user', aiChatBody);
-        aiChatInput.value = '';
+                    appendChatMessage(userMessageText, 'user', aiChatBody);
+                    aiChatInput.value = '';
 
-        const botTypingElement = appendChatMessage('Digitando...', 'bot', aiChatBody);
-        
-        // --- INÍCIO DA MODIFICAÇÃO ---
-        
-        // Verifica se a última mensagem da IA continha a pergunta final
-        const lastAiMessage = Array.from(aiChatBody.querySelectorAll('.bot')).pop()?.textContent || '';
-        const isMagicQuestion = lastAiMessage.includes('mágica acontecer?');
+                    // --- INÍCIO DA CORREÇÃO ---
+                    
+                    // 1. PRIMEIRO, verificamos qual foi a última pergunta do bot
+                    const lastAiMessage = Array.from(aiChatBody.querySelectorAll('.bot')).pop()?.textContent || '';
+                    const isMagicQuestion = lastAiMessage.includes('mágica acontecer?');
 
-        // Prepara os dados para enviar ao n8n
-        const payload = {
-            prompt: userMessageText,
-            // Adiciona o sinalizador se for a resposta para a pergunta final
-            isFinalStep: isMagicQuestion 
-        };
+                    // 2. SÓ DEPOIS, adicionamos o indicador "Digitando..."
+                    const botTypingElement = appendChatMessage('Digitando...', 'bot', aiChatBody);
 
-        const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload);
-        
-        // --- FIM DA MODIFICAÇÃO ---
-        
-        botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
+                    // 3. Montamos o corpo da requisição com a informação correta
+                    const payload = {
+                        prompt: userMessageText,
+                        isFinalStep: isMagicQuestion
+                    };
 
-        if (result.status === 'BRIEFING_COMPLETE') {
-            switchToLoadingScreen();
-        }
-    });
-}
+                    const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload);
+                    
+                    // --- FIM DA CORREÇÃO ---
+
+                    botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
+
+                    // A verificação do status continua aqui
+                    if (result.status === 'BRIEFING_COMPLETE') {
+                        switchToLoadingScreen();
+                    }
+                });
+            }
 
 // Encontre a função sendMessageToN8N e ajuste-a para aceitar o 'payload'
 async function sendMessageToN8N(webhookUrl, payload) {
