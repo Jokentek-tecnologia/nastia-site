@@ -228,6 +228,25 @@ async function sendMessageToN8N(webhookUrl, payload) {
         console.error("Usuário não logado.");
         return { reply: "Erro de autenticação. Por favor, faça login novamente." };
     }
+
+ // --- INÍCIO DA CORREÇÃO ---
+    // Garante que o corpo da requisição seja sempre um objeto bem formado.
+    let bodyPayload = {
+        userId: currentUser.id,
+        userName: currentUser.user_metadata.full_name || currentUser.email
+    };
+
+    if (typeof payload === 'string') {
+        // Se o payload for apenas o texto da mensagem (como no chat de teste),
+        // nós o colocamos na chave 'prompt'.
+        bodyPayload.prompt = payload;
+    } else if (typeof payload === 'object' && payload !== null) {
+        // Se o payload for um objeto (como no final da entrevista, com 'prompt' e 'isFinalStep'),
+        // nós mesclamos ele com os dados do usuário.
+        bodyPayload = { ...bodyPayload, ...payload };
+    }
+    // --- FIM DA CORREÇÃO ---
+
     try {
         const response = await fetch(webhookUrl, {
             method: 'POST',
