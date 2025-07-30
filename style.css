@@ -242,3 +242,37 @@ div[data-netlify-identity-widget] {
     border-radius: 10px;
     cursor: pointer;
 }
+
+/* ===== NOVO: ESTILOS PARA O CABEÇALHO COM BOTÃO DE QUIZ FIXO ===== */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem; /* Espaçamento entre o logo e o botão */
+}
+
+/* Ajuste para o botão do quiz no cabeçalho não ser tão grande */
+.btn-quiz-header {
+    padding: 12px 25px;
+    font-size: 0.9rem;
+}
+
+/* Ajustes para telas de tablet */
+@media (max-width: 992px) {
+    .header-left {
+        gap: 1.5rem;
+    }
+    .btn-quiz-header {
+        padding: 10px 20px;
+    }
+}
+
+/* Ajustes para telas de celular */
+@media (max-width: 768px) {
+    .btn-quiz-header {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+    }
+    .header-logo {
+        max-width: 80px; /* Diminui um pouco o logo para caber tudo */
+    }
+}
