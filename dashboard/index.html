@@ -221,7 +221,7 @@
                 });
             }
 
-// Encontre a função sendMessageToN8N e ajuste-a para aceitar o 'payload'
+// Encontre a função antiga no seu <script> e substitua por esta
 async function sendMessageToN8N(webhookUrl, payload) {
     const currentUser = netlifyIdentity.currentUser();
     if (!currentUser) {
@@ -229,7 +229,7 @@ async function sendMessageToN8N(webhookUrl, payload) {
         return { reply: "Erro de autenticação. Por favor, faça login novamente." };
     }
 
- // --- INÍCIO DA CORREÇÃO ---
+    // --- INÍCIO DA CORREÇÃO ---
     // Garante que o corpo da requisição seja sempre um objeto bem formado.
     let bodyPayload = {
         userId: currentUser.id,
@@ -251,21 +251,16 @@ async function sendMessageToN8N(webhookUrl, payload) {
         const response = await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            // Adiciona os dados básicos ao payload
-            body: JSON.stringify({
-                userId: currentUser.id,
-                userName: currentUser.user_metadata.full_name || currentUser.email,
-                ...payload // Inclui o 'prompt' e o 'isFinalStep'
-            })
+            body: JSON.stringify(bodyPayload) // Envia o payload corrigido e completo
         });
         if (!response.ok) throw new Error(`A resposta do servidor não foi bem-sucedida: ${response.statusText}`);
         return await response.json();
     } catch (error) {
         console.error("Erro ao conectar com a IA:", error);
+        // MODIFICAÇÃO: Retorna um JSON no formato esperado para evitar o erro no front-end
         return { reply: "Ocorreu um erro ao conectar com nossos servidores. Tente novamente." };
     }
 }
-
             // --- NOVO: LISTENER PARA O FORMULÁRIO DO AGENTE DE TESTE ---
             if (testAgentChatForm) {
                  testAgentChatForm.addEventListener('submit', async (e) => {
