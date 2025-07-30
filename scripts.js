@@ -1,4 +1,4 @@
-/* ARQUIVO: scripts.js (VERSÃO COM MEMÓRIA DE CHAT ENTRE PÁGINAS) */
+/* ARQUIVO: scripts.js (VERSÃO COM MEMÓRIA DE CHAT E LOGIN INTELIGENTE) */
 
 // Executa o código quando o conteúdo da página estiver carregado
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,6 +14,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ================================================================
+    // --- NOVA LÓGICA DE LOGIN INTELIGENTE ---
+    // ================================================================
+    if (window.netlifyIdentity) {
+        const loginBtn = document.getElementById('login-btn');
+        if (loginBtn) {
+          loginBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Impede a ação padrão do link '#'
+            const user = netlifyIdentity.currentUser();
+            
+            if (user) {
+              // Se o usuário já estiver logado, redireciona direto para o dashboard
+              window.location.href = '/dashboard/';
+            } else {
+              // Se não estiver logado, abre a janela de login
+              // e guarda a informação para redirecionar após o sucesso.
+              sessionStorage.setItem('redirectAfterLogin', '/dashboard/');
+              netlifyIdentity.open('login');
+            }
+          });
+        }
+    }
+
+
+    // ================================================================
     // --- LÓGICA DO CHAT FLUTUANTE (AGORA COM MEMÓRIA PERSISTENTE) ---
     // ================================================================
     const fab = document.getElementById('nast-ia-fab');
@@ -25,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const N8N_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Nah';
 
-    // --- NOVO: LÓGICA DE SESSÃO E HISTÓRICO ---
+    // --- LÓGICA DE SESSÃO E HISTÓRICO ---
 
     // 1. Gera ou recupera um ID de sessão único para toda a navegação do usuário
     let sessionId = sessionStorage.getItem('nastiaSessionId');
@@ -52,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionStorage.setItem('nastiaChatHistory', JSON.stringify(history));
     }
     
-    // --- FIM DA NOVA LÓGICA ---
+    // --- FIM DA LÓGICA DE SESSÃO ---
 
 
     if (fab && chatWindow && closeChatBtn && chatForm) {
@@ -103,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ATUALIZADO: Função appendMessage agora tem um parâmetro extra para controlar o salvamento
+// Função appendMessage agora tem um parâmetro extra para controlar o salvamento
 function appendMessage(message, sender, salvar = true) {
     const chatLog = document.getElementById('chat-log');
     if (!chatLog) return; 
@@ -126,7 +150,7 @@ function appendMessage(message, sender, salvar = true) {
     return messageElement;
 }
 
-// ATUALIZADO: Adiciona a função de salvar ao escopo global para ser acessível
+// Adiciona a função de salvar ao escopo global para ser acessível
 (typeof window !== 'undefined' ? window : this).salvarHistorico = function(message, sender) {
     let history = JSON.parse(sessionStorage.getItem('nastiaChatHistory')) || [];
     // Evita salvar a mensagem "Digitando..."
