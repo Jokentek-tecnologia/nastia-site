@@ -76,10 +76,12 @@
             </div>
             <div class="slide">
                 <h2>Estamos quase lá!</h2>
-                <p>Analisamos suas respostas e preparamos um diagnóstico rápido sobre a maturidade digital da sua empresa. Para ver seu resultado, por favor, informe seu nome e e-mail.</p>
+                <p>Analisamos suas respostas e preparamos um diagnóstico rápido sobre a maturidade digital da sua empresa. Para ver seu resultado, por favor, informe seus dados.</p>
                 <form id="quiz-form" style="text-align: left; max-width: 400px; margin: 2rem auto 0 auto;">
                     <input type="text" id="quiz-nome" name="nome" placeholder="Seu nome" required>
-                    <input type="email" id="quiz-email" name="email" placeholder="Seu melhor e-mail" required style="margin-top:1rem; margin-bottom: 1rem;">
+                    <input type="email" id="quiz-email" name="email" placeholder="Seu melhor e-mail" required style="margin-top:1rem;">
+                    
+                    <input type="tel" id="quiz-whatsapp" name="whatsapp" placeholder="Seu WhatsApp (opcional, para contato rápido)" style="margin-top:1rem; margin-bottom: 1rem;">
                     <button type="submit" class="btn" style="width: 100%;">Ver meu Diagnóstico!</button>
                 </form>
             </div>
@@ -90,6 +92,7 @@
         <input type="text" name="nome" />
         <input type="email" name="email" />
         <input type="number" name="score" />
+        <input type="tel" name="whatsapp" />
     </form>
 
     <div id="nast-ia-fab" title="Fale com a Nah">
@@ -142,7 +145,31 @@
             
             const nome = document.getElementById('quiz-nome').value;
             const email = document.getElementById('quiz-email').value;
+            // ===== NOVO: Captura do número de WhatsApp =====
+            const whatsapp = document.getElementById('quiz-whatsapp').value.trim();
 
+            // ===== NOVO: Lógica de disparo para o n8n =====
+            const n8nWebhookUrl = 'https://webhook.oresultador.com.br/webhook/Quiz';
+            
+            // Só executa a chamada para o n8n se o campo de WhatsApp foi preenchido
+            if (whatsapp) {
+                // Envia os dados para o n8n em segundo plano (não trava o site)
+                fetch(n8nWebhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nome: nome,
+                        email: email,
+                        whatsapp: whatsapp,
+                        score: finalScore
+                    })
+                }).catch(error => console.error('Erro ao enviar dados para o n8n:', error));
+                // O .catch() garante que, mesmo se o n8n falhar, o processo principal continue
+            }
+            // ===== FIM DA NOVA LÓGICA =====
+
+
+            // Lógica original para enviar os dados ao Netlify e redirecionar
             fetch("/", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -150,7 +177,8 @@
                     "form-name": "quiz-leads",
                     "nome": nome,
                     "email": email,
-                    "score": finalScore
+                    "score": finalScore,
+                    "whatsapp": whatsapp // Adicionamos o whatsapp aqui também para salvar no Netlify
                 }).toString(),
             })
             .then(() => window.location.href = `/resultado-quiz.html?score=${finalScore}`)
