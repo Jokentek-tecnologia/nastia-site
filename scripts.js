@@ -190,12 +190,3 @@ if (window.netlifyIdentity) {
     }
   });
 }
-
-/* --- CORREÇÃO PARA EXIBIÇÃO DO QUIZ/PESQUISA --- */
-.quiz-container .slide, .survey-container .slide {
-    display: none; /* Esconde todos os slides por padrão */
-}
-
-.quiz-container .slide.active, .survey-container .slide.active {
-    display: block; /* Mostra APENAS o slide que está com a classe 'active' */
-}
