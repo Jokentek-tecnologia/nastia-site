@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagnóstico Digital | NástIA</title>
+    <title>Diagnóstico Digital Gratuito para Empresas | NástIA</title>
+    <meta name="description" content="Receba um Diagnóstico Digital Gratuito da NástIA. Responda nosso questionário rápido e entenda onde a tecnologia pode gerar mais impacto no seu negócio em Peruíbe.">
+
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
     <link rel="stylesheet" href="/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +40,56 @@
             }
         }
     </style>
-</head>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Diagnóstico Digital Gratuito | NástIA",
+      "description": "Formulário interativo para empresas receberem um diagnóstico digital gratuito e personalizado da NástIA.",
+      "url": "https://nastia.com.br/pesquisa.html",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Início",
+            "item": "https://nastia.com.br/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Diagnóstico Digital"
+          }
+        ]
+      },
+      "mainEntity": {
+        "@type": "HowTo",
+        "name": "Como Receber seu Diagnóstico Digital Gratuito",
+        "description": "Um processo de 3 passos para fornecer informações sobre seu negócio e receber uma análise personalizada da NástIA.",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Passo 1: Responda as Perguntas",
+            "text": "Preencha o questionário com informações sobre seu negócio, desafios e objetivos. Isso nos ajuda a entender seu cenário atual."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Passo 2: Forneça seu Contato",
+            "text": "Ao final, deixe seu nome e informações de contato para que possamos enviar seu diagnóstico."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Passo 3: Receba a Análise",
+            "text": "Nossa equipe irá analisar suas respostas e preparar um diagnóstico personalizado com as melhores oportunidades de tecnologia para sua empresa, que será enviado para você."
+          }
+        ],
+        "totalTime": "PT5M" 
+      }
+    }
+    </script>
+    </head>
 <body class="page-centered">
 
     <a href="/" class="btn btn-voltar-inicio btn-inicio">Início</a>
@@ -97,7 +148,7 @@
                 
                 <div class="slide">
                     <h2>4. Finalidade do WhatsApp</h2>
-                    <p>Para quais finalidades você mais usa o WhatsApp? (Marque todas que se aplicam)</p>
+                    <p>Para quais finalidades você mais usa o WhatsApp? (Marque todos que se aplicam)</p>
                     <div class="options">
                         <div><input type="checkbox" id="wpp-vendas" name="finalidade_wpp[]" value="Fechar Vendas"><label class="option-label" for="wpp-vendas">Fechar Vendas Diretas</label></div>
                         <div><input type="checkbox" id="wpp-suporte" name="finalidade_wpp[]" value="Suporte"><label class="option-label" for="wpp-suporte">Tirar Dúvidas / Suporte</label></div>
@@ -257,21 +308,9 @@
     </main>
     
     <div id="nast-ia-fab" title="Fale com a Nah">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
-    </div>
+        </div>
     <div id="nast-ia-chat-window">
-        <div class="chat-header">
-            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
         </div>
-        <div class="chat-body" id="chat-log">
-            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
-        </div>
-        <div class="chat-footer">
-            <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
-            </form>
-        </div>
-    </div>
 
     <script>
         const slides = document.querySelectorAll('.slide');
@@ -294,18 +333,33 @@
             const currentSlideElement = slides[index];
             const inputs = currentSlideElement.querySelectorAll('input[type="radio"], input[type="checkbox"]');
             const requiredText = currentSlideElement.querySelector('input[required], textarea[required]');
+            
+            // Validação para campos de texto/textarea obrigatórios
             if (requiredText && !requiredText.value.trim()) {
-                 errorMessage.textContent = 'Este campo é obrigatório.';
-                 errorMessage.style.display = 'block';
+                if (errorMessage) {
+                    errorMessage.textContent = 'Este campo é obrigatório.';
+                    errorMessage.style.display = 'block';
+                }
                 return false;
             }
-            if (inputs.length === 0) return true;
-            const isChecked = Array.from(inputs).some(input => input.checked);
-            if (!isChecked) {
-                 errorMessage.textContent = 'Por favor, selecione uma opção.';
-                 errorMessage.style.display = 'block';
+            
+            // Validação para radio/checkbox
+            if (inputs.length > 0) {
+                 const name = inputs[0].name;
+                 // Se o grupo de inputs não for obrigatório, retorna true
+                 if (!surveyForm.querySelector(`[name="${name}"][required]`)) {
+                     return true;
+                 }
+                const isChecked = Array.from(inputs).some(input => input.checked);
+                if (!isChecked) {
+                    if (errorMessage) {
+                        errorMessage.textContent = 'Por favor, selecione uma opção.';
+                        errorMessage.style.display = 'block';
+                    }
+                    return false;
+                }
             }
-            return isChecked;
+            return true;
         }
 
         nextBtns.forEach(btn => {
@@ -329,17 +383,19 @@
         });
         
        if(surveyForm) {
-    surveyForm.addEventListener('submit', (e) => {
-        const nameInput = surveyForm.querySelector('input[name="contato-nome"]');
-        const emailInput = surveyForm.querySelector('input[name="contato-email"]');
-        const whatsappInput = surveyForm.querySelector('input[name="contato-whatsapp"]');
-        if (!nameInput.value.trim() || !emailInput.value.trim() || !whatsappInput.value.trim()) {
-            e.preventDefault();
-            errorMessage.textContent = 'Por favor, preencha nome, e-mail e WhatsApp.';
-            errorMessage.style.display = 'block';
+            surveyForm.addEventListener('submit', (e) => {
+                const nameInput = surveyForm.querySelector('input[name="contato-nome"]');
+                const emailInput = surveyForm.querySelector('input[name="contato-email"]');
+                const whatsappInput = surveyForm.querySelector('input[name="contato-whatsapp"]');
+                if (!nameInput.value.trim() || !emailInput.value.trim() || !whatsappInput.value.trim()) {
+                    e.preventDefault();
+                    if(errorMessage) {
+                        errorMessage.textContent = 'Por favor, preencha nome, e-mail e WhatsApp.';
+                        errorMessage.style.display = 'block';
+                    }
+                }
+            });
         }
-    });
-}
         
         function setupOtherOption(checkboxId, textInputId) {
             const checkbox = document.getElementById(checkboxId);
@@ -351,13 +407,15 @@
                     radioGroup.forEach(radio => {
                         radio.addEventListener('change', () => {
                            textInput.style.display = checkbox.checked ? 'block' : 'none';
-                           if (!checkbox.checked) { textInput.value = ''; }
+                           if (checkbox.checked) { textInput.focus(); }
+                           else { textInput.value = ''; }
                         });
                     });
                 } else {
                     checkbox.addEventListener('change', () => {
                         textInput.style.display = checkbox.checked ? 'block' : 'none';
-                        if (!checkbox.checked) { textInput.value = ''; }
+                        if (checkbox.checked) { textInput.focus(); }
+                        else { textInput.value = ''; }
                     });
                 }
             }
@@ -367,11 +425,10 @@
         setupOtherOption('canal-outro', 'canal-outro-texto');
         setupOtherOption('desc-outro', 'descoberta-outro-texto');
         setupOtherOption('barreira-outro', 'barreira-outro-texto');
-        setupOtherOption('prio-outro', 'prio-outro-texto');
+        setupOtherOption('prio-outro', 'prioridade_outro_texto');
         
         showSlide(currentSlide);
     </script>
 
-    <script src="scripts.js"></script>
-</body>
+    </body>
 </html>

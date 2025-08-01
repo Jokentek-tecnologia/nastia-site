@@ -3,13 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NástIA - Tecnologia e IA para o Comércio de Peruíbe</title>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <title>NástIA | IA e Automação para Empresas em Peruíbe</title>
+    <meta name="description" content="Potencialize seu negócio em Peruíbe com a NástIA. Oferecemos IA para WhatsApp e automação de processos para liberar seu tempo e aumentar suas vendas. Diagnóstico gratuito!">
+
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="stylesheet" href="/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Corporation",
+      "name": "NástIA",
+      "url": "https://nastia.com.br/",
+      "logo": "https://nastia.com.br/assets/images/logoNastia.png",
+      "description": "A NástIA desenvolve soluções de Inteligência Artificial e automação para empresas em Peruíbe, com foco em otimizar o atendimento ao cliente via WhatsApp, automatizar processos e criar presença digital através de sites e marketing.",
+      "slogan": "Simplificando a tecnologia para o comércio de Peruíbe.",
+      "knowsAbout": ["Inteligência Artificial", "Automação de Processos", "Desenvolvimento de Sites", "Marketing Digital"],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "seu-email-de-contato@nastia.com.br"
+      },
+      "founder": {
+        "@type": "Organization",
+        "name": "Uma família apaixonada por Peruíbe e por Inovação."
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Peruíbe",
+        "addressRegion": "SP",
+        "addressCountry": "BR"
+      },
+      "potentialAction": {
+        "@type": "ReceiveAction",
+        "actionStatus": "PotentialActionStatus",
+        "object": {
+          "@type": "DiagnoseAction"
+        },
+        "handler": {
+          "@type": "WebAPI",
+          "url": "https://nastia.com.br/pesquisa.html",
+          "name": "Receba um Diagnóstico Digital Gratuito"
+        }
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Soluções NástIA",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Atendimento com IA para WhatsApp",
+              "description": "Nosso agente de IA responde 100% dos seus clientes com informações precisas, 24 horas por dia. Transforme perguntas de turistas em vendas confirmadas e clientes satisfeitos."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Automação de Processos",
+              "description": "Deixe a tecnologia cuidar das tarefas repetitivas. Liberte sua equipe e seu tempo para focar no crescimento do seu negócio."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Sites e Apps Profissionais",
+              "description": "Criamos sites e aplicativos que não são apenas bonitos. Eles são máquinas de atração e conversão, projetados para passar confiança e facilitar a vida do seu cliente."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Marketing e Vídeos com IA",
+              "description": "Divulgue seu negócio de forma profissional e ágil. Usamos inteligência artificial para criar campanhas e vídeos que capturam a atenção e trazem o público certo até você."
+            }
+          }
+        ]
+      }
+    }
+    </script>
+    </head>
 <body>
 
     <header class="main-header">
@@ -22,6 +102,7 @@
                 <a href="/#solucoes">Soluções</a>
                 <a href="/cases.html">Cases de Sucesso</a>
                 <a href="/blog.html">Blog</a>
+                <a href="/sac.html">SAC</a>
 		        <a href="#" id="login-btn" style="margin-right: 1.5rem;">Login</a>
                 </nav>
             <button id="hamburger-btn" class="hamburger-btn">
@@ -106,21 +187,9 @@
     </footer>
 
     <div id="nast-ia-fab" title="Fale com a Nah">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
-    </div>
+        </div>
     <div id="nast-ia-chat-window">
-        <div class="chat-header">
-            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
         </div>
-        <div class="chat-body" id="chat-log">
-            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
-        </div>
-        <div class="chat-footer">
-            <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
-            </form>
-        </div>
-    </div>
     
     <script src="/scripts.js"></script>
 

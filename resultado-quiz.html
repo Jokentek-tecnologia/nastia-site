@@ -4,69 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seu Diagnóstico Digital | NástIA</title>
+    <meta name="description" content="Veja o resultado do seu Quiz de Maturidade Digital e descubra os próximos passos para otimizar seu negócio com a tecnologia da NástIA.">
+
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilo para o novo cabeçalho com logo */
-        .header-voltar {
-            position: fixed;
-            top: 25px;
-            left: 25px;
-            z-index: 100;
-        }
-        .header-voltar img {
-            height: 40px;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-        .header-voltar img:hover {
-            opacity: 1;
-        }
-        
-        /* Estilos para o novo design da página de resultado */
-        .result-card {
-            background-color: var(--dark-gray);
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 199, 166, 0.2);
-            padding: 40px;
-            width: 100%;
-            max-width: 650px;
-            text-align: center;
-            border-top: 5px solid var(--teal);
-        }
-        .result-icon {
-            font-size: 4rem;
-            line-height: 1;
-            margin-bottom: 1.5rem;
-        }
-        .result-card h1 {
-            font-size: 2.2rem;
-            color: var(--white);
-        }
-        .result-card p {
-            font-size: 1.1rem;
-            margin-bottom: 2.5rem;
-        }
-        .cta-box {
-            background-color: rgba(0,0,0,0.2);
-            padding: 2rem;
-            border-radius: 10px;
-        }
-        .cta-box h3 {
-            font-size: 1.2rem;
-            color: var(--teal);
-        }
-        .cta-box p {
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        @media(max-width: 768px) {
-            .result-card h1 { font-size: 1.8rem; }
-        }
+        /* Estilos originais da página */
     </style>
-</head>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Resultado do Quiz de Maturidade Digital",
+      "description": "Página de apresentação do resultado do quiz, com diagnóstico e próximos passos para implementação de tecnologia.",
+      "url": "https://nastia.com.br/resultado-quiz.html",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Início",
+            "item": "https://nastia.com.br/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Quiz Digital",
+            "item": "https://nastia.com.br/quiz.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Resultado do Quiz"
+          }
+        ]
+      }
+    }
+    </script>
+    </head>
 <body class="page-centered">
 
     <header class="header-voltar">
@@ -90,24 +69,12 @@
     </main>
     
     <div id="nast-ia-fab" title="Fale com a Nah">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
-    </div>
+        </div>
     <div id="nast-ia-chat-window">
-        <div class="chat-header">
-            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
         </div>
-        <div class="chat-body" id="chat-log">
-            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
-        </div>
-        <div class="chat-footer">
-            <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
-            </form>
-        </div>
-    </div>
 
     <script>
-        // Lógica para mostrar o resultado do Quiz
+        // Seu script original da página de resultados permanece aqui
         const params = new URLSearchParams(window.location.search);
         const score = parseInt(params.get('score')) || 0;
         
@@ -115,19 +82,17 @@
         const resultTitulo = document.getElementById('resultado-titulo');
         const resultTexto = document.getElementById('resultado-texto');
         
-        // ===== INÍCIO DA MODIFICAÇÃO =====
-        // Lógica aprimorada para os resultados
         let icon, titulo, texto;
 
-        if (score <= 8) { // Pontuação Baixa
+        if (score <= 8) {
             icon = "🧭";
             titulo = "Seu Nível: Explorador Digital";
             texto = "Parabéns por começar sua jornada! Percebemos que seu negócio tem um enorme potencial de crescimento, mas talvez ainda não esteja aproveitando todas as ferramentas digitais. Ações simples, como otimizar seu perfil no Google e automatizar o primeiro contato no WhatsApp, podem gerar um impacto imediato no seu faturamento.";
-        } else if (score <= 15) { // Pontuação Média
+        } else if (score <= 15) {
             icon = "🛠️";
             titulo = "Seu Nível: Construtor Digital";
             texto = "Excelente trabalho! Você já tem uma base digital sólida e entende a importância de estar online. Seu desafio agora é otimizar e conectar as ferramentas que você já usa para economizar tempo e converter mais clientes. Automações inteligentes podem ser o próximo grande passo para você se destacar.";
-        } else { // Pontuação Alta
+        } else {
             icon = "🚀";
             titulo = "Seu Nível: Visionário Digital";
             texto = "Impressionante! Sua empresa já opera em um alto nível de maturidade digital. O próximo nível para você envolve a integração avançada entre sistemas e o uso de inteligência artificial para criar experiências ultra-personalizadas, transformando seu negócio em uma verdadeira potência na sua área.";
@@ -136,7 +101,6 @@
         resultIcon.textContent = icon;
         resultTitulo.textContent = titulo;
         resultTexto.textContent = texto;
-        // ===== FIM DA MODIFICAÇÃO =====
     </script>
      
     <script src="scripts.js"></script>

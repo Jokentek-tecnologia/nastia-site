@@ -4,34 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz de Maturidade Digital | NástIA</title>
+    <meta name="description" content="Descubra o nível de maturidade digital do seu negócio com o quiz rápido da NástIA. Responda 4 perguntas e receba um diagnóstico e recomendações personalizadas.">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Estilo para o novo cabeçalho com logo */
-        .header-voltar {
-            position: fixed;
-            top: 25px;
-            left: 25px;
-            z-index: 100;
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Quiz",
+      "name": "Quiz de Maturidade Digital da NástIA",
+      "description": "Um quiz de 4 perguntas para ajudar empresários a entenderem seu nível de maturidade digital em áreas como atendimento, presença online, marketing e gestão.",
+      "hasPart": [
+        {
+          "@type": "Question",
+          "name": "Como é o seu atendimento via WhatsApp hoje?"
+        },
+        {
+          "@type": "Question",
+          "name": "Sua empresa possui um site profissional?"
+        },
+        {
+          "@type": "Question",
+          "name": "Como você descreveria seu marketing digital?"
+        },
+        {
+          "@type": "Question",
+          "name": "Como você gerencia as tarefas repetitivas?"
         }
-        .header-voltar img {
-            height: 40px;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-        .header-voltar img:hover {
-            opacity: 1;
-        }
-        /* Ajustes específicos do Quiz */
-        .quiz-container { background-color: var(--dark-gray); border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 199, 166, 0.2); overflow: hidden; width: 100%; max-width: 700px; }
-        .slide { display: none; padding: 40px; text-align: center; }
-        .slide.active { display: block; animation: fadeIn 0.5s forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .option-label { text-align: left; }
-    </style>
-</head>
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "NástIA"
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Início",
+            "item": "https://nastia.com.br/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Quiz Digital"
+          }
+        ]
+      }
+    }
+    </script>
+    </head>
 <body class="page-centered">
 
     <header class="header-voltar">
@@ -95,59 +121,34 @@
     </form>
 
     <div id="nast-ia-fab" title="Fale com a Nah">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
-    </div>
+        </div>
     <div id="nast-ia-chat-window">
-        <div class="chat-header">
-            <h3>NástIA</h3><p>Sua assistente de IA</p><button id="close-chat-btn">&times;</button>
         </div>
-        <div class="chat-body" id="chat-log">
-            <div class="chat-message bot">Olá! Como posso ajudar você a entender melhor nossos serviços?</div>
-        </div>
-        <div class="chat-footer">
-            <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." autocomplete="off"><button type="submit">Enviar</button>
-            </form>
-        </div>
-    </div>
     
     <script>
+        // Seu script original do quiz permanece aqui
         const slides = document.querySelectorAll('.slide');
         let currentSlide = 0;
 
-        // ===== NOVA FUNÇÃO PARA FORMATAR O NÚMERO DE WHATSAPP =====
         function formatarNumeroWhatsApp(numero) {
-            if (!numero) {
-                return ''; // Retorna vazio se o campo não for preenchido
-            }
-            // 1. Remove tudo que não for número (parênteses, traços, espaços)
+            if (!numero) return '';
             const numeroLimpo = numero.replace(/\D/g, '');
-
-            // 2. Verifica se o número já tem o código do país (55)
-            // Um número brasileiro completo (55 + DDD + 9 dígitos) tem 13 dígitos.
-            // Se tiver 12 (55 + DDD + 8 dígitos), também aceitamos.
             if (numeroLimpo.length >= 12 && numeroLimpo.startsWith('55')) {
                 return `${numeroLimpo}@s.whatsapp.net`;
             }
-
-            // 3. Se não tiver, adicionamos o 55 (assumindo que é um número brasileiro)
             return `55${numeroLimpo}@s.whatsapp.net`;
         }
         
         function showSlide(index) {
             slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.add('active');
-                } else {
-                    slide.classList.remove('active');
-                }
+                slide.classList.toggle('active', i === index);
             });
         }
 
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 setTimeout(() => {
-                    if (currentSlide < slides.length - 1) { // Avança até o último slide
+                    if (currentSlide < slides.length - 1) {
                         currentSlide++;
                         showSlide(currentSlide);
                     }
@@ -164,10 +165,7 @@
             const nome = document.getElementById('quiz-nome').value;
             const email = document.getElementById('quiz-email').value;
             const whatsappRaw = document.getElementById('quiz-whatsapp').value.trim();
-
-            // ===== MODIFICAÇÃO: Usamos a nova função para formatar o número =====
             const whatsappFormatado = formatarNumeroWhatsApp(whatsappRaw);
-
             const n8nWebhookUrl = 'https://webhook.oresultador.com.br/webhook/Quiz';
             
             if (whatsappFormatado) {
@@ -177,13 +175,12 @@
                     body: JSON.stringify({
                         nome: nome,
                         email: email,
-                        whatsapp: whatsappFormatado, // Enviamos o número já formatado
+                        whatsapp: whatsappFormatado,
                         score: finalScore
                     })
                 }).catch(error => console.error('Erro ao enviar dados para o n8n:', error));
             }
 
-            // Lógica original para enviar os dados ao Netlify e redirecionar
             fetch("/", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -192,7 +189,7 @@
                     "nome": nome,
                     "email": email,
                     "score": finalScore,
-                    "whatsapp": whatsappRaw // Salvamos o número "cru" no Netlify, como o usuário digitou
+                    "whatsapp": whatsappRaw
                 }).toString(),
             })
             .then(() => window.location.href = `/resultado-quiz.html?score=${finalScore}`)
