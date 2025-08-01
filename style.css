@@ -52,7 +52,10 @@ p { font-size: 1.1rem; color: var(--text-medium); line-height: 1.7; max-width: 8
 .btn-inicio:hover { background: var(--teal); color: var(--black); border-color: var(--teal); }
 
 /* --- BOTÃO 'VOLTAR' PARA PÁGINAS SEM HEADER --- */
-.btn-voltar-inicio { position: fixed; top: 25px; right: 25px; z-index: 100; }
+.header-voltar { position: fixed; top: 25px; left: 25px; z-index: 100; }
+.header-voltar img { height: 40px; opacity: 0.8; transition: opacity 0.3s ease; }
+.header-voltar img:hover { opacity: 1; }
+
 
 /* --- SEÇÕES E CARDS --- */
 #inicio { min-height: 100vh; display: flex; align-items: center; }
@@ -96,6 +99,13 @@ textarea:focus {
     outline: none;
     border-color: var(--gold);
 }
+
+/* --- AJUSTES ESPECÍFICOS DO QUIZ --- */
+.quiz-container { background-color: var(--dark-gray); border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 199, 166, 0.2); overflow: hidden; width: 100%; max-width: 700px; }
+.slide { display: none; padding: 40px; text-align: center; }
+.slide.active { display: block; animation: fadeIn 0.5s forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.option-label { text-align: left; }
 
 
 /* --- ESTILOS DO CHAT FLUTUANTE --- */
@@ -152,7 +162,6 @@ textarea:focus {
 }
 
 /* --- CORREÇÃO COMPLETA PARA O POP-UP DE LOGIN --- */
-/* Garante que a janela de login fique visível e na frente de tudo */
 div[data-netlify-identity-widget] {
   z-index: 9999 !important;
   position: fixed !important;
@@ -160,10 +169,9 @@ div[data-netlify-identity-widget] {
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  overflow-y: auto !important; /* Permite rolar a janela se for maior que a tela */
+  overflow-y: auto !important;
 }
 
-/* Helper class para esconder o header durante o login */
 .header-escondido {
     display: none !important;
 }
@@ -175,113 +183,37 @@ div[data-netlify-identity-widget] {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 500px; /* Altura fixa para o chat */
+    height: 500px;
     background-color: var(--black);
 }
-
-.chat-interface-container .chat-body {
-    flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.chat-interface-container .chat-message {
-    padding: 10px 15px;
-    border-radius: 20px;
-    max-width: 80%;
-    line-height: 1.5;
-}
-
-.chat-interface-container .chat-message.bot {
-    background-color: var(--dark-gray);
-    align-self: flex-start;
-    border-bottom-left-radius: 5px;
-}
- .chat-interface-container .chat-message.bot p {
-    margin: 0;
-    font-size: 1rem;
- }
-
-.chat-interface-container .chat-message.user {
-    background-color: var(--teal);
-    color: var(--black);
-    align-self: flex-end;
-    border-bottom-right-radius: 5px;
-}
- .chat-interface-container .chat-message.user p {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--black);
- }
-
-.chat-interface-container .chat-footer {
-    padding: 15px;
-    border-top: 1px solid var(--medium-gray);
-}
-
-.chat-interface-container #ai-chat-form {
-    display: flex;
-    gap: 10px;
-    margin: 0;
-}
-
-.chat-interface-container #ai-chat-input {
-    flex-grow: 1;
-    margin-bottom: 0; /* Remove a margem padrão dos inputs */
-}
-
-.chat-interface-container .chat-footer button {
-    background: var(--teal);
-    border: none;
-    color: white;
-    font-weight: 600;
-    padding: 0 20px;
-    border-radius: 10px;
-    cursor: pointer;
-}
+.chat-interface-container .chat-body { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+.chat-interface-container .chat-message { padding: 10px 15px; border-radius: 20px; max-width: 80%; line-height: 1.5; }
+.chat-interface-container .chat-message.bot { background-color: var(--dark-gray); align-self: flex-start; border-bottom-left-radius: 5px; }
+.chat-interface-container .chat-message.bot p { margin: 0; font-size: 1rem; }
+.chat-interface-container .chat-message.user { background-color: var(--teal); color: var(--black); align-self: flex-end; border-bottom-right-radius: 5px; }
+.chat-interface-container .chat-message.user p { margin: 0; font-size: 1rem; color: var(--black); }
+.chat-interface-container .chat-footer { padding: 15px; border-top: 1px solid var(--medium-gray); }
+.chat-interface-container #ai-chat-form { display: flex; gap: 10px; margin: 0; }
+.chat-interface-container #ai-chat-input { flex-grow: 1; margin-bottom: 0; }
+.chat-interface-container .chat-footer button { background: var(--teal); border: none; color: white; font-weight: 600; padding: 0 20px; border-radius: 10px; cursor: pointer; }
 
 /* ===== NOVO: ESTILOS PARA O CABEÇALHO COM BOTÃO DE QUIZ FIXO ===== */
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 2rem; /* Espaçamento entre o logo e o botão */
-}
+.header-left { display: flex; align-items: center; gap: 2rem; }
+.btn-quiz-header { padding: 12px 25px; font-size: 0.9rem; }
 
-/* Ajuste para o botão do quiz no cabeçalho não ser tão grande */
-.btn-quiz-header {
-    padding: 12px 25px;
-    font-size: 0.9rem;
-}
-
-/* Ajustes para telas de tablet */
 @media (max-width: 992px) {
-    .header-left {
-        gap: 1.5rem;
-    }
-    .btn-quiz-header {
-        padding: 10px 20px;
-    }
+    .header-left { gap: 1.5rem; }
+    .btn-quiz-header { padding: 10px 20px; }
 }
-
-/* Ajustes para telas de celular */
 @media (max-width: 768px) {
-    .btn-quiz-header {
-        padding: 8px 15px;
-        font-size: 0.8rem;
-    }
-    .header-logo {
-        max-width: 80px; /* Diminui um pouco o logo para caber tudo */
-    }
+    .btn-quiz-header { padding: 8px 15px; font-size: 0.8rem; }
+    .header-logo { max-width: 80px; }
 }
 
-/* --- CORREÇÃO PARA EXIBIÇÃO DO QUIZ/PESQUISA --- */
+/* --- ADIÇÃO FINAL PARA CORRIGIR O LAYOUT DO QUIZ E PESQUISA DE VEZ --- */
 .quiz-container .slide, .survey-container .slide {
-    display: none; /* Esconde todos os slides por padrão */
+    display: none;
 }
-
 .quiz-container .slide.active, .survey-container .slide.active {
-    display: block; /* Mostra APENAS o slide que está com a classe 'active' */
+    display: block;
 }
