@@ -37,6 +37,62 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* ===== ESTILOS PARA O CONSTRUTOR VISUAL ===== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Chat ocupa 2/3, Ficha ocupa 1/3 */
+            gap: 2rem;
+            align-items: flex-start;
+        }
+        
+        .profile-card {
+            background-color: var(--black);
+            border: 1px solid var(--medium-gray);
+            border-radius: 10px;
+            padding: 1.5rem;
+            height: 500px; /* Mesma altura do chat */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-card h4 {
+            color: var(--teal);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--medium-gray);
+            padding-bottom: 1rem;
+        }
+
+        .profile-item {
+            margin-bottom: 1rem;
+        }
+        
+        .profile-item label {
+            display: block;
+            color: var(--text-medium);
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-item span {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.95rem;
+            opacity: 0.5; /* Começa meio apagado */
+            transition: opacity 0.5s ease;
+        }
+        
+        /* Media query para telas menores */
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr; /* Coluna única em telas menores */
+            }
+            .profile-card {
+                height: auto;
+                margin-top: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -60,14 +116,36 @@
                     <div class="card" style="text-align: left;">
                         <h3>Entrevista de Configuração</h3>
                         <p style="max-width: none; margin-bottom: 1.5rem;">Responda às perguntas da nossa assistente para configurar a sua IA.</p>
-                        <div class="chat-interface-container">
-                            <div class="chat-body" id="ai-chat-body">
+                        
+                        <div class="dashboard-grid">
+                            <div class="chat-interface-container">
+                                <div class="chat-body" id="ai-chat-body"></div>
+                                <div class="chat-footer">
+                                    <form id="ai-chat-form">
+                                        <input type="text" id="ai-chat-input" placeholder="Digite sua resposta..." autocomplete="off" required>
+                                        <button type="submit">Enviar</button>
+                                    </form>
                                 </div>
-                            <div class="chat-footer">
-                                <form id="ai-chat-form">
-                                    <input type="text" id="ai-chat-input" placeholder="Digite sua resposta..." autocomplete="off" required>
-                                    <button type="submit">Enviar</button>
-                                </form>
+                            </div>
+
+                            <div id="agent-profile-card" class="profile-card">
+                                <h4>Perfil do seu Agente</h4>
+                                <div class="profile-item">
+                                    <label>Nome do Agente</label>
+                                    <span id="profile-nomeAgente">Aguardando...</span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>Objetivo Principal</label>
+                                    <span id="profile-objetivo">Aguardando...</span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>Personalidade</label>
+                                    <span id="profile-personalidade">Aguardando...</span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>Habilidades</label>
+                                    <span id="profile-habilidades">Aguardando...</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -88,10 +166,9 @@
                         <h3>Seu Agente de Teste</h3>
                         <p style="max-width: none; margin-bottom: 1.5rem;">Converse com a versão piloto do seu agente.</p>
                         <div class="chat-interface-container">
-                            <div class="chat-body" id="test-agent-chat-body">
-                                </div>
+                            <div class="chat-body" id="test-agent-chat-body"></div>
                             <div class="chat-footer">
-                                <form id="test-agent-chat-form">
+                                <form id="test-agent-form">
                                     <input type="text" id="test-agent-chat-input" placeholder="Converse com seu agente..." autocomplete="off" required>
                                     <button type="submit">Enviar</button>
                                 </form>
@@ -108,26 +185,33 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- IMPORTANTE: SUBSTITUA PELAS SUAS URLs REAIS DO N8N ---
-            const INTERVIEWER_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA';            		    const TEST_AGENT_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/AgenteTeste';
-            // -----------------------------------------------------------------
-
+            const INTERVIEWER_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA';
+            const TEST_AGENT_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/AgenteTeste';
+      
             // --- REFERÊNCIAS AOS ELEMENTOS DO HTML ---
             const userNameSpan = document.getElementById('user-name');
             const chatWrapper = document.getElementById('chat-wrapper');
             const loadingScreenWrapper = document.getElementById('loading-screen-wrapper');
             const testAgentWrapper = document.getElementById('test-agent-wrapper');
-
             const aiChatForm = document.getElementById('ai-chat-form');
             const aiChatInput = document.getElementById('ai-chat-input');
             const aiChatBody = document.getElementById('ai-chat-body');
-
-            const testAgentChatForm = document.getElementById('test-agent-chat-form');
-            const testAgentChatInput = document.getElementById('test-agent-chat-input');
+            const testAgentChatForm = document.getElementById('test-agent-form');
+            const testAgentChatInput = document.getElementById('test-agent-input');
             const testAgentChatBody = document.getElementById('test-agent-chat-body');
+            const profileSpans = {
+                nomeAgente: document.getElementById('profile-nomeAgente'),
+                objetivo: document.getElementById('profile-objetivo'),
+                personalidade: document.getElementById('profile-personalidade'),
+                habilidades: document.getElementById('profile-habilidades')
+            };
+
+            // ===== INÍCIO DA CORREÇÃO DE AUTENTICAÇÃO =====
+            let authenticatedUser = null; // Variável para guardar o usuário de forma segura
 
             // --- LÓGICA DE LOGIN (NETLIFY IDENTITY) ---
             netlifyIdentity.on('init', user => {
+              authenticatedUser = user; // Guarda o usuário (ou null) assim que o Netlify confirma
               if (!user) {
                 sessionStorage.setItem('redirectAfterLogin', window.location.href);
                 window.location.href = '/'; 
@@ -139,32 +223,31 @@
             });
             netlifyIdentity.on('logout', () => window.location.href = '/');
 
-            // --- FUNÇÃO ÚNICA E CORRIGIDA PARA ENVIAR MENSAGENS AO N8N ---
+            // --- FUNÇÃO PARA ENVIAR MENSAGENS AO N8N ---
             async function sendMessageToN8N(webhookUrl, payload) {
-                const currentUser = netlifyIdentity.currentUser();
+                const currentUser = authenticatedUser; // Usa a variável segura em vez de chamar a função novamente
                 if (!currentUser) {
-                    console.error("Usuário não logado.");
-                    return { reply: "Erro de autenticação. Por favor, faça login novamente." };
+                    console.error("Usuário não autenticado ou script de identidade não inicializado.");
+                    return { reply: "Erro de autenticação. Por favor, recarregue a página." };
                 }
-
+                // ===== FIM DA CORREÇÃO DE AUTENTICAÇÃO =====
+                
                 let bodyPayload = {
                     userId: currentUser.id,
                     userName: currentUser.user_metadata.full_name || currentUser.email
                 };
-
                 if (typeof payload === 'string') {
                     bodyPayload.prompt = payload;
                 } else if (typeof payload === 'object' && payload !== null) {
                     bodyPayload = { ...bodyPayload, ...payload };
                 }
-
                 try {
                     const response = await fetch(webhookUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(bodyPayload)
                     });
-                    if (!response.ok) throw new Error(`A resposta do servidor não foi bem-sucedida: ${response.statusText}`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return await response.json();
                 } catch (error) {
                     console.error("Erro ao conectar com a IA:", error);
@@ -182,15 +265,24 @@
                 return messageElement;
             }
 
+            // --- FUNÇÃO PARA ATUALIZAR A FICHA DO AGENTE ---
+            function updateProfileCard(updateData) {
+                if (!updateData) return;
+                const { fieldName, value } = updateData;
+                const element = profileSpans[fieldName];
+                if (element) {
+                    element.textContent = value;
+                    element.style.opacity = 1;
+                }
+            }
+
             // --- FUNÇÃO DE INÍCIO DA ENTREVISTA ---
             function startInterview() {
-                if (chatWrapper) chatWrapper.classList.remove('hidden');
-                if (loadingScreenWrapper) loadingScreenWrapper.classList.add('hidden');
-                if (testAgentWrapper) testAgentWrapper.classList.add('hidden');
-                if (aiChatBody) {
-                    aiChatBody.innerHTML = '';
-                    appendChatMessage('Olá! Eu sou sua assistente de configuração. Para começarmos, preciso de fazer algumas perguntas para entender o seu negócio. Quando estiver pronto, diga "começar".', 'bot', aiChatBody);
-                }
+                chatWrapper.classList.remove('hidden');
+                loadingScreenWrapper.classList.add('hidden');
+                testAgentWrapper.classList.add('hidden');
+                aiChatBody.innerHTML = '';
+                appendChatMessage('Olá! Eu sou sua assistente de configuração. Para começarmos, preciso de fazer algumas perguntas para entender o seu negócio. Quando estiver pronto, diga "começar".', 'bot', aiChatBody);
             }
 
             // --- LISTENER DO FORMULÁRIO DO ENTREVISTADOR ---
@@ -216,6 +308,10 @@
                     const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload);
                     
                     botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
+                    
+                    if (result.updateProfile) {
+                        updateProfileCard(result.updateProfile);
+                    }
 
                     if (result.status === 'BRIEFING_COMPLETE') {
                         switchToLoadingScreen();
@@ -242,23 +338,21 @@
             // --- FUNÇÕES PARA A TRANSIÇÃO DE TELA ---
             function switchToLoadingScreen() {
                 setTimeout(() => {
-                    if (chatWrapper) chatWrapper.classList.add('hidden');
-                    if (loadingScreenWrapper) loadingScreenWrapper.classList.remove('hidden');
+                    chatWrapper.classList.add('hidden');
+                    loadingScreenWrapper.classList.remove('hidden');
                     simulateAgentBuilding();
                 }, 1000);
             }
 
             function simulateAgentBuilding() {
                 setTimeout(() => {
-                    if (loadingScreenWrapper) loadingScreenWrapper.classList.add('hidden');
-                    if (testAgentWrapper) testAgentWrapper.classList.remove('hidden');
+                    loadingScreenWrapper.classList.add('hidden');
+                    testAgentWrapper.classList.remove('hidden');
                     appendChatMessage('Olá! Sou seu novo agente, criado com base nas suas instruções. Como posso te ajudar hoje?', 'bot', testAgentChatBody);
                 }, 5000);
             }
         });
     </script>
     
-    <script src="../scripts.js"></script>
-
 </body>
 </html>
