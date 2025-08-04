@@ -223,17 +223,19 @@
             });
             netlifyIdentity.on('logout', () => window.location.href = '/');
 
-           // ===== FUNÇÃO DE TESTE PARA BYPASS DE AUTENTICAÇÃO =====
-async function sendMessageToN8N(webhookUrl, payload) {
-    // --- MUDANÇA TEMPORÁRIA PARA TESTE ---
-    // Vamos usar um ID de usuário e nome fixos e ignorar o Netlify Identity por um momento.
-    const testUserId = "teste_auth_12345";
-    const testUserName = "Usuário Teste";
-
-    let bodyPayload = {
-        userId: testUserId,
-        userName: testUserName
-    };
+            // --- FUNÇÃO PARA ENVIAR MENSAGENS AO N8N ---
+            async function sendMessageToN8N(webhookUrl, payload) {
+                const currentUser = authenticatedUser; // Usa a variável segura em vez de chamar a função novamente
+                if (!currentUser) {
+                    console.error("Usuário não autenticado ou script de identidade não inicializado.");
+                    return { reply: "Erro de autenticação. Por favor, recarregue a página." };
+                }
+                // ===== FIM DA CORREÇÃO DE AUTENTICAÇÃO =====
+                
+                let bodyPayload = {
+                    userId: currentUser.id,
+                    userName: currentUser.user_metadata.full_name || currentUser.email
+                };
                 if (typeof payload === 'string') {
                     bodyPayload.prompt = payload;
                 } else if (typeof payload === 'object' && payload !== null) {
