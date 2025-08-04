@@ -11,65 +11,61 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Ajuste para layout de tela cheia */
-        html, body {
-            height: 100%;
-            overflow: hidden; /* Impede a rolagem da página principal */
-        }
-        main {
-            height: calc(100vh - 78px); /* Altura total da tela menos a altura do cabeçalho */
-            display: flex;
-            flex-direction: column;
-        }
-        #dashboard-content, #dashboard-content > .container, #chat-wrapper, #chat-wrapper > .card {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .chat-interface-container {
-            height: 100%; /* Faz o container do chat preencher o card */
-        }
-        .profile-card {
-             height: 100%; /* Faz a ficha do agente preencher o espaço */
-        }
-
         .hidden {
             display: none !important;
         }
-        #chat-wrapper, #loading-screen-wrapper, #test-agent-wrapper {
-            margin-top: 2rem;
-        }
-        .loading-content {
+
+        /* Estrutura principal do conteúdo do Dashboard */
+        #dashboard-content .card {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 50px;
-        }
-        .spinner {
-            border: 4px solid rgba(128, 128, 128, 0.2);
-            border-left-color: var(--teal);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-top: 20px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            align-items: flex-start;
-            flex-grow: 1;
-            overflow: hidden; /* Impede que o grid cresça demais */
+            /* Removemos a altura fixa para deixar o conteúdo definir o tamanho */
         }
         
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Chat (2/3) e Ficha (1/3) */
+            gap: 2rem;
+            align-items: stretch; /* Faz os dois itens terem a mesma altura */
+            flex-grow: 1;
+        }
+        
+        /* Container principal do Chat */
+        .chat-interface-container {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--medium-gray);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: var(--black);
+            min-height: 500px; /* Altura mínima para o chat */
+        }
+
+        /* Corpo do Chat (área de mensagens) */
+        .chat-interface-container .chat-body {
+            flex-grow: 1; /* Faz esta área crescer e ocupar o espaço disponível */
+            padding: 20px;
+            overflow-y: auto; /* Adiciona scroll se as mensagens passarem da altura */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Rodapé do Chat (área de digitação) */
+        .chat-interface-container .chat-footer {
+            flex-shrink: 0; /* Regra CRUCIAL: Impede que o rodapé encolha ou suma */
+            padding: 15px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        /* Perfil do Agente */
+        .profile-card {
+            background-color: var(--black);
+            border: 1px solid var(--medium-gray);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
         .profile-card h4 {
             color: var(--teal);
             margin-bottom: 1.5rem;
@@ -78,37 +74,21 @@
             padding-bottom: 1rem;
         }
 
-        .profile-item {
-            margin-bottom: 1rem;
-        }
-        
-        .profile-item label {
-            display: block;
-            color: var(--text-medium);
-            font-size: 0.8rem;
-            margin-bottom: 0.25rem;
-        }
+        .profile-item { margin-bottom: 1rem; }
+        .profile-item label { display: block; color: var(--text-medium); font-size: 0.8rem; margin-bottom: 0.25rem; }
+        .profile-item span { color: var(--white); font-weight: 600; font-size: 0.95rem; opacity: 0.5; transition: opacity 0.5s ease; }
 
-        .profile-item span {
-            color: var(--white);
-            font-weight: 600;
-            font-size: 0.95rem;
-            opacity: 0.5;
-            transition: opacity 0.5s ease;
-        }
-        
+        /* Tela de Carregamento */
+        .loading-content { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 50px; }
+        .spinner { border: 4px solid rgba(128, 128, 128, 0.2); border-left-color: var(--teal); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-top: 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Ajuste para telas menores */
         @media (max-width: 992px) {
-            html, body {
-                overflow: auto; /* Permite rolagem em telas menores */
-            }
-            main {
-                height: auto;
-            }
             .dashboard-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Coluna única */
             }
             .profile-card {
-                height: auto;
                 margin-top: 2rem;
             }
         }
