@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Layout de Tela Cheia */
         html, body { height: 100%; overflow: hidden; }
         body { display: flex; flex-direction: column; }
         .header-minimalista { flex-shrink: 0; }
@@ -23,20 +22,15 @@
         .chat-interface-container { display: flex; flex-direction: column; height: 100%; min-height: 500px; }
         .chat-interface-container .chat-body { flex-grow: 1; overflow-y: auto; }
         .chat-interface-container .chat-footer { flex-shrink: 0; }
-
-        /* Perfil do Agente "Futurista" */
         .profile-card { background: linear-gradient(145deg, #1f1f1f, #2d2d2d); border: 1px solid #444; border-radius: 15px; padding: 1.5rem; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0, 199, 166, 0.1); }
         .profile-card h4 { color: var(--teal); margin-bottom: 1.5rem; text-align: center; border-bottom: 1px solid #444; padding-bottom: 1rem; font-weight: 600; }
         .profile-item { margin-bottom: 1.25rem; }
         .profile-item label { display: block; color: var(--text-medium); font-size: 0.8rem; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .profile-item span { color: var(--white); font-weight: 500; font-size: 0.95rem; opacity: 0.6; transition: opacity 0.5s ease; }
-
-        /* Outros */
         .hidden { display: none !important; }
         .loading-content { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 50px; height: 100%; }
         .spinner { border: 4px solid rgba(128, 128, 128, 0.2); border-left-color: var(--teal); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-top: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
         @media (max-width: 992px) {
             html, body { overflow: auto; }
             main { height: auto; }
@@ -46,7 +40,6 @@
     </style>
 </head>
 <body>
-
     <header class="header-minimalista">
         <div class="container">
             <a href="/"><img src="../assets/images/logoNastia.png" alt="Logo da NástIA" class="header-logo"></a>
@@ -55,44 +48,29 @@
             </div>
         </div>
     </header>
-    
     <main>
         <section id="dashboard-content">
             <div class="container" style="text-align: left;">
                 <h2>Bem-vindo(a) ao seu Dashboard, <span id="user-name">...</span>!</h2>
                 <p class="subtitulo" style="text-align: left;">Este é o seu espaço para interagir com as ferramentas da NástIA.</p>
-                
                 <div id="chat-wrapper">
                     <div class="card" style="text-align: left; padding-top: 1.5rem;">
                         <div class="dashboard-grid">
                             <div class="chat-interface-container">
-                                <div class="chat-body" id="ai-chat-body">
-                                    </div>
+                                <div class="chat-body" id="ai-chat-body"></div>
                                 <div class="chat-footer">
                                     <form id="ai-chat-form">
-                                        <input type="text" id="ai-chat-input" placeholder="Aguardando conexão..." autocomplete="off" required disabled>
-                                        <button type="submit" disabled>Enviar</button>
+                                        <input type="text" id="ai-chat-input" placeholder="Digite sua resposta..." autocomplete="off" required>
+                                        <button type="submit">Enviar</button>
                                     </form>
                                 </div>
                             </div>
                             <div id="agent-profile-card" class="profile-card">
                                 <h4>Perfil do seu Agente</h4>
-                                <div class="profile-item">
-                                    <label>Nome do Agente</label>
-                                    <span id="profile-nomeAgente">Aguardando...</span>
-                                </div>
-                                <div class="profile-item">
-                                    <label>Objetivo Principal</label>
-                                    <span id="profile-objetivo">Aguardando...</span>
-                                </div>
-                                <div class="profile-item">
-                                    <label>Personalidade</label>
-                                    <span id="profile-personalidade">Aguardando...</span>
-                                </div>
-                                <div class="profile-item">
-                                    <label>Habilidades</label>
-                                    <span id="profile-habilidades">Aguardando...</span>
-                                </div>
+                                <div class="profile-item"><label>Nome do Agente</label><span id="profile-nomeAgente">Aguardando...</span></div>
+                                <div class="profile-item"><label>Objetivo Principal</label><span id="profile-objetivo">Aguardando...</span></div>
+                                <div class="profile-item"><label>Personalidade</label><span id="profile-personalidade">Aguardando...</span></div>
+                                <div class="profile-item"><label>Habilidades</label><span id="profile-habilidades">Aguardando...</span></div>
                             </div>
                         </div>
                     </div>
@@ -100,25 +78,20 @@
                  </div>
         </section>
     </main>
-
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const INTERVIEWER_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA';
             const TEST_AGENT_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/AgenteTeste';
-      
             const userNameSpan = document.getElementById('user-name');
             const aiChatForm = document.getElementById('ai-chat-form');
             const aiChatInput = document.getElementById('ai-chat-input');
             const aiChatBody = document.getElementById('ai-chat-body');
-            const aiChatSubmitBtn = aiChatForm.querySelector('button');
-
-            // --- LÓGICA DE LOGIN E ATIVAÇÃO DO CHAT (A CORREÇÃO PRINCIPAL) ---
+            
             netlifyIdentity.on('init', user => {
               if (!user) {
                 window.location.href = '/'; 
               } else {
-                // SÓ DEPOIS DE CONFIRMAR O LOGIN, NÓS ATIVAMOS O RESTO
                 const fullName = user.user_metadata.full_name || user.email;
                 userNameSpan.textContent = fullName;
                 startInterview();
@@ -126,13 +99,11 @@
             });
             netlifyIdentity.on('logout', () => window.location.href = '/');
 
-            // Função de envio que agora é segura
             async function sendMessageToN8N(webhookUrl, payload) {
-                const currentUser = netlifyIdentity.currentUser(); // Pega o usuário no momento do envio
+                const currentUser = netlifyIdentity.currentUser();
                 if (!currentUser) {
                     return { reply: "Erro de autenticação. Por favor, recarregue a página." };
                 }
-                
                 let bodyPayload = {
                     userId: currentUser.id,
                     userName: currentUser.user_metadata.full_name || currentUser.email
@@ -140,7 +111,6 @@
                 if (typeof payload === 'object' && payload !== null) {
                     bodyPayload = { ...bodyPayload, ...payload };
                 }
-
                 try {
                     const response = await fetch(webhookUrl, {
                         method: 'POST',
@@ -163,55 +133,31 @@
                 chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
                 return messageElement;
             }
-            
-            // Habilita/desabilita o chat
-            function setChatEnabled(enabled) {
-                aiChatInput.disabled = !enabled;
-                aiChatSubmitBtn.disabled = !enabled;
-                if(enabled) {
-                    aiChatInput.placeholder = "Digite sua resposta...";
-                    aiChatInput.focus();
-                } else {
-                    aiChatInput.placeholder = "Aguardando...";
-                }
-            }
 
-            // Inicia a entrevista e busca a primeira mensagem
-            async function startInterview() {
+            function startInterview() {
                 aiChatBody.innerHTML = '';
-                const botTypingElement = appendChatMessage('Conectando com a assistente...', 'bot', aiChatBody);
-                
-                const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, { prompt: '__START_INTERVIEW__' });
-
-                botTypingElement.innerHTML = `<p>${result.reply || 'Olá! Vamos começar?'}</p>`;
-                setChatEnabled(true); // ATIVA O CHAT APENAS AQUI
+                // MENSAGEM INICIAL FIXA E INSTANTÂNEA
+                appendChatMessage('Olá! Sou sua assistente de configuração. Para começarmos, por favor, me diga o nome do seu projeto.', 'bot', aiChatBody);
             }
 
-            // Listener do formulário
             if (aiChatForm) {
                 aiChatForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     const userMessageText = aiChatInput.value.trim();
-                    if (!userMessageText || aiChatInput.disabled) return;
+                    if (!userMessageText) return;
 
                     appendChatMessage(userMessageText, 'user', aiChatBody);
-                    aiChatInput.value = '';
-                    setChatEnabled(false);
+aiChatInput.value = '';
 
                     const lastAiMessage = Array.from(aiChatBody.querySelectorAll('.bot')).pop()?.textContent || '';
                     const isMagicQuestion = lastAiMessage.includes('mágica acontecer?');
-                    
                     const botTypingElement = appendChatMessage('Digitando...', 'bot', aiChatBody);
-
                     const payload = {
                         prompt: userMessageText,
                         isFinalStep: isMagicQuestion
                     };
-
                     const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload);
-                    
                     botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar.'}</p>`;
-                    setChatEnabled(true);
                     
                     if (result.updateProfile) {
                         // Lógica de update da ficha
@@ -221,10 +167,8 @@
                     }
                 });
             }
-
             // ... (demais funções e listeners)
         });
     </script>
-
 </body>
 </html>
