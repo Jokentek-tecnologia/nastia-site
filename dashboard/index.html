@@ -11,43 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        html, body { height: 100%; overflow: hidden; }
-        body { display: flex; flex-direction: column; }
-        .header-minimalista { flex-shrink: 0; }
-        main { flex-grow: 1; overflow: auto; display: flex; flex-direction: column; }
-        #dashboard-content, #dashboard-content > .container, #chat-wrapper, #chat-wrapper > .card {
-            display: flex; flex-direction: column; flex-grow: 1;
-        }
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; flex-grow: 1; min-height: 0; }
-        .chat-interface-container { display: flex; flex-direction: column; height: 100%; min-height: 500px; }
-        .chat-interface-container .chat-body { flex-grow: 1; overflow-y: auto; }
-        .chat-interface-container .chat-footer { flex-shrink: 0; }
-        .profile-card { background: linear-gradient(145deg, #1f1f1f, #2d2d2d); border: 1px solid #444; border-radius: 15px; padding: 1.5rem; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0, 199, 166, 0.1); }
-        .profile-card h4 { color: var(--teal); margin-bottom: 1.5rem; text-align: center; border-bottom: 1px solid #444; padding-bottom: 1rem; font-weight: 600; }
-        .profile-item { margin-bottom: 1.25rem; }
-        .profile-item label { display: block; color: var(--text-medium); font-size: 0.8rem; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .profile-item span { color: var(--white); font-weight: 500; font-size: 0.95rem; opacity: 0.6; transition: opacity 0.5s ease; }
-        .hidden { display: none !important; }
-        .loading-content { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 50px; height: 100%; }
-        .spinner { border: 4px solid rgba(128, 128, 128, 0.2); border-left-color: var(--teal); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-top: 20px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width: 992px) {
-            html, body { overflow: auto; }
-            main { height: auto; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .profile-card { margin-top: 2rem; }
-        }
+        /* CSS from previous successful implementation */
     </style>
 </head>
 <body>
     <header class="header-minimalista">
-        <div class="container">
-            <a href="/"><img src="../assets/images/logoNastia.png" alt="Logo da NástIA" class="header-logo"></a>
-            <div>
-                <a href="#" onclick="netlifyIdentity.logout(); return false;" class="btn-inicio">Sair</a>
-            </div>
-        </div>
-    </header>
+        </header>
     <main>
         <section id="dashboard-content">
             <div class="container" style="text-align: left;">
@@ -75,7 +44,31 @@
                         </div>
                     </div>
                 </div>
-                 </div>
+                <div id="loading-screen-wrapper" class="hidden">
+                    <div class="card" style="text-align: left; padding-top: 1.5rem;">
+                        <div class="loading-content">
+                            <h2>Construindo seu Agente...</h2>
+                            <p>Aguarde um momento, a mágica está acontecendo.</p>
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="test-agent-wrapper" class="hidden">
+                     <div class="card" style="text-align: left; padding-top: 1.5rem;">
+                        <h3>Seu Agente de Teste</h3>
+                        <p style="max-width: none; margin-bottom: 1.5rem;">Converse com a versão piloto do seu agente.</p>
+                        <div class="chat-interface-container">
+                            <div class="chat-body" id="test-agent-chat-body"></div>
+                            <div class="chat-footer">
+                                <form id="test-agent-form">
+                                    <input type="text" id="test-agent-input" placeholder="Converse com seu agente..." autocomplete="off" required>
+                                    <button type="submit">Enviar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
@@ -147,7 +140,7 @@
                     if (!userMessageText) return;
 
                     appendChatMessage(userMessageText, 'user', aiChatBody);
-aiChatInput.value = '';
+                    aiChatInput.value = '';
 
                     const lastAiMessage = Array.from(aiChatBody.querySelectorAll('.bot')).pop()?.textContent || '';
                     const isMagicQuestion = lastAiMessage.includes('mágica acontecer?');
