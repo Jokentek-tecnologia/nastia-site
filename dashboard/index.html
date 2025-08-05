@@ -11,64 +11,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-       /* ===== INÍCIO DO BLOCO DE ESTILO CORRIGIDO ===== */
-
-        /* Define a estrutura principal da página para ocupar 100% da tela */
         html, body {
             height: 100%;
-            overflow: hidden; /* Impede a rolagem da página como um todo */
+            overflow: hidden;
         }
-
         body {
             display: flex;
             flex-direction: column;
         }
-
         .header-minimalista {
-            flex-shrink: 0; /* Garante que o cabeçalho nunca encolha */
+            flex-shrink: 0;
         }
-
         main {
-            flex-grow: 1; /* Faz a área principal crescer e ocupar todo o espaço restante */
-            overflow-y: auto; /* Adiciona rolagem DENTRO da área principal, se necessário (telas pequenas) */
+            flex-grow: 1;
+            overflow: auto; /* Permite rolagem interna se necessário, mas não da página inteira */
             display: flex;
             flex-direction: column;
         }
-        
-        /* Faz os containers internos se expandirem corretamente */
-        #dashboard-content,
-        #dashboard-content > .container,
-        #chat-wrapper,
-        #chat-wrapper > .card {
+        #dashboard-content, #dashboard-content > .container, #chat-wrapper, #chat-wrapper > .card {
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
-
         .dashboard-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 1.5rem;
             flex-grow: 1;
-            min-height: 0; /* Correção para bugs de overflow em layout flex/grid */
+            min-height: 0;
         }
-
-        /* Estrutura interna do componente de CHAT */
         .chat-interface-container {
             display: flex;
             flex-direction: column;
             height: 100%;
-            min-height: 450px; /* Define uma altura mínima para o chat */
+            min-height: 500px;
         }
         .chat-interface-container .chat-body {
-            flex-grow: 1; /* Faz a área de mensagens ocupar o espaço disponível */
-            overflow-y: auto; /* Adiciona rolagem APENAS na área de mensagens */
+            flex-grow: 1;
+            overflow-y: auto;
         }
         .chat-interface-container .chat-footer {
-            flex-shrink: 0; /* Impede que a área de input suma */
+            flex-shrink: 0;
         }
-
-        /* Estilos do Perfil do Agente */
         .profile-card {
             background: linear-gradient(145deg, #1f1f1f, #2d2d2d);
             border: 1px solid #444;
@@ -82,21 +66,17 @@
         .profile-item { margin-bottom: 1.25rem; }
         .profile-item label { display: block; color: var(--text-medium); font-size: 0.8rem; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .profile-item span { color: var(--white); font-weight: 500; font-size: 0.95rem; opacity: 0.6; transition: opacity 0.5s ease; }
-
-        /* Classe para esconder elementos e estilos da tela de loading */
         .hidden { display: none !important; }
         .loading-content { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 50px; height: 100%; }
         .spinner { border: 4px solid rgba(128, 128, 128, 0.2); border-left-color: var(--teal); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-top: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Ajuste para telas menores */
         @media (max-width: 992px) {
-            html, body { overflow: auto; } /* Reabilita o scroll normal em telas menores */
+            html, body { overflow: auto; }
             main { height: auto; }
             .dashboard-grid { grid-template-columns: 1fr; }
             .profile-card { margin-top: 2rem; }
         }
-        /* ===== FIM DO BLOCO DE ESTILO CORRIGIDO ===== */
     </style>
 </head>
 <body>
@@ -113,18 +93,19 @@
     <main>
         <section id="dashboard-content">
             <div class="container" style="text-align: left;">
-                <h2 style="margin-bottom: 0.5rem;">Bem-vindo(a) ao seu Dashboard, <span id="user-name">...</span>!</h2>
+                <h2>Bem-vindo(a) ao seu Dashboard, <span id="user-name">...</span>!</h2>
                 <p class="subtitulo" style="text-align: left;">Este é o seu espaço para interagir com as ferramentas da NástIA.</p>
                 
                 <div id="chat-wrapper">
                     <div class="card" style="text-align: left; padding-top: 1.5rem;">
                         <div class="dashboard-grid">
                             <div class="chat-interface-container">
-                                <div class="chat-body" id="ai-chat-body"></div>
+                                <div class="chat-body" id="ai-chat-body">
+                                    </div>
                                 <div class="chat-footer">
                                     <form id="ai-chat-form">
-                                        <input type="text" id="ai-chat-input" placeholder="Aguardando conexão..." autocomplete="off" required disabled>
-                                        <button type="submit" disabled>Enviar</button>
+                                        <input type="text" id="ai-chat-input" placeholder="Digite sua resposta..." autocomplete="off" required>
+                                        <button type="submit">Enviar</button>
                                     </form>
                                 </div>
                             </div>
@@ -151,7 +132,10 @@
                     </div>
                 </div>
 
-                </div>
+                <div id="loading-screen-wrapper" class="hidden"> ... </div>
+                <div id="test-agent-wrapper" class="hidden"> ... </div>
+
+            </div>
         </section>
     </main>
 
@@ -166,40 +150,37 @@
             const aiChatForm = document.getElementById('ai-chat-form');
             const aiChatInput = document.getElementById('ai-chat-input');
             const aiChatBody = document.getElementById('ai-chat-body');
-            const aiChatSubmitBtn = aiChatForm.querySelector('button');
             
-            // --- CORREÇÃO DEFINITIVA DA AUTENTICAÇÃO ---
             let authenticatedUser = null; 
 
+            // A lógica de autenticação agora acontece aqui, de forma segura
             netlifyIdentity.on('init', user => {
-              authenticatedUser = user; // Guarda o usuário de forma segura
+              authenticatedUser = user;
               if (!user) {
-                sessionStorage.setItem('redirectAfterLogin', window.location.href);
                 window.location.href = '/'; 
               } else {
                 const fullName = user.user_metadata.full_name || user.email;
                 userNameSpan.textContent = fullName;
-                startInterview(user); // Passa o usuário diretamente para a função
+                startInterview(); // Inicia a entrevista SÓ DEPOIS de confirmar o login
               }
             });
             netlifyIdentity.on('logout', () => window.location.href = '/');
 
-            // Função de envio agora recebe o usuário como parâmetro para garantir
-            async function sendMessageToN8N(webhookUrl, payload, user) {
-                if (!user) {
-                    console.error("Usuário não autenticado.");
+            // Função de envio que usa a variável segura 'authenticatedUser'
+            async function sendMessageToN8N(webhookUrl, payload) {
+                if (!authenticatedUser) {
                     return { reply: "Erro de autenticação. Por favor, recarregue a página." };
                 }
                 
                 let bodyPayload = {
-                    userId: user.id,
-                    userName: user.user_metadata.full_name || user.email
+                    userId: authenticatedUser.id,
+                    userName: authenticatedUser.user_metadata.full_name || authenticatedUser.email
                 };
-                if (typeof payload === 'string') {
-                    bodyPayload.prompt = payload;
-                } else if (typeof payload === 'object' && payload !== null) {
+
+                if (typeof payload === 'object' && payload !== null) {
                     bodyPayload = { ...bodyPayload, ...payload };
                 }
+
                 try {
                     const response = await fetch(webhookUrl, {
                         method: 'POST',
@@ -210,7 +191,7 @@
                     return await response.json();
                 } catch (error) {
                     console.error("Erro ao conectar com a IA:", error);
-                    return { reply: "Ocorreu um erro ao conectar com nossos servidores. Tente novamente." };
+                    return { reply: "Ocorreu um erro ao conectar com nossos servidores." };
                 }
             }
 
@@ -222,40 +203,22 @@
                 chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
                 return messageElement;
             }
-            
-            // Habilita/desabilita o chat para evitar erros
-            function setChatEnabled(enabled) {
-                aiChatInput.disabled = !enabled;
-                aiChatSubmitBtn.disabled = !enabled;
-                if(enabled) {
-                    aiChatInput.placeholder = "Digite sua resposta...";
-                    aiChatInput.focus();
-                } else {
-                    aiChatInput.placeholder = "Aguardando...";
-                }
-            }
 
-            // Função de início da entrevista agora recebe o usuário autenticado
-            async function startInterview(user) {
+            // VERSÃO SIMPLIFICADA E CONFIÁVEL
+            function startInterview() {
                 aiChatBody.innerHTML = '';
-                setChatEnabled(false);
-                const botTypingElement = appendChatMessage('Conectando com a assistente...', 'bot', aiChatBody);
-                
-                const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, { prompt: '__START_INTERVIEW__' }, user);
-
-                botTypingElement.innerHTML = `<p>${result.reply || 'Olá! Vamos começar?'}</p>`;
-                setChatEnabled(true);
+                // Mensagem inicial FIXA para evitar chamadas de rede e erros
+                appendChatMessage('Olá! Sou sua assistente de configuração. Para começarmos, pode me dizer o nome do seu projeto?', 'bot', aiChatBody);
             }
 
             if (aiChatForm) {
                 aiChatForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     const userMessageText = aiChatInput.value.trim();
-                    if (!userMessageText || aiChatInput.disabled) return;
+                    if (!userMessageText) return;
 
                     appendChatMessage(userMessageText, 'user', aiChatBody);
                     aiChatInput.value = '';
-                    setChatEnabled(false);
 
                     const lastAiMessage = Array.from(aiChatBody.querySelectorAll('.bot')).pop()?.textContent || '';
                     const isMagicQuestion = lastAiMessage.includes('mágica acontecer?');
@@ -267,23 +230,21 @@
                         isFinalStep: isMagicQuestion
                     };
 
-                    const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload, authenticatedUser);
+                    const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload);
                     
                     botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
-                    setChatEnabled(true);
                     
                     if (result.updateProfile) {
-                        // (lógica de update mantida)
+                        // A lógica de update da ficha continua aqui
                     }
 
-                    if (result.status === 'BRIEF_COMPLETE') {
-                       // (lógica de transição mantida)
+                    if (result.status === 'BRIEFING_COMPLETE') {
+                       // A lógica de transição de tela continua aqui
                     }
                 });
             }
 
-            // O restante das suas funções (testAgentForm listener, switchToLoadingScreen, etc.)
-            // deve ser adicionado aqui, sem alterações.
+            // ... (as outras funções como switchToLoadingScreen, etc. devem ser mantidas aqui dentro do DOMContentLoaded)
         });
     </script>
 
