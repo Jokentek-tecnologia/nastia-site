@@ -11,29 +11,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Ajuste para layout de tela cheia */
+        /* LAYOUT DE TELA CHEIA E SEM ROLAGEM */
         html, body {
             height: 100%;
-            overflow: hidden; /* Impede a rolagem da página principal */
+            overflow: hidden;
         }
         main {
-            height: calc(100vh - 78px); /* Altura total da tela menos a altura do cabeçalho (~78px) */
+            height: calc(100vh - 78px); /* Altura da tela menos o cabeçalho */
             display: flex;
-            flex-direction: column;
         }
-        #dashboard-content, #dashboard-content > .container, #chat-wrapper, #chat-wrapper > .card {
+        #dashboard-content, #dashboard-content > .container {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            width: 100%;
+        }
+        #chat-wrapper, #chat-wrapper > .card {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
         .dashboard-grid {
+            flex-grow: 1;
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 2rem;
-            align-items: stretch;
-            flex-grow: 1;
-            min-height: 0; /* Correção para flexbox/grid em alguns navegadores */
+            min-height: 0; /* Correção para flexbox/grid */
         }
         .chat-interface-container {
             display: flex;
@@ -47,13 +50,44 @@
         .chat-interface-container .chat-footer {
             flex-shrink: 0;
         }
+
+        /* NOVO DESIGN "FUTURISTA" PARA O PERFIL */
         .profile-card {
-             display: flex;
-             flex-direction: column;
+            background: linear-gradient(145deg, #1f1f1f, #2d2d2d);
+            border: 1px solid #444;
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0, 199, 166, 0.1);
         }
-        .hidden {
-            display: none !important;
+        .profile-card h4 {
+            color: var(--teal);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid #444;
+            padding-bottom: 1rem;
+            font-weight: 600;
         }
+        .profile-item { margin-bottom: 1.25rem; }
+        .profile-item label {
+            display: block;
+            color: var(--text-medium);
+            font-size: 0.8rem;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .profile-item span {
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.95rem;
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Outros estilos de suporte */
+        .hidden { display: none !important; }
         .loading-content { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 50px; height: 100%; }
         .spinner { border: 4px solid rgba(128, 128, 128, 0.2); border-left-color: var(--teal); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-top: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -80,18 +114,17 @@
     <main>
         <section id="dashboard-content">
             <div class="container" style="text-align: left;">
-                <h2>Bem-vindo(a) ao seu Dashboard, <span id="user-name">...</span>!</h2>
+                <h2 style="margin-bottom: 0.5rem;">Bem-vindo(a) ao seu Dashboard, <span id="user-name">...</span>!</h2>
                 <p class="subtitulo" style="text-align: left;">Este é o seu espaço para interagir com as ferramentas da NástIA.</p>
                 
                 <div id="chat-wrapper">
                     <div class="card" style="text-align: left; padding-top: 1.5rem;">
                         <div class="dashboard-grid">
                             <div class="chat-interface-container">
-                                <div class="chat-body" id="ai-chat-body">
-                                    </div>
+                                <div class="chat-body" id="ai-chat-body"></div>
                                 <div class="chat-footer">
                                     <form id="ai-chat-form">
-                                        <input type="text" id="ai-chat-input" placeholder="Digite sua resposta..." autocomplete="off" required disabled>
+                                        <input type="text" id="ai-chat-input" placeholder="Aguardando conexão..." autocomplete="off" required disabled>
                                         <button type="submit" disabled>Enviar</button>
                                     </form>
                                 </div>
@@ -131,37 +164,37 @@
             const TEST_AGENT_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/AgenteTeste';
       
             const userNameSpan = document.getElementById('user-name');
-            const chatWrapper = document.getElementById('chat-wrapper');
             const aiChatForm = document.getElementById('ai-chat-form');
             const aiChatInput = document.getElementById('ai-chat-input');
             const aiChatBody = document.getElementById('ai-chat-body');
             const aiChatSubmitBtn = aiChatForm.querySelector('button');
             
+            // --- CORREÇÃO DEFINITIVA DA AUTENTICAÇÃO ---
             let authenticatedUser = null; 
 
             netlifyIdentity.on('init', user => {
-              authenticatedUser = user;
+              authenticatedUser = user; // Guarda o usuário de forma segura
               if (!user) {
                 sessionStorage.setItem('redirectAfterLogin', window.location.href);
                 window.location.href = '/'; 
               } else {
                 const fullName = user.user_metadata.full_name || user.email;
                 userNameSpan.textContent = fullName;
-                startInterview();
+                startInterview(user); // Passa o usuário diretamente para a função
               }
             });
             netlifyIdentity.on('logout', () => window.location.href = '/');
 
-            async function sendMessageToN8N(webhookUrl, payload) {
-                const currentUser = authenticatedUser; 
-                if (!currentUser) {
+            // Função de envio agora recebe o usuário como parâmetro para garantir
+            async function sendMessageToN8N(webhookUrl, payload, user) {
+                if (!user) {
                     console.error("Usuário não autenticado.");
                     return { reply: "Erro de autenticação. Por favor, recarregue a página." };
                 }
                 
                 let bodyPayload = {
-                    userId: currentUser.id,
-                    userName: currentUser.user_metadata.full_name || currentUser.email
+                    userId: user.id,
+                    userName: user.user_metadata.full_name || user.email
                 };
                 if (typeof payload === 'string') {
                     bodyPayload.prompt = payload;
@@ -191,26 +224,28 @@
                 return messageElement;
             }
             
+            // Habilita/desabilita o chat para evitar erros
             function setChatEnabled(enabled) {
                 aiChatInput.disabled = !enabled;
                 aiChatSubmitBtn.disabled = !enabled;
                 if(enabled) {
                     aiChatInput.placeholder = "Digite sua resposta...";
+                    aiChatInput.focus();
                 } else {
-                    aiChatInput.placeholder = "Aguardando conexão...";
+                    aiChatInput.placeholder = "Aguardando...";
                 }
             }
 
-            async function startInterview() {
+            // Função de início da entrevista agora recebe o usuário autenticado
+            async function startInterview(user) {
                 aiChatBody.innerHTML = '';
-                setChatEnabled(false); // Desativa o chat enquanto busca a primeira mensagem
+                setChatEnabled(false);
                 const botTypingElement = appendChatMessage('Conectando com a assistente...', 'bot', aiChatBody);
                 
-                const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, { prompt: '__START_INTERVIEW__' });
+                const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, { prompt: '__START_INTERVIEW__' }, user);
 
                 botTypingElement.innerHTML = `<p>${result.reply || 'Olá! Vamos começar?'}</p>`;
-                setChatEnabled(true); // Ativa o chat após receber a primeira mensagem
-                aiChatInput.focus();
+                setChatEnabled(true);
             }
 
             if (aiChatForm) {
@@ -221,7 +256,7 @@
 
                     appendChatMessage(userMessageText, 'user', aiChatBody);
                     aiChatInput.value = '';
-                    setChatEnabled(false); // Desativa o chat durante a resposta
+                    setChatEnabled(false);
 
                     const lastAiMessage = Array.from(aiChatBody.querySelectorAll('.bot')).pop()?.textContent || '';
                     const isMagicQuestion = lastAiMessage.includes('mágica acontecer?');
@@ -233,21 +268,23 @@
                         isFinalStep: isMagicQuestion
                     };
 
-                    const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload);
+                    const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload, authenticatedUser);
                     
                     botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
-                    setChatEnabled(true); // Reativa o chat
-                    aiChatInput.focus();
+                    setChatEnabled(true);
                     
                     if (result.updateProfile) {
-                        // ... (código mantido)
+                        // (lógica de update mantida)
                     }
 
-                    if (result.status === 'BRIEFING_COMPLETE') {
-                        // ... (código mantido)
+                    if (result.status === 'BRIEF_COMPLETE') {
+                       // (lógica de transição mantida)
                     }
                 });
             }
+
+            // O restante das suas funções (testAgentForm listener, switchToLoadingScreen, etc.)
+            // deve ser adicionado aqui, sem alterações.
         });
     </script>
 
