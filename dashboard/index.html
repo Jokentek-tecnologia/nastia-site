@@ -6,13 +6,13 @@
   <title>NastIA | Entrevista & Agente</title>
   <style>
     :root{
-      --bg:#0b0a14;           /* fundo escuro violeta-azulado */
-      --panel:#111024;        /* painel */
-      --primary:#8B5CF6;      /* roxo NastIA */
-      --secondary:#22D3EE;    /* ciano */
-      --accent:#34D399;       /* verde */
-      --text:#EAEFF7;         /* texto claro */
-      --muted:#9aa4b2;        /* texto secundário */
+      --bg:#0b0a14;
+      --panel:#111024;
+      --primary:#8B5CF6;
+      --secondary:#22D3EE;
+      --accent:#34D399;
+      --text:#EAEFF7;
+      --muted:#9aa4b2;
       --border:rgba(139,92,246,.35);
     }
 
@@ -53,7 +53,6 @@
     .agent-message{ background: rgba(34,211,238,.08); border:1px solid rgba(34,211,238,.3); padding:14px; border-radius:10px; margin-bottom:12px; line-height:1.6; }
     .user-question{ background: transparent; color:var(--muted); text-align:right; padding:6px 8px 14px; margin-bottom:6px; font-style:italic; }
 
-    /* Loading (Construindo seu Agente...) */
     .center{ text-align:center; }
     .loader{
       display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--secondary);
@@ -65,7 +64,6 @@
     .step{ height:6px; width:48px; border-radius:6px; background:rgba(255,255,255,.08); overflow:hidden; }
     .step > i{ display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width .6s ease; }
 
-    /* Reset */
     .reset-button{ position:fixed; top:12px; right:12px; padding:6px 10px; font-size:12px; border:1px solid rgba(255,255,255,0.35); background:rgba(0,0,0,0.35); color:#fff; border-radius:10px; cursor:pointer; z-index:5; opacity:.7; }
     .reset-button:hover{ opacity:1 }
   </style>
@@ -125,7 +123,7 @@
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // === Particles BG ===
+    // Partículas
     if (window.tsParticles) {
       tsParticles.load("particles-js", {
         fpsLimit: 60,
@@ -142,7 +140,7 @@
       });
     }
 
-    // === DOM Refs ===
+    // DOM
     const questionnaireEl = document.getElementById('questionnaire-container');
     const aiTextEl = document.getElementById('ai-text');
     const aiInput = document.getElementById('ai-input');
@@ -161,28 +159,25 @@
 
     const resetBtn = document.getElementById('reset-btn');
 
-    // === Config ===
+    // Config
     const STORAGE_KEY = 'nastia_state_v1';
-    // 👉 Substitua pelo seu webhook unificado do n8n:
-    // Webhook unificado (entrevista + agente)
-const WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA';
+    const WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA';
 
-    // === Estado ===
+    // Estado
     let userId = null;
-    let phase = 'diagnostic';                // 'diagnostic' | 'building' | 'agent'
-    let conversationHistory = [];            // histórico textual simples (diagnóstico)
-    let lastQuestionFull = null;             // texto COMPLETO exibido ao usuário (com DICA/Exemplos)
-let lastQuestionLine = null;             // apenas a 1ª linha da pergunta (sem DICA)
-let lastIndex = null;                    // índice da próxima pergunta (opcional)             // só a 1ª linha da pergunta
-    let lastAiText = '';                     // última pergunta renderizada
-    let agentPersonalization = {};           // welcome/challenge/attraction (seu backend pode enviar)
-    let agentChat = [];                      // histórico de conversa com o agente
+    let phase = 'diagnostic';
+    let conversationHistory = [];
+    let lastQuestionFull = null; // texto COMPLETO mostrado (com DICA/Exemplos)
+    let lastQuestionLine = null; // 1ª linha (sem DICA/Exemplos)
+    let lastAiText = '';         // última pergunta renderizada
+    let agentPersonalization = {};
+    let agentChat = [];
 
-    // === Persistência ===
+    // Persistência
     function saveState(){
       try{
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          userId, phase, conversationHistory, lastQuestionFull, lastQuestionLine, lastIndex, lastAiText,
+          userId, phase, conversationHistory, lastQuestionFull, lastQuestionLine, lastAiText,
           agent: { personalization: agentPersonalization, chat: agentChat }
         }));
       }catch(e){}
@@ -194,7 +189,7 @@ let lastIndex = null;                    // índice da próxima pergunta (opcion
       }catch(e){ return null; }
     }
 
-    // === Helpers ===
+    // Helpers
     function typeWriter(text, el, onDone){
       const t = String(text || '');
       el.innerHTML = '';
@@ -204,13 +199,11 @@ let lastIndex = null;                    // índice da próxima pergunta (opcion
         onDone && onDone();
       })();
     }
-    function scrollToEnd(box){ setTimeout(() => { box.scrollTop = box.scrollHeight; }, 50); }
     function extractQuestionLine(block){
       if(!block) return '';
       const i = block.indexOf('\nDICA:');
       return (i > -1 ? block.slice(0, i) : block).trim();
     }
-
     async function sendMessageToN8N(url, body){
       const res = await fetch(url, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(body) });
       if(!res.ok) throw new Error('Erro ao comunicar com o backend.');
@@ -221,7 +214,6 @@ let lastIndex = null;                    // índice da próxima pergunta (opcion
       phase = 'building'; saveState();
       questionnaireEl.classList.add('hidden');
       buildingEl.classList.remove('hidden');
-      // anima steps suavemente
       setTimeout(() => st1.style.width = '100%', 300);
       setTimeout(() => st2.style.width = '100%', 1200);
       setTimeout(() => st3.style.width = '100%', 2100);
@@ -232,11 +224,11 @@ let lastIndex = null;                    // índice da próxima pergunta (opcion
       typeWriter(agentPersonalization.welcomeMessage || 'Seu agente está pronto!', agentWelcome, () => {
         agentInput && agentInput.focus();
       });
-      scrollToEnd(agentChatBox);
+      agentChatBox.scrollTop = agentChatBox.scrollHeight;
       phase = 'agent'; saveState();
     }
 
-    // === ENTREVISTA ===
+    // ENTREVISTA
     async function handleInterviewSubmit(){
       const text = (aiInput.value || '').trim();
       if(!text) return;
@@ -246,67 +238,72 @@ let lastIndex = null;                    // índice da próxima pergunta (opcion
       conversationHistory.push('Usuário: ' + text);
       saveState();
 
-      // 1ª interação: só prompt; nas seguintes: lastQuestion/lastAnswer
+      // 1ª interação: só prompt; demais: inclui a pergunta anterior (1ª linha) + a resposta
       let body = { userId: userId || ('user_' + Date.now()), prompt: text };
-      if(lastQuestionLine){ body.lastQuestion = lastQuestionLine; body.lastAnswer = text; if(lastIndex!=null) body.lastIndex = lastIndex; }
+      if(lastQuestionLine){
+        body.lastQuestion = lastQuestionLine;
+        body.lastAnswer   = text;
+      }
       userId = body.userId;
 
-      // indicador visual
-      const typing = 'Digitando…';
-      aiTextEl.innerHTML = (lastAiText ? lastAiText + '\n\n' : '') + typing;
+      // indicador
+      aiTextEl.innerHTML = (lastAiText ? lastAiText + '\n\n' : '') + 'Digitando…';
 
       try{
         const result = await sendMessageToN8N(WEBHOOK_URL, body);
 
+        // finalização
         if(result && result.status === 'complete'){
-          // salva dados opcionais do agente
           agentPersonalization = result.agentData || {};
           saveState();
-          // dispara a finalização no backend e mostra tela de build
           switchToBuilding();
           try{
             await sendMessageToN8N(WEBHOOK_URL, { userId, prompt: 'Finalizar entrevista', isFinalStep: true });
-          }catch(_){}
-          // dá um respiro visual e troca para o agente
+          }catch(_){/* ignore */}
           return setTimeout(() => switchToAgent(), 2600);
         }
 
+        // próxima pergunta
         if (result && result.proxima_pergunta) {
           lastAiText = String(result.proxima_pergunta);
           typeWriter(lastAiText, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
-          lastQuestionFull = lastAiText; // guarda a pergunta que FOI exibida ao usuário
-          lastQuestionLine = extractQuestionLine(lastAiText);
-          lastIndex = (typeof result.indice_proxima_pergunta === 'number' ? result.indice_proxima_pergunta : null);
+          lastQuestionFull = lastAiText;
+          lastQuestionLine = extractQuestionLine(lastAiText); // <-- chave para não voltar perguntas
           saveState();
           return;
         }
 
         // fallback
         const fallback = String(result && (result.reply || result.text) || 'Vamos seguir.');
-        lastAiText = fallback; lastQuestionFull = fallback; lastQuestionLine = extractQuestionLine(fallback);
+        lastAiText = fallback;
+        lastQuestionFull = fallback;
+        lastQuestionLine = extractQuestionLine(fallback);
         typeWriter(fallback, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
         saveState();
       }catch(err){
         console.error(err);
         const msg = 'Desculpe, não consegui processar agora. Tente novamente.';
-        lastAiText = msg; typeWriter(msg, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
+        lastAiText = msg;
+        typeWriter(msg, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
         saveState();
       }
     }
 
-    // === AGENTE (teste) ===
+    // AGENTE (teste)
     function appendAgentBubble(role, text){
       const div = document.createElement('div');
       div.className = role === 'user' ? 'user-question' : 'agent-message';
       div.innerHTML = `<p></p>`;
       agentChatBox.appendChild(div);
-      typeWriter(String(text||''), div.querySelector('p'));
-      scrollToEnd(agentChatBox);
+      const p = div.querySelector('p');
+      let i=0, t=String(text||'');
+      (function tw(){ if(i<t.length){ p.textContent += t.charAt(i++); return setTimeout(tw, 16);} })();
+      agentChatBox.scrollTop = agentChatBox.scrollHeight;
     }
 
     async function handleAgentSend(){
       const text = (agentInput.value || '').trim();
-      if(!text) return;
+      if (!text) return;
       agentInput.value='';
       appendAgentBubble('user', text);
       agentChat.push({ role:'user', text }); saveState();
@@ -319,18 +316,18 @@ let lastIndex = null;                    // índice da próxima pergunta (opcion
       }catch(err){
         console.error(err);
         appendAgentBubble('agent', '⚠️ Não consegui responder agora. Tente novamente.');
-        agentChat.push({ role:'agent', text: '⚠️ Não consegui responder agora. Tente novamente.' }); saveState();
+        agentChat.push({ role:'agent', text:'⚠️ Não consegui responder agora. Tente novamente.' }); saveState();
       }
     }
 
-    // === Eventos ===
+    // Eventos
     aiSend.addEventListener('click', handleInterviewSubmit);
     aiInput.addEventListener('keyup', e => { if(e.key === 'Enter') handleInterviewSubmit(); });
     agentSend.addEventListener('click', handleAgentSend);
     agentInput.addEventListener('keyup', e => { if(e.key === 'Enter') handleAgentSend(); });
     resetBtn.addEventListener('click', (e)=>{ e.preventDefault(); try{ localStorage.removeItem(STORAGE_KEY); }catch(_){} location.reload(); });
 
-    // === Boot c/ restauração ===
+    // Boot
     (function init(){
       const restored = loadState();
       if(restored){
@@ -339,7 +336,6 @@ let lastIndex = null;                    // índice da próxima pergunta (opcion
         conversationHistory = restored.conversationHistory || [];
         lastQuestionFull = restored.lastQuestionFull || null;
         lastQuestionLine = restored.lastQuestionLine || null;
-        lastIndex = restored.lastIndex || null;
         lastAiText = restored.lastAiText || '';
         agentPersonalization = (restored.agent && restored.agent.personalization) || {};
         agentChat = (restored.agent && restored.agent.chat) || [];
@@ -361,12 +357,11 @@ let lastIndex = null;                    // índice da próxima pergunta (opcion
       if(phase === 'building'){
         questionnaireEl.classList.add('hidden');
         buildingEl.classList.remove('hidden');
-        // retoma animação e troca em seguida
         setTimeout(()=> switchToAgent(), 1600);
         return;
       }
 
-      // fase diagnóstico
+      // diagnóstico
       agentEl.classList.add('hidden');
       buildingEl.classList.add('hidden');
       questionnaireEl.classList.remove('hidden');
