@@ -171,7 +171,7 @@ const WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA
     let userId = null;
     let phase = 'diagnostic';                // 'diagnostic' | 'building' | 'agent'
     let conversationHistory = [];            // histórico textual simples (diagnóstico)
-    let lastQuestionText = null;             // só a 1ª linha da pergunta
+    let lastQuestionFull = null;             // só a 1ª linha da pergunta
     let lastAiText = '';                     // última pergunta renderizada
     let agentPersonalization = {};           // welcome/challenge/attraction (seu backend pode enviar)
     let agentChat = [];                      // histórico de conversa com o agente
@@ -180,7 +180,7 @@ const WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA
     function saveState(){
       try{
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          userId, phase, conversationHistory, lastQuestionText, lastAiText,
+          userId, phase, conversationHistory, lastQuestionFull, lastAiText,
           agent: { personalization: agentPersonalization, chat: agentChat }
         }));
       }catch(e){}
@@ -246,7 +246,7 @@ const WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA
 
       // 1ª interação: só prompt; nas seguintes: lastQuestion/lastAnswer
       let body = { userId: userId || ('user_' + Date.now()), prompt: text };
-      if(lastQuestionText){ body.lastQuestion = lastQuestionText; body.lastAnswer = text; }
+      if(lastQuestionFull){ body.lastQuestion = lastQuestionFull; body.lastAnswer = text; }
       userId = body.userId;
 
       // indicador visual
@@ -272,14 +272,14 @@ const WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA
         if(result && result.proxima_pergunta){
           lastAiText = String(result.proxima_pergunta);
           typeWriter(lastAiText, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
-          lastQuestionText = extractQuestionLine(lastAiText);
+          lastQuestionFull = lastAiText;
           saveState();
           return;
         }
 
         // fallback
         const fallback = String(result && (result.reply || result.text) || 'Vamos seguir.');
-        lastAiText = fallback; lastQuestionText = extractQuestionLine(fallback);
+        lastAiText = fallback; lastQuestionFull = fallback;
         typeWriter(fallback, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
         saveState();
       }catch(err){
@@ -333,7 +333,7 @@ const WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA
         userId = restored.userId || ('user_' + Date.now());
         phase = restored.phase || 'diagnostic';
         conversationHistory = restored.conversationHistory || [];
-        lastQuestionText = restored.lastQuestionText || null;
+        lastQuestionFull = restored.lastQuestionFull || null;
         lastAiText = restored.lastAiText || '';
         agentPersonalization = (restored.agent && restored.agent.personalization) || {};
         agentChat = (restored.agent && restored.agent.chat) || [];
