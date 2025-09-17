@@ -1,302 +1,375 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | NástIA</title>
-    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NastIA | Entrevista & Agente</title>
+  <style>
+    :root{
+      --bg:#0b0a14;           /* fundo escuro violeta-azulado */
+      --panel:#111024;        /* painel */
+      --primary:#8B5CF6;      /* roxo NastIA */
+      --secondary:#22D3EE;    /* ciano */
+      --accent:#34D399;       /* verde */
+      --text:#EAEFF7;         /* texto claro */
+      --muted:#9aa4b2;        /* texto secundário */
+      --border:rgba(139,92,246,.35);
+    }
 
-    <style>
-        .hidden {
-            display: none !important;
-        }
-        #chat-wrapper, #loading-screen-wrapper, #test-agent-wrapper {
-            margin-top: 2rem;
-        }
-        .loading-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 50px;
-        }
-        .spinner {
-            border: 4px solid rgba(128, 128, 128, 0.2);
-            border-left-color: var(--teal); /* Usa a cor do seu tema */
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-top: 20px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0; font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      color: var(--text); background: radial-gradient(1200px 800px at 20% 10%, rgba(139,92,246,0.12), transparent 60%),
+                              radial-gradient(1000px 600px at 90% 20%, rgba(34,211,238,0.12), transparent 60%),
+                              linear-gradient(180deg, #0b0a14 0%, #0b0a14 100%);
+      overflow:hidden; display:flex; align-items:center; justify-content:center;
+    }
+
+    .hidden{ display:none !important; }
+    #particles-js{ position:fixed; inset:0; z-index:0; }
+
+    .wrap{ position:relative; z-index:1; width:92%; max-width:840px; }
+    .card{ background: rgba(17,16,36,0.85); border:1px solid var(--border); border-radius:16px; box-shadow: 0 10px 40px rgba(0,0,0,.35);
+           padding:24px; display:flex; flex-direction:column; gap:18px; transition:.35s ease opacity; }
+
+    .brand{ display:flex; align-items:center; gap:12px; padding-bottom:10px; border-bottom:1px solid rgba(139,92,246,.25); }
+    .brand img{ height:36px; width:auto; }
+    .brand h1{ margin:0; font-size:18px; font-weight:600; letter-spacing:.3px; color:var(--secondary); }
+
+    .box{ min-height:120px; background: rgba(139,92,246,.10); border:1px solid rgba(139,92,246,.35); border-radius:12px; padding:18px; display:flex; align-items:center; }
+    .box p{ margin:0; font-size:1.05rem; line-height:1.6; white-space:pre-wrap; }
+
+    .row{ display:flex; gap:10px; }
+    input[type="text"]{ flex:1; background:#0c0b1c; border:1px solid var(--border); color:var(--text); padding:14px 14px; border-radius:12px; font-size:1rem; }
+    input[type="text"]:focus{ outline:none; box-shadow: 0 0 0 3px rgba(139,92,246,.25); }
+    button.send{ width:58px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border:none; color:#070611; font-weight:700; font-size:1.2rem; border-radius:12px; cursor:pointer; }
+    button.send:disabled{ opacity:.6; cursor:not-allowed; }
+
+    .agent-header{ text-align:center; padding:0 0 12px; border-bottom:1px solid rgba(139,92,246,.25); }
+    .agent-header h2{ margin:0; font-size:1.2rem; color:var(--secondary); font-weight:600; }
+
+    #agent-chat-box{ flex:1; max-height:52vh; overflow:auto; padding-right:8px; }
+    .agent-message{ background: rgba(34,211,238,.08); border:1px solid rgba(34,211,238,.3); padding:14px; border-radius:10px; margin-bottom:12px; line-height:1.6; }
+    .user-question{ background: transparent; color:var(--muted); text-align:right; padding:6px 8px 14px; margin-bottom:6px; font-style:italic; }
+
+    /* Loading (Construindo seu Agente...) */
+    .center{ text-align:center; }
+    .loader{
+      display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--secondary);
+      box-shadow: 18px 0 0 0 var(--primary), 36px 0 0 0 var(--accent);
+      animation: bounce 1s infinite ease-in-out;
+    }
+    @keyframes bounce{ 0%,80%,100%{ transform:scale(0) } 40%{ transform:scale(1.0) } }
+    .progress-steps{ display:flex; gap:10px; justify-content:center; margin-top:12px; }
+    .step{ height:6px; width:48px; border-radius:6px; background:rgba(255,255,255,.08); overflow:hidden; }
+    .step > i{ display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width .6s ease; }
+
+    /* Reset */
+    .reset-button{ position:fixed; top:12px; right:12px; padding:6px 10px; font-size:12px; border:1px solid rgba(255,255,255,0.35); background:rgba(0,0,0,0.35); color:#fff; border-radius:10px; cursor:pointer; z-index:5; opacity:.7; }
+    .reset-button:hover{ opacity:1 }
+  </style>
 </head>
 <body>
+  <div id="particles-js"></div>
 
-    <header class="header-minimalista">
-        <div class="container">
-            <a href="/"><img src="../assets/images/logoNastia.png" alt="Logo da NástIA" class="header-logo"></a>
-            <div>
-                <a href="#" onclick="netlifyIdentity.logout(); return false;" class="btn-inicio">Sair</a>
-            </div>
-        </div>
-    </header>
-    
-    <main>
-        <section id="dashboard-content">
-            <div class="container" style="text-align: left;">
-                <h2>Bem-vindo(a) ao seu Dashboard, <span id="user-name">...</span>!</h2>
-                <p class="subtitulo" style="text-align: left;">Este é o seu espaço para interagir com as ferramentas da NástIA.</p>
+  <button id="reset-btn" class="reset-button" title="Recomeçar do zero">Reset</button>
 
-                <div id="chat-wrapper">
-                    <div class="card" style="text-align: left;">
-                        <h3>Entrevista de Configuração</h3>
-                        <p style="max-width: none; margin-bottom: 1.5rem;">Responda às perguntas da nossa assistente para configurar a sua IA.</p>
-                        <div class="chat-interface-container">
-                            <div class="chat-body" id="ai-chat-body">
-                                </div>
-                            <div class="chat-footer">
-                                <form id="ai-chat-form">
-                                    <input type="text" id="ai-chat-input" placeholder="Digite sua resposta..." autocomplete="off" required>
-                                    <button type="submit">Enviar</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="wrap">
 
-                <div id="loading-screen-wrapper" class="hidden">
-                    <div class="card" style="text-align: left;">
-                         <div class="loading-content">
-                            <h2>Construindo seu Agente...</h2>
-                            <p>Aguarde um momento, a mágica está acontecendo.</p>
-                            <div class="spinner"></div>
-                        </div>
-                    </div>
-                </div>
+    <!-- ENTREVISTA -->
+    <section id="questionnaire-container" class="card">
+      <div class="brand">
+        <img id="nastia-logo" src="logo_nastia.png" alt="Logo NastIA" />
+        <h1>NastIA • Entrevista de Onboarding</h1>
+      </div>
+      <div id="ai-message-box" class="box"><p id="ai-text"></p></div>
+      <div class="row">
+        <input type="text" id="ai-input" placeholder="Sua resposta..." autocomplete="off" disabled />
+        <button id="ai-send" class="send" disabled>›</button>
+      </div>
+    </section>
 
-                <div id="test-agent-wrapper" class="hidden">
-                     <div class="card" style="text-align: left;">
-                        <h3>Seu Agente de Teste</h3>
-                        <p style="max-width: none; margin-bottom: 1.5rem;">Converse com a versão piloto do seu agente.</p>
-                        <div class="chat-interface-container">
-                            <div class="chat-body" id="test-agent-chat-body">
-                                </div>
-                            <div class="chat-footer">
-                                <form id="test-agent-chat-form">
-                                    <input type="text" id="test-agent-chat-input" placeholder="Converse com seu agente..." autocomplete="off" required>
-                                    <button type="submit">Enviar</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- CONSTRUINDO AGENTE -->
+    <section id="building-container" class="card hidden center">
+      <div class="brand" style="justify-content:center; border:none; padding-bottom:0">
+        <img src="logo_nastia.png" alt="Logo NastIA" />
+        <h1>Construindo seu Agente...</h1>
+      </div>
+      <div style="padding:10px 0 6px;">
+        <span class="loader"></span>
+      </div>
+      <div class="progress-steps">
+        <div class="step"><i id="st1"></i></div>
+        <div class="step"><i id="st2"></i></div>
+        <div class="step"><i id="st3"></i></div>
+      </div>
+      <p style="margin:14px 0 0; color:var(--muted)">Preparando persona • Carregando conhecimento • Publicando agente</p>
+    </section>
 
-            </div>
-        </section>
-    </main>
+    <!-- AGENTE DE TESTE -->
+    <section id="agent-container" class="card hidden" style="min-height:420px;">
+      <div class="agent-header"><h2>Seu Agente de Teste</h2></div>
+      <div id="agent-chat-box">
+        <div class="agent-message"><p id="agent-welcome-message"></p></div>
+      </div>
+      <div class="row">
+        <input type="text" id="agent-input" placeholder="Escreva para o agente..." autocomplete="off" />
+        <button id="agent-send" class="send">›</button>
+      </div>
+    </section>
 
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+  </div>
 
-            // --- IMPORTANTE: SUBSTITUA PELAS SUAS URLs REAIS DO N8N ---
-            const INTERVIEWER_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA'; // << SUBSTITUA AQUI
-            const TEST_AGENT_WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/AgenteTeste'; // << SUBSTITUA AQUI
-            // -----------------------------------------------------------------
-
-            // --- LÓGICA DE LOGIN E ELEMENTOS (Seu código original + novos elementos) ---
-            const userNameSpan = document.getElementById('user-name');
-            const chatWrapper = document.getElementById('chat-wrapper');
-            const aiChatForm = document.getElementById('ai-chat-form');
-            const aiChatInput = document.getElementById('ai-chat-input');
-            const aiChatBody = document.getElementById('ai-chat-body');
-            
-            // --- NOVO: Referências aos elementos das novas telas ---
-            const loadingScreenWrapper = document.getElementById('loading-screen-wrapper');
-            const testAgentWrapper = document.getElementById('test-agent-wrapper');
-            const testAgentChatForm = document.getElementById('test-agent-chat-form');
-            const testAgentChatInput = document.getElementById('test-agent-chat-input');
-            const testAgentChatBody = document.getElementById('test-agent-chat-body');
-
-            netlifyIdentity.on('init', user => {
-              if (!user) {
-                sessionStorage.setItem('redirectAfterLogin', window.location.href);
-                window.location.href = '/'; 
-              } else {
-                const fullName = user.user_metadata.full_name || user.email;
-                userNameSpan.textContent = fullName;
-                startInterview();
-              }
-            });
-            netlifyIdentity.on('logout', () => window.location.href = '/');
-
-            // --- FUNÇÃO GENÉRICA PARA ENVIAR MENSAGENS AO N8N ---
-            async function sendMessageToN8N(webhookUrl, userMessageText) {
-                const currentUser = netlifyIdentity.currentUser();
-                if (!currentUser) {
-                    console.error("Usuário não logado.");
-                    return { reply: "Erro de autenticação. Por favor, faça login novamente." };
-                }
-                try {
-                    const response = await fetch(webhookUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            userId: currentUser.id,
-                            userName: currentUser.user_metadata.full_name || currentUser.email,
-                            prompt: userMessageText
-                        })
-                    });
-                    if (!response.ok) throw new Error(`A resposta do servidor não foi bem-sucedida: ${response.statusText}`);
-                    return await response.json();
-                } catch (error) {
-                    console.error("Erro ao conectar com a IA:", error);
-                    return { reply: "Ocorreu um erro ao conectar com nossos servidores. Tente novamente." };
-                }
-            }
-
-            // --- FUNÇÃO PARA ADICIONAR MENSAGEM (Sua função original) ---
-            function appendChatMessage(text, sender, chatBodyElement) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('chat-message', sender);
-                messageElement.innerHTML = `<p>${text}</p>`;
-                chatBodyElement.appendChild(messageElement);
-                chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
-                return messageElement;
-            }
-
-            // --- FUNÇÃO DE INÍCIO DA ENTREVISTA (Sua função original) ---
-            function startInterview() {
-                chatWrapper.classList.remove('hidden');
-                loadingScreenWrapper.classList.add('hidden');
-                testAgentWrapper.classList.add('hidden');
-                aiChatBody.innerHTML = '';
-                appendChatMessage('Olá! Eu sou sua assistente de configuração. Para começarmos, preciso de fazer algumas perguntas para entender o seu negócio. Quando estiver pronto, diga "começar".', 'bot', aiChatBody);
-            }
-
-            // --- LISTENER DO FORMULÁRIO DO ENTREVISTADOR (VERSÃO CORRIGIDA) ---
-            if (aiChatForm) {
-                aiChatForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const userMessageText = aiChatInput.value.trim();
-                    if (!userMessageText) return;
-
-                    appendChatMessage(userMessageText, 'user', aiChatBody);
-                    aiChatInput.value = '';
-
-                    // --- INÍCIO DA CORREÇÃO ---
-                    
-                    // 1. PRIMEIRO, verificamos qual foi a última pergunta do bot
-                    const lastAiMessage = Array.from(aiChatBody.querySelectorAll('.bot')).pop()?.textContent || '';
-                    const isMagicQuestion = lastAiMessage.includes('mágica acontecer?');
-
-                    // 2. SÓ DEPOIS, adicionamos o indicador "Digitando..."
-                    const botTypingElement = appendChatMessage('Digitando...', 'bot', aiChatBody);
-
-                    // 3. Montamos o corpo da requisição com a informação correta
-                    const payload = {
-                        prompt: userMessageText,
-                        isFinalStep: isMagicQuestion
-                    };
-
-                    const result = await sendMessageToN8N(INTERVIEWER_WEBHOOK_URL, payload);
-                    
-                    // --- FIM DA CORREÇÃO ---
-
-                    botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
-
-                    // A verificação do status continua aqui
-                    if (result.status === 'BRIEFING_COMPLETE') {
-                        switchToLoadingScreen();
-                    }
-                });
-            }
-
-// Encontre a função antiga no seu <script> e substitua por esta
-async function sendMessageToN8N(webhookUrl, payload) {
-    const currentUser = netlifyIdentity.currentUser();
-    if (!currentUser) {
-        console.error("Usuário não logado.");
-        return { reply: "Erro de autenticação. Por favor, faça login novamente." };
+  <!-- Partículas -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // === Particles BG ===
+    if (window.tsParticles) {
+      tsParticles.load("particles-js", {
+        fpsLimit: 60,
+        interactivity: { events: { onHover: { enable: true, mode: "repulse" }, resize: true } },
+        particles: {
+          color: { value: ["#8B5CF6", "#22D3EE"] },
+          links: { color: "#8B5CF6", distance: 140, enable: true, opacity: 0.25, width: 1 },
+          move: { enable: true, speed: 1, direction: "none", outModes: { default: "bounce" } },
+          number: { value: 60, density: { enable: true, area: 800 } },
+          opacity: { value: 0.25 },
+          shape: { type: "circle" },
+          size: { value: 3, random: true }
+        }
+      });
     }
 
-    // --- INÍCIO DA CORREÇÃO ---
-    // Garante que o corpo da requisição seja sempre um objeto bem formado.
-    let bodyPayload = {
-        userId: currentUser.id,
-        userName: currentUser.user_metadata.full_name || currentUser.email
-    };
+    // === DOM Refs ===
+    const questionnaireEl = document.getElementById('questionnaire-container');
+    const aiTextEl = document.getElementById('ai-text');
+    const aiInput = document.getElementById('ai-input');
+    const aiSend = document.getElementById('ai-send');
 
-    if (typeof payload === 'string') {
-        // Se o payload for apenas o texto da mensagem (como no chat de teste),
-        // nós o colocamos na chave 'prompt'.
-        bodyPayload.prompt = payload;
-    } else if (typeof payload === 'object' && payload !== null) {
-        // Se o payload for um objeto (como no final da entrevista, com 'prompt' e 'isFinalStep'),
-        // nós mesclamos ele com os dados do usuário.
-        bodyPayload = { ...bodyPayload, ...payload };
+    const buildingEl = document.getElementById('building-container');
+    const st1 = document.getElementById('st1');
+    const st2 = document.getElementById('st2');
+    const st3 = document.getElementById('st3');
+
+    const agentEl = document.getElementById('agent-container');
+    const agentWelcome = document.getElementById('agent-welcome-message');
+    const agentChatBox = document.getElementById('agent-chat-box');
+    const agentInput = document.getElementById('agent-input');
+    const agentSend = document.getElementById('agent-send');
+
+    const resetBtn = document.getElementById('reset-btn');
+
+    // === Config ===
+    const STORAGE_KEY = 'nastia_state_v1';
+    // 👉 Substitua pelo seu webhook unificado do n8n:
+    // Webhook unificado (entrevista + agente)
+const WEBHOOK_URL = 'https://webhook.oresultador.com.br/webhook/Entrevistador-IA';
+
+    // === Estado ===
+    let userId = null;
+    let phase = 'diagnostic';                // 'diagnostic' | 'building' | 'agent'
+    let conversationHistory = [];            // histórico textual simples (diagnóstico)
+    let lastQuestionText = null;             // só a 1ª linha da pergunta
+    let lastAiText = '';                     // última pergunta renderizada
+    let agentPersonalization = {};           // welcome/challenge/attraction (seu backend pode enviar)
+    let agentChat = [];                      // histórico de conversa com o agente
+
+    // === Persistência ===
+    function saveState(){
+      try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          userId, phase, conversationHistory, lastQuestionText, lastAiText,
+          agent: { personalization: agentPersonalization, chat: agentChat }
+        }));
+      }catch(e){}
     }
-    // --- FIM DA CORREÇÃO ---
-
-    try {
-        const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(bodyPayload) // Envia o payload corrigido e completo
-        });
-        if (!response.ok) throw new Error(`A resposta do servidor não foi bem-sucedida: ${response.statusText}`);
-        return await response.json();
-    } catch (error) {
-        console.error("Erro ao conectar com a IA:", error);
-        // MODIFICAÇÃO: Retorna um JSON no formato esperado para evitar o erro no front-end
-        return { reply: "Ocorreu um erro ao conectar com nossos servidores. Tente novamente." };
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      }catch(e){ return null; }
     }
-}
-            // --- NOVO: LISTENER PARA O FORMULÁRIO DO AGENTE DE TESTE ---
-            if (testAgentChatForm) {
-                 testAgentChatForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const userMessageText = testAgentChatInput.value.trim();
-                    if (!userMessageText) return;
 
-                    appendChatMessage(userMessageText, 'user', testAgentChatBody);
-                    testAgentChatInput.value = '';
+    // === Helpers ===
+    function typeWriter(text, el, onDone){
+      const t = String(text || '');
+      el.innerHTML = '';
+      let i = 0;
+      (function type(){
+        if(i < t.length){ el.innerHTML += t.charAt(i++); return setTimeout(type, 16); }
+        onDone && onDone();
+      })();
+    }
+    function scrollToEnd(box){ setTimeout(() => { box.scrollTop = box.scrollHeight; }, 50); }
+    function extractQuestionLine(block){
+      if(!block) return '';
+      const i = block.indexOf('\nDICA:');
+      return (i > -1 ? block.slice(0, i) : block).trim();
+    }
 
-                    const botTypingElement = appendChatMessage('Digitando...', 'bot', testAgentChatBody);
-                    const result = await sendMessageToN8N(TEST_AGENT_WEBHOOK_URL, userMessageText);
-                    botTypingElement.innerHTML = `<p>${result.reply || 'Não consegui processar a sua resposta.'}</p>`;
-                });
-            }
+    async function sendMessageToN8N(url, body){
+      const res = await fetch(url, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(body) });
+      if(!res.ok) throw new Error('Erro ao comunicar com o backend.');
+      return res.json();
+    }
 
-            // --- NOVAS FUNÇÕES PARA A TRANSIÇÃO DE TELA ---
-            function switchToLoadingScreen() {
-                setTimeout(() => {
-                    chatWrapper.classList.add('hidden');
-                    loadingScreenWrapper.classList.remove('hidden');
-                    simulateAgentBuilding();
-                }, 1000); // Delay de 1 segundo para o usuário ler a última mensagem
-            }
+    function switchToBuilding(){
+      phase = 'building'; saveState();
+      questionnaireEl.classList.add('hidden');
+      buildingEl.classList.remove('hidden');
+      // anima steps suavemente
+      setTimeout(() => st1.style.width = '100%', 300);
+      setTimeout(() => st2.style.width = '100%', 1200);
+      setTimeout(() => st3.style.width = '100%', 2100);
+    }
+    function switchToAgent(){
+      buildingEl.classList.add('hidden');
+      agentEl.classList.remove('hidden');
+      typeWriter(agentPersonalization.welcomeMessage || 'Seu agente está pronto!', agentWelcome, () => {
+        agentInput && agentInput.focus();
+      });
+      scrollToEnd(agentChatBox);
+      phase = 'agent'; saveState();
+    }
 
-            function simulateAgentBuilding() {
-                setTimeout(() => {
-                    loadingScreenWrapper.classList.add('hidden');
-                    testAgentWrapper.classList.remove('hidden');
-                    appendChatMessage('Olá! Sou seu novo agente, criado com base nas suas instruções. Como posso te ajudar hoje?', 'bot', testAgentChatBody);
-                }, 5000); // Delay de 5 segundos para simular a "construção"
-            }
-        });
-    </script>
-    
-    <script src="../scripts.js"></script>
+    // === ENTREVISTA ===
+    async function handleInterviewSubmit(){
+      const text = (aiInput.value || '').trim();
+      if(!text) return;
+      aiInput.value = '';
+      aiInput.disabled = true; aiSend.disabled = true;
 
+      conversationHistory.push('Usuário: ' + text);
+      saveState();
+
+      // 1ª interação: só prompt; nas seguintes: lastQuestion/lastAnswer
+      let body = { userId: userId || ('user_' + Date.now()), prompt: text };
+      if(lastQuestionText){ body.lastQuestion = lastQuestionText; body.lastAnswer = text; }
+      userId = body.userId;
+
+      // indicador visual
+      const typing = 'Digitando…';
+      aiTextEl.innerHTML = (lastAiText ? lastAiText + '\n\n' : '') + typing;
+
+      try{
+        const result = await sendMessageToN8N(WEBHOOK_URL, body);
+
+        if(result && result.status === 'complete'){
+          // salva dados opcionais do agente
+          agentPersonalization = result.agentData || {};
+          saveState();
+          // dispara a finalização no backend e mostra tela de build
+          switchToBuilding();
+          try{
+            await sendMessageToN8N(WEBHOOK_URL, { userId, prompt: 'Finalizar entrevista', isFinalStep: true });
+          }catch(_){}
+          // dá um respiro visual e troca para o agente
+          return setTimeout(() => switchToAgent(), 2600);
+        }
+
+        if(result && result.proxima_pergunta){
+          lastAiText = String(result.proxima_pergunta);
+          typeWriter(lastAiText, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
+          lastQuestionText = extractQuestionLine(lastAiText);
+          saveState();
+          return;
+        }
+
+        // fallback
+        const fallback = String(result && (result.reply || result.text) || 'Vamos seguir.');
+        lastAiText = fallback; lastQuestionText = extractQuestionLine(fallback);
+        typeWriter(fallback, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
+        saveState();
+      }catch(err){
+        console.error(err);
+        const msg = 'Desculpe, não consegui processar agora. Tente novamente.';
+        lastAiText = msg; typeWriter(msg, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
+        saveState();
+      }
+    }
+
+    // === AGENTE (teste) ===
+    function appendAgentBubble(role, text){
+      const div = document.createElement('div');
+      div.className = role === 'user' ? 'user-question' : 'agent-message';
+      div.innerHTML = `<p></p>`;
+      agentChatBox.appendChild(div);
+      typeWriter(String(text||''), div.querySelector('p'));
+      scrollToEnd(agentChatBox);
+    }
+
+    async function handleAgentSend(){
+      const text = (agentInput.value || '').trim();
+      if(!text) return;
+      agentInput.value='';
+      appendAgentBubble('user', text);
+      agentChat.push({ role:'user', text }); saveState();
+
+      try{
+        const data = await sendMessageToN8N(WEBHOOK_URL, { mode:'agent', userId, message: text });
+        const reply = data.reply || data.answer || data.text || '...';
+        appendAgentBubble('agent', reply);
+        agentChat.push({ role:'agent', text: reply }); saveState();
+      }catch(err){
+        console.error(err);
+        appendAgentBubble('agent', '⚠️ Não consegui responder agora. Tente novamente.');
+        agentChat.push({ role:'agent', text: '⚠️ Não consegui responder agora. Tente novamente.' }); saveState();
+      }
+    }
+
+    // === Eventos ===
+    aiSend.addEventListener('click', handleInterviewSubmit);
+    aiInput.addEventListener('keyup', e => { if(e.key === 'Enter') handleInterviewSubmit(); });
+    agentSend.addEventListener('click', handleAgentSend);
+    agentInput.addEventListener('keyup', e => { if(e.key === 'Enter') handleAgentSend(); });
+    resetBtn.addEventListener('click', (e)=>{ e.preventDefault(); try{ localStorage.removeItem(STORAGE_KEY); }catch(_){} location.reload(); });
+
+    // === Boot c/ restauração ===
+    (function init(){
+      const restored = loadState();
+      if(restored){
+        userId = restored.userId || ('user_' + Date.now());
+        phase = restored.phase || 'diagnostic';
+        conversationHistory = restored.conversationHistory || [];
+        lastQuestionText = restored.lastQuestionText || null;
+        lastAiText = restored.lastAiText || '';
+        agentPersonalization = (restored.agent && restored.agent.personalization) || {};
+        agentChat = (restored.agent && restored.agent.chat) || [];
+      }else{
+        userId = 'user_' + Date.now();
+        saveState();
+      }
+
+      if(phase === 'agent'){
+        questionnaireEl.classList.add('hidden');
+        buildingEl.classList.add('hidden');
+        agentEl.classList.remove('hidden');
+        agentWelcome.textContent = agentPersonalization.welcomeMessage || 'Seu agente está pronto!';
+        agentChat.forEach(m => appendAgentBubble(m.role, m.text));
+        agentInput && agentInput.focus();
+        return;
+      }
+
+      if(phase === 'building'){
+        questionnaireEl.classList.add('hidden');
+        buildingEl.classList.remove('hidden');
+        // retoma animação e troca em seguida
+        setTimeout(()=> switchToAgent(), 1600);
+        return;
+      }
+
+      // fase diagnóstico
+      agentEl.classList.add('hidden');
+      buildingEl.classList.add('hidden');
+      questionnaireEl.classList.remove('hidden');
+
+      const firstQuestion = lastAiText || 'Olá! Sou a assistente de IA da NastIA. Vamos começar a criar o seu agente?';
+      typeWriter(firstQuestion, aiTextEl, () => { aiInput.disabled = false; aiSend.disabled = false; aiInput.focus(); });
+      lastAiText = firstQuestion; saveState();
+    })();
+  });
+  </script>
 </body>
 </html>
